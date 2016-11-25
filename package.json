@@ -1,0 +1,44 @@
+{
+  "name": "webmesh",
+  "version": "1.0.0",
+  "description": "A mesh editor for the browser.",
+  "main": "webmesh.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hakudoshi23/webmesh.git"
+  },
+  "keywords": [
+    "mesh",
+    "editor",
+    "web",
+    "browser",
+    "3d",
+    "webgl"
+  ],
+  "author": "Aleix Valls",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hakudoshi23/webmesh/issues"
+  },
+  "homepage": "https://github.com/hakudoshi23/webmesh#readme",
+  "dependencies": {
+    "gl-matrix": "^2.3.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-concat": "^2.6.1",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "gulp-xo": "^0.14.0",
+    "jquery": "^3.1.1",
+    "sass": "^0.5.0"
+  }
+}
