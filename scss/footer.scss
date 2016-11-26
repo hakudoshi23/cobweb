@@ -1,0 +1,21 @@
+$HEIGHT: 20px;
+
+.wm-logger {
+    height: $HEIGHT;
+    width: 100%;
+
+    background-color: #E6E6E6;
+
+    position: absolute;
+    bottom: 0;
+
+    font-size: 12px;
+    line-height: $HEIGHT;
+
+    .info {
+        float: left;
+        color: gray;
+
+        padding: 0 5px;
+    }
+}

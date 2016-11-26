@@ -16,7 +16,15 @@ var config = {
                 'node_modules/gl-matrix/dist/gl-matrix.js',
                 'plugins/litegl/litegl.js'
             ],
-            master: 'src/**/*.js'
+            master: [
+                'src/utils.js',
+                'src/events.js',
+                'src/webmesh.js',
+                'src/plugins.js',
+                'src/logger.js',
+                'src/menu.js'
+            ],
+            test: 'test/**/*.js'
         }
     }
 };
@@ -30,11 +38,17 @@ gulp.task('watch', function () {
 });
 
 gulp.task('watch-sass', function () {
-    return gulp.watch(config.sass.paths.master, ['sass']);
+    return gulp.watch(config.sass.paths.master, ['sass'])
+        .on('error', function (err) {
+            plugins.util.log(plugins.util.colors.red(err));
+        });
 });
 
 gulp.task('watch-js', function () {
-    return gulp.watch(config.js.paths.master, ['js']);
+    return gulp.watch(config.js.paths.master, ['js'])
+        .on('error', function (err) {
+            plugins.util.log(plugins.util.colors.red(err));
+        });
 });
 
 gulp.task('clean', function () {
@@ -43,6 +57,10 @@ gulp.task('clean', function () {
 
 gulp.task('build', ['clean'], function () {
     return gulp.start('sass', 'js');
+});
+
+gulp.task('lint', function () {
+    return gulp.start('js-lint');
 });
 
 gulp.task('sass', function () {
@@ -66,7 +84,7 @@ gulp.task('js', function () {
     return gulp.src(config.js.paths.master)
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.concat('webmesh.min.js'))
-        .pipe(plugins.uglify())
+        .pipe(plugins.uglify().on('error', plugins.util.log))
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(config.dist))
         .on('error', function (err) {

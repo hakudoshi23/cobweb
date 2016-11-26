@@ -1,0 +1,44 @@
+$DEFAULT_HEIGHT: 30px;
+$DEFAULT_MARGIN_V: 2px;
+$DEFAULT_BORDER_WIDTH: 1px;
+
+.wm-menu {
+    height: $DEFAULT_HEIGHT;
+    width: 100%;
+
+    position: absolute;
+    top: 0;
+
+    background-color: #E6E6E6;
+
+    font-size: 14px;
+
+    cursor: default;
+
+    ul {
+        float: left;
+
+        margin: $DEFAULT_MARGIN_V 5px;
+        padding: 0;
+
+        list-style-type: none;
+        user-select: none;
+
+        li {
+            height: $DEFAULT_HEIGHT - ($DEFAULT_MARGIN_V * 2) - ($DEFAULT_BORDER_WIDTH * 2);
+            line-height: $DEFAULT_HEIGHT - ($DEFAULT_MARGIN_V * 2);
+
+            border: solid $DEFAULT_BORDER_WIDTH transparent;
+            border-radius: 2px;
+            padding: 0 5px;
+
+            float: left;
+            vertical-align: middle;
+
+            &:hover {
+                border: solid 1px gray;
+                cursor: pointer;
+            }
+        }
+    }
+}
