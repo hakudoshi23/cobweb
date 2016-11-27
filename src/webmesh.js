@@ -31,10 +31,14 @@
         this.events = new EventHandler();
         WebMesh.prototype.enablePlugins(this);
 
+        this.events.on('resize', function(instance) {
+            instance.gl.canvas.height = instance.container.height();
+            instance.gl.canvas.width = instance.container.width();
+        });
+
+        var scope = this;
         window.addEventListener('resize', function(event) {
-            this.gl.canvas.height = this.container.height();
-            this.gl.canvas.width = this.container.width();
-            this.events.trigger('resize');
+            scope.events.trigger('resize', scope);
         });
     };
 
