@@ -5,12 +5,10 @@
         this.listeners = {};
         this.trigger = function() {
             var name = arguments[0];
-            var scope = arguments[1] || null;
             var listeners = this.listeners[name] || [];
             for (var i = 0; i < listeners.length; i++) {
-                Array.prototype.splice.call(arguments, 0, 2);
-                var callback = this.listeners[name][i];
-                callback.apply(scope, arguments);
+                Array.prototype.splice.call(arguments, 0, 1);
+                listeners[i].apply(null, arguments);
             }
         };
         this.on = function(name, callback) {

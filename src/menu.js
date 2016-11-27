@@ -18,9 +18,9 @@
                 }
             ],
             'Alert!': function() {
-                instance.events.trigger('logger.info', null, 'LOOK AT ME! O_O');
+                instance.events.trigger('logger.info', 'LOOK AT ME! O_O');
                 window.setTimeout(function(){
-                    instance.events.trigger('logger.info', null, 'STAPH!');
+                    instance.events.trigger('logger.info', 'STAPH!');
                 }, 2000);
             },
             'Help': [
