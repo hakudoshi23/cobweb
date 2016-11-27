@@ -16,9 +16,7 @@ var config = {
                 'src/utils.js',
                 'src/events.js',
                 'src/webmesh.js',
-                'src/plugins.js',
-                'src/logger.js',
-                'src/menu.js'
+                'src/plugins/**/*.js'
             ]
         }
     }

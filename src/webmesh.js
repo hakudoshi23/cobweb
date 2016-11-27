@@ -1,7 +1,7 @@
 'use strict';
 
 (function(){
-    window.WebMesh = function(options) {
+    var WebMesh = function(options) {
         this.options = {
             container: {
                 selector: '#webmesh',
@@ -42,6 +42,13 @@
         });
     };
 
+    WebMesh.prototype.plugins = {};
+
+    WebMesh.prototype.enablePlugins = function(instance) {
+        for (var name in WebMesh.prototype.plugins)
+            instance[name] = new WebMesh.prototype.plugins[name](instance);
+    };
+
     function extend(source, properties){
         for (var property in properties) {
             if (properties.hasOwnProperty(property)) {
@@ -54,4 +61,6 @@
             }
         }
     }
+
+    window.WebMesh = WebMesh;
 }());
