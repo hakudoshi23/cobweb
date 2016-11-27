@@ -16,6 +16,7 @@ var config = {
                 'src/utils.js',
                 'src/events.js',
                 'src/cobweb.js',
+                'src/plugins.js',
                 'src/plugins/**/*.js'
             ]
         }

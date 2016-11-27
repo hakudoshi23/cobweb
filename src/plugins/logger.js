@@ -18,5 +18,5 @@
         instance.events.on('logger.info', this.info);
     };
 
-    Cobweb.prototype.plugins['logger'] = Logger;
+    Cobweb.prototype.plugins.add('logger', Logger);
 })());

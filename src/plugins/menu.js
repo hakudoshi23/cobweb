@@ -11,46 +11,42 @@
         this.container.append(menu);
 
         this.items = {
-            'File': [
-                {
-                    'Load...': function() {
-                        console.log('item click!');
-                    }
+            'File': {
+                'Load...': function() {
+                    console.log('item click!');
                 }
-            ],
+            },
             'Alert!': function() {
                 instance.events.trigger('logger.info', 'LOOK AT ME! O_O');
                 window.setTimeout(function(){
                     instance.events.trigger('logger.info', 'STAPH!');
                 }, 2000);
             },
-            'Help': [
-                {
-                    'About WebMesh': function() {
-                        console.log('About what?!');
-                    }
+            'Help': {
+                'About WebMesh': function() {
+                    console.log('About what?!');
                 }
-            ]
+            }
+        };
+
+        this.update = function() {
+            for(var item in this.items){
+                var li = document.createElement('LI');
+                li.innerHTML = item;
+                li.addClass(item);
+
+                var value = this.items[item];
+                if (typeof value === 'function') {
+                    li.onclick = value;
+                }
+
+                var mainMenu = this.container.querySelector('.main-menu');
+                mainMenu.append(li);
+            }
         };
 
         this.update();
     };
 
-    Menu.prototype.update = function() {
-        for(var item in this.items){
-            var li = document.createElement('LI');
-            li.innerHTML = item;
-            li.addClass(item);
-
-            var value = this.items[item];
-            if (typeof value === 'function') {
-                li.onclick = value;
-            }
-
-            var mainMenu = this.container.querySelector('.main-menu');
-            mainMenu.append(li);
-        }
-    };
-
-    Cobweb.prototype.plugins['menu'] = Menu;
+    Cobweb.prototype.plugins.add('menu', Menu);
 })());

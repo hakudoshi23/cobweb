@@ -14,39 +14,23 @@
                 className: 'cb-logger'
             }
         };
-        if (options && typeof options === 'object') {
+        if (options && typeof options === 'object')
             extend(this.options, options);
-        }
 
         this.container = document.querySelector(this.options.container.selector);
         this.container.addClass(this.options.container.className);
 
-        this.gl = GL.create({
-            height: container.height(),
-            width: container.width()
-        });
-
-        this.container.append(this.gl.canvas);
-
         this.events = new EventHandler();
-        Cobweb.prototype.enablePlugins(this);
-
-        this.events.on('resize', function(instance) {
-            instance.gl.canvas.height = instance.container.height();
-            instance.gl.canvas.width = instance.container.width();
+        this.events.on('core.resize', function(instance) {
+            instance.plugins.surface.gl.canvas.height = instance.container.height();
+            instance.plugins.surface.gl.canvas.width = instance.container.width();
         });
+        Cobweb.prototype.plugins.load(this);
 
         var scope = this;
         window.addEventListener('resize', function(event) {
-            scope.events.trigger('resize', scope);
+            scope.events.trigger('core.resize', scope);
         });
-    };
-
-    Cobweb.prototype.plugins = {};
-
-    Cobweb.prototype.enablePlugins = function(instance) {
-        for (var name in Cobweb.prototype.plugins)
-            instance[name] = new Cobweb.prototype.plugins[name](instance);
     };
 
     function extend(source, properties){
