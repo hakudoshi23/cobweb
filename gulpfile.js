@@ -15,7 +15,7 @@ var config = {
             master: [
                 'src/utils.js',
                 'src/events.js',
-                'src/webmesh.js',
+                'src/cobweb.js',
                 'src/plugins/**/*.js'
             ]
         }
@@ -65,7 +65,7 @@ gulp.task('sass', function () {
             processImport: false,
             compatibility: 'ie8'
         }))
-        .pipe(plugins.concat('webmesh.min.css'))
+        .pipe(plugins.concat('cobweb.min.css'))
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(config.dist))
         .on('error', function (err) {
@@ -76,7 +76,7 @@ gulp.task('sass', function () {
 gulp.task('js', function () {
     return gulp.src(config.js.paths.master)
         .pipe(plugins.sourcemaps.init())
-        .pipe(plugins.concat('webmesh.min.js'))
+        .pipe(plugins.concat('cobweb.min.js'))
         .pipe(plugins.uglify().on('error', plugins.util.log))
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(config.dist))

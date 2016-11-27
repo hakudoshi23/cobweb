@@ -1,7 +1,7 @@
 'use strict';
 
 ((function(){
-    WebMesh.prototype.plugins['logger'] = function(instance) {
+    var Logger = function(instance) {
         var container = document.createElement('DIV');
         container.addClass(instance.options.logger.className);
         instance.container.append(container);
@@ -17,4 +17,6 @@
 
         instance.events.on('logger.info', this.info);
     };
+
+    Cobweb.prototype.plugins['logger'] = Logger;
 })());

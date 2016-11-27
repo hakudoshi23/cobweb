@@ -1,13 +1,14 @@
 'use strict';
 
 ((function(){
-    WebMesh.prototype.plugins['menu'] = function(instance) {
-        var container = document.createElement('DIV');
-        container.addClass(instance.options.menu.className);
-        instance.container.append(container);
+    var Menu = function(instance) {
+        this.container = document.createElement('DIV');
+        this.container.addClass(instance.options.menu.className);
+        instance.container.append(this.container);
 
         var menu = document.createElement('UL');
-        container.append(menu);
+        menu.addClass('main-menu');
+        this.container.append(menu);
 
         this.items = {
             'File': [
@@ -32,20 +33,24 @@
             ]
         };
 
-        this.update = function() {
-            for(var item in this.items){
-                var li = document.createElement('LI');
-                li.innerHTML = item;
-                li.addClass(item);
-
-                var value = this.items[item];
-                if (typeof value === 'function') {
-                    li.onclick = value;
-                }
-
-                menu.append(li);
-            }
-        };
         this.update();
     };
+
+    Menu.prototype.update = function() {
+        for(var item in this.items){
+            var li = document.createElement('LI');
+            li.innerHTML = item;
+            li.addClass(item);
+
+            var value = this.items[item];
+            if (typeof value === 'function') {
+                li.onclick = value;
+            }
+
+            var mainMenu = this.container.querySelector('.main-menu');
+            mainMenu.append(li);
+        }
+    };
+
+    Cobweb.prototype.plugins['menu'] = Menu;
 })());

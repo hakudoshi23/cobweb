@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>WebMesh</title>
+        <title>Cobweb</title>
 
         <script src="external/gl-matrix/gl-matrix-min.js"></script>
         <script src="external/litegl/litegl.min.js"></script>
 
-        <link rel="stylesheet" href="dist/webmesh.min.css"></link>
-        <script src="dist/webmesh.min.js"></script>
+        <link rel="stylesheet" href="dist/cobweb.min.css"></link>
+        <script src="dist/cobweb.min.js"></script>
 
         <script type="text/javascript">
-            var wm = null;
+            var cb = null;
             window.addEventListener('load', function(){
-                wm = new WebMesh({
+                cb = new Cobweb({
                     container: {
                         selector: '#container'
                     }
                 });
 
-                wm.gl.animate();
+                cb.gl.animate();
 
                 var object = {};
-            	object.primitive = wm.gl.TRIANGLES;
+            	object.primitive = cb.gl.TRIANGLES;
             	object.model = mat4.create();
                 object.mesh = GL.Mesh.cube();
 
@@ -31,7 +31,7 @@
             	var mvp = mat4.create();
             	var temp = mat4.create();
 
-            	mat4.perspective(proj, 45 * DEG2RAD, wm.gl.canvas.width / wm.gl.canvas.height, 0.1, 1000);
+            	mat4.perspective(proj, 45 * DEG2RAD, cb.gl.canvas.width / cb.gl.canvas.height, 0.1, 1000);
             	mat4.lookAt(view, [0,10,10],[0,0,0], [0,1,0]);
 
             	var shader = new Shader(
@@ -55,8 +55,8 @@
             		}'
                 );
 
-            	wm.gl.clearColor(0.4, 0.4, 0.4, 1);
-            	wm.gl.enable(wm.gl.DEPTH_TEST);
+            	cb.gl.clearColor(0.4, 0.4, 0.4, 1);
+            	cb.gl.enable(cb.gl.DEPTH_TEST);
 
             	var uniforms = {
             		u_color: [1, 1, 1, 1],
@@ -65,8 +65,8 @@
             		u_mvp: mvp
             	};
 
-            	wm.gl.ondraw = function() {
-            		wm.gl.clear(wm.gl.COLOR_BUFFER_BIT | wm.gl.DEPTH_BUFFER_BIT);
+            	cb.gl.ondraw = function() {
+            		cb.gl.clear(cb.gl.COLOR_BUFFER_BIT | cb.gl.DEPTH_BUFFER_BIT);
 
                     mat4.multiply(temp, view, object.model);
                     mat4.multiply(mvp, proj, temp);
@@ -75,7 +75,7 @@
                     shader.uniforms(uniforms).draw(object.mesh, object.primitive);
             	};
 
-            	wm.gl.onupdate = function(dt) {
+            	cb.gl.onupdate = function(dt) {
             		mat4.rotateY(object.model, object.model, dt * 0.2);
             	};
             });

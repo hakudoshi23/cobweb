@@ -1,17 +1,17 @@
 'use strict';
 
 (function(){
-    var WebMesh = function(options) {
+    var Cobweb = function(options) {
         this.options = {
             container: {
-                selector: '#webmesh',
-                className: 'wm-container'
+                selector: '#cobweb',
+                className: 'cb-container'
             },
             menu: {
-                className: 'wm-menu'
+                className: 'cb-menu'
             },
             logger: {
-                className: 'wm-logger'
+                className: 'cb-logger'
             }
         };
         if (options && typeof options === 'object') {
@@ -29,7 +29,7 @@
         this.container.append(this.gl.canvas);
 
         this.events = new EventHandler();
-        WebMesh.prototype.enablePlugins(this);
+        Cobweb.prototype.enablePlugins(this);
 
         this.events.on('resize', function(instance) {
             instance.gl.canvas.height = instance.container.height();
@@ -42,11 +42,11 @@
         });
     };
 
-    WebMesh.prototype.plugins = {};
+    Cobweb.prototype.plugins = {};
 
-    WebMesh.prototype.enablePlugins = function(instance) {
-        for (var name in WebMesh.prototype.plugins)
-            instance[name] = new WebMesh.prototype.plugins[name](instance);
+    Cobweb.prototype.enablePlugins = function(instance) {
+        for (var name in Cobweb.prototype.plugins)
+            instance[name] = new Cobweb.prototype.plugins[name](instance);
     };
 
     function extend(source, properties){
@@ -62,5 +62,5 @@
         }
     }
 
-    window.WebMesh = WebMesh;
+    window.Cobweb = Cobweb;
 }());

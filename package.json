@@ -1,14 +1,14 @@
 {
-  "name": "webmesh",
+  "name": "cobweb",
   "version": "1.0.0",
   "description": "A mesh editor for the browser.",
-  "main": "webmesh.js",
+  "main": "src/cobweb.js",
   "scripts": {
     "start": "gulp demo"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hakudoshi23/webmesh.git"
+    "url": "git+https://github.com/hakudoshi23/cobweb.git"
   },
   "keywords": [
     "mesh",
@@ -21,9 +21,9 @@
   "author": "Aleix Valls",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hakudoshi23/webmesh/issues"
+    "url": "https://github.com/hakudoshi23/cobweb/issues"
   },
-  "homepage": "https://github.com/hakudoshi23/webmesh#readme",
+  "homepage": "https://github.com/hakudoshi23/cobweb#readme",
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.1",
