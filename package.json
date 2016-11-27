@@ -4,7 +4,7 @@
   "description": "A mesh editor for the browser.",
   "main": "webmesh.js",
   "scripts": {
-    "test": "gulp test"
+    "start": "gulp demo"
   },
   "repository": {
     "type": "git",
@@ -24,9 +24,7 @@
     "url": "https://github.com/hakudoshi23/webmesh/issues"
   },
   "homepage": "https://github.com/hakudoshi23/webmesh#readme",
-  "dependencies": {
-    "gl-matrix": "^2.3.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
@@ -37,6 +35,7 @@
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
+    "gulp-webserver": "^0.9.1",
     "gulp-xo": "^0.14.0"
   },
   "xo": {

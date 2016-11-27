@@ -12,10 +12,6 @@ var config = {
     },
     js: {
         paths: {
-            vendor: [
-                'node_modules/gl-matrix/dist/gl-matrix.js',
-                'plugins/litegl/litegl.js'
-            ],
             master: [
                 'src/utils.js',
                 'src/events.js',
@@ -23,8 +19,7 @@ var config = {
                 'src/plugins.js',
                 'src/logger.js',
                 'src/menu.js'
-            ],
-            test: 'test/**/*.js'
+            ]
         }
     }
 };
@@ -95,4 +90,13 @@ gulp.task('js', function () {
 gulp.task('js-lint', function () {
     return gulp.src(config.js.paths.master)
         .pipe(plugins.xo());
+});
+
+gulp.task('demo', function () {
+    return gulp.src('.')
+        .pipe(plugins.webserver({
+          livereload: true,
+          directoryListing: true,
+          open: 'index.html'
+        }));
 });
