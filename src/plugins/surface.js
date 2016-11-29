@@ -9,10 +9,25 @@
 
         this.gl.animate();
 
-        var object = {};
-        object.primitive = this.gl.TRIANGLES;
-        object.model = mat4.create();
-        object.mesh = GL.Mesh.cube();
+        var objs = [];
+
+        objs[0] = {};
+        objs[0].primitive = this.gl.TRIANGLES;
+        objs[0].model = mat4.create();
+        objs[0].mesh = GL.Mesh.cube();
+        mat4.translate(objs[0].model, objs[0].model, [-2, 0, 0]);
+
+        objs[1] = {};
+        objs[1].primitive = this.gl.TRIANGLES;
+        objs[1].model = mat4.create();
+        objs[1].mesh = GL.Mesh.sphere();
+        mat4.translate(objs[1].model, objs[1].model, [2, 0, 0]);
+
+        objs[2] = {};
+        objs[2].primitive = this.gl.TRIANGLES;
+        objs[2].model = mat4.create();
+        objs[2].mesh = GL.Mesh.cylinder({radius:0.5});
+        mat4.translate(objs[2].model, objs[2].model, [0, 0, -2]);
 
         var proj = mat4.create();
         var view = mat4.create();
@@ -21,7 +36,7 @@
         var temp = mat4.create();
 
         mat4.perspective(proj, 45 * DEG2RAD, this.gl.canvas.width / this.gl.canvas.height, 0.1, 1000);
-        mat4.lookAt(view, [0,10,10],[0,0,0], [0,1,0]);
+        mat4.lookAt(view, [0,5,5],[0,0,0], [0,1,0]);
 
         var shader = new Shader(
             'precision highp float;\
@@ -58,15 +73,19 @@
         this.gl.ondraw = function() {
             scope.gl.clear(scope.gl.COLOR_BUFFER_BIT | scope.gl.DEPTH_BUFFER_BIT);
 
-            mat4.multiply(temp, view, object.model);
-            mat4.multiply(mvp, proj, temp);
+            objs.forEach(function(item){
+    			mat4.multiply(temp, view, item.model);
+    			mat4.multiply(mvp, proj, temp);
 
-            uniforms.u_model = object.model;
-            shader.uniforms(uniforms).draw(object.mesh, object.primitive);
+    			uniforms.u_model = item.model;
+    			shader.uniforms(uniforms).draw(item.mesh, item.primitive);
+            });
         };
 
         this.gl.onupdate = function(dt) {
-            mat4.rotateY(object.model, object.model, dt * 0.2);
+            objs.forEach(function(item){
+                mat4.rotateY(item.model, item.model, dt * 0.2);
+            });
         };
 
         instance.container.append(this.gl.canvas);
