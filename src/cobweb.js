@@ -1,50 +1,39 @@
-'use strict';
-
 (function(){
-    var Cobweb = function(options) {
-        this.options = {
-            container: {
-                selector: '#cobweb',
-                className: 'cb-container'
-            },
-            menu: {
-                className: 'cb-menu'
-            },
-            logger: {
-                className: 'cb-logger'
-            }
-        };
-        if (options && typeof options === 'object')
-            extend(this.options, options);
+    'use strict';
 
-        this.container = document.querySelector(this.options.container.selector);
-        this.container.addClass(this.options.container.className);
-
-        this.events = new EventHandler();
-        this.events.on('core.resize', function(instance) {
-            instance.plugins.surface.gl.canvas.height = instance.container.height();
-            instance.plugins.surface.gl.canvas.width = instance.container.width();
-        });
-        Cobweb.prototype.plugins.load(this);
-
-        var scope = this;
-        window.addEventListener('resize', function(event) {
-            scope.events.trigger('core.resize', scope);
-        });
+    var defaultOptions = {
+        container: {
+            selector: '#cobweb',
+            className: 'cb-container'
+        }
     };
 
-    function extend(source, properties){
-        for (var property in properties) {
+    var Cobweb = function (options) {
+        this.options = defaultOptions;
+        this.extendOptions(this.options, options || {});
+
+        this.container = document.querySelector(this.options.container.selector);
+        if (!this.container)
+            throw new Error('Invalid container selector: \'' +
+                this.options.container.selector + '\'');
+        this.container.addClass(this.options.container.className);
+        this.container.data('instance', this);
+
+        this.logger = new Logger(this);
+        this.events = new EventHandler(this);
+        Cobweb.prototype.plugins.load(this);
+    };
+
+    Cobweb.prototype.extendOptions = function (defaults, properties) {
+        for (var property in properties)
             if (properties.hasOwnProperty(property)) {
                 var value = properties[property];
-                if (typeof value === 'object') {
-                    extend(source[property], properties[property]);
-                } else {
-                    source[property] = properties[property];
-                }
+                if (typeof value === 'object')
+                    this.extendOptions(defaults[property], properties[property]);
+                else
+                    defaults[property] = properties[property];
             }
-        }
-    }
+    };
 
     window.Cobweb = Cobweb;
 }());

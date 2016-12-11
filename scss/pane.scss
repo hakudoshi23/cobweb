@@ -1,0 +1,63 @@
+$PANE_BG: #DDDDDD;
+$ANCHOR_BG: #0000AA;
+$ANCHOR_SIZE: 15px;
+$SEPARATOR_BG: #FF8800;
+
+.pane {
+    background-color: $PANE_BG;
+    position: relative;
+    float: left;
+
+    .pane-anchor {
+        background-color: $ANCHOR_BG;
+        cursor: crosshair;
+        user-select: none;
+
+        height: $ANCHOR_SIZE;
+        width: $ANCHOR_SIZE;
+
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}
+
+.pane-separator {
+    background-color: $SEPARATOR_BG;
+    user-select: none;
+    display: block;
+    float: left;
+}
+
+.pane-group {
+    overflow: hidden;
+    float: left;
+}
+
+.pane-group-h {
+    width: 100%;
+
+    .pane {
+        display: inline-block;
+        height: 100%;
+    }
+
+    .pane-separator {
+        display: inline-block;
+        height: 100%;
+   }
+}
+
+.pane-group-v {
+    display: inline-block;
+    height: 100%;
+
+    .pane {
+        vertical-align: bottom;
+        width: 100%;
+    }
+
+    .pane-separator {
+        width: 100%;
+   }
+}

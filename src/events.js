@@ -1,17 +1,20 @@
-'use strict';
-
 ((function() {
-    var EventHandler = function() {
+    'use strict';
+
+    var EventHandler = function (instance) {
+        this.instance = instance;
         this.listeners = {};
     };
 
     EventHandler.prototype.trigger = function() {
         var name = arguments[0];
         var listeners = this.listeners[name] || [];
-        for (var i = 0; i < listeners.length; i++) {
-            Array.prototype.splice.call(arguments, 0, 1);
+        Array.prototype.splice.call(arguments, 0, 1);
+        for (var i = 0; i < listeners.length; i++)
             listeners[i].apply(null, arguments);
-        }
+        this.instance.logger.debug('Event triggered: ' + name);
+        if (arguments.length > 0)
+            this.instance.logger.debug(arguments);
     };
 
     EventHandler.prototype.on = function(name, callback) {

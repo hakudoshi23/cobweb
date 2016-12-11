@@ -1,3 +1,5 @@
+/* jshint ignore: start */
+
 'use strict';
 
 var gulp = require('gulp'),
@@ -13,11 +15,12 @@ var config = {
     js: {
         paths: {
             master: [
-                'src/utils.js',
+                'src/utils/**/*.js',
                 'src/events.js',
+                'src/logger.js',
                 'src/cobweb.js',
                 'src/plugins.js',
-                'src/plugins/**/*.js'
+                'src/plugins/**/*.js',
             ]
         }
     }
@@ -69,21 +72,17 @@ gulp.task('sass', function () {
         .pipe(plugins.concat('cobweb.min.css'))
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(config.dist))
-        .on('error', function (err) {
-            plugins.util.log(plugins.util.colors.red(err));
-        });
+        .on('error', swallowError);
 });
 
 gulp.task('js', function () {
     return gulp.src(config.js.paths.master)
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.concat('cobweb.min.js'))
-        .pipe(plugins.uglify().on('error', plugins.util.log))
+        .pipe(plugins.uglify().on('error', swallowError))
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(config.dist))
-        .on('error', function (err) {
-            plugins.util.log(plugins.util.colors.red(err));
-        });
+        .on('error', swallowError);
 });
 
 gulp.task('js-lint', function () {
@@ -99,3 +98,8 @@ gulp.task('demo', function () {
           open: 'index.html'
         }));
 });
+
+function swallowError (error) {
+  console.log(error.toString());
+  this.emit('end');
+}
