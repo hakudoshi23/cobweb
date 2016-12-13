@@ -30,6 +30,12 @@
         instance.events.on('pane.select', function (pane) {
             instance.pane.current = pane;
         });
+
+        window.addEventListener('resize', function (event) {
+            var queryString = ':scope > .pane, :scope > .pane-group';
+            var root = instance.container.querySelector(queryString);
+            triggerResize(instance, root);
+        });
     };
 
     Pane.prototype.splitPane = function (pane, axis) {
@@ -42,7 +48,7 @@
             if (pane.nextSibling)
                 pane.nextSibling.data('pane1', newPane);
 
-            newPane.setData(Object.clone(group.data()));
+            //newPane.setData(Object.clone(group.data()));
             var originalDimension = pane.data('perc-' + styleAttr);
             newPane.data('perc-' + styleAttr, originalDimension / 2);
             pane.data('perc-' + styleAttr, originalDimension / 2);
@@ -54,6 +60,8 @@
             updateDimensions(group, styleAttr);
 
             this.instance.events.trigger('pane.split', pane, newPane);
+            triggerResize(this.instance, newPane);
+            triggerResize(this.instance, pane);
         }
     };
 
@@ -72,14 +80,17 @@
 
                 group.removeChild(pane[sibling]);
                 group.removeChild(pane[sibling]);
-                if (pane[sibling])
-                    pane[sibling].data('pane1', pane);
+                if (pane.previousSibling) pane.previousSibling.data('pane2', pane);
+                if (pane.nextSibling) pane.nextSibling.data('pane1', pane);
 
                 var siblings = group.children.length;
                 var newPerc = pane.data('perc-' + styleAttr) + removedSize;
                 pane.data('perc-' + styleAttr, siblings === 1 ? 100 : newPerc);
 
-                updateDimensions(group, styleAttr);
+                var subPanes = group.querySelectorAll(':scope > .pane, :scope > .pane-group');
+                if (subPanes.length === 1) unwrapFromGroup(pane);
+                else updateDimensions(group, styleAttr);
+                triggerResize(this.instance, pane);
             }
         }
     };
@@ -125,9 +136,9 @@
             group.addClass('pane-group', className);
 
             var styleProp = className === 'pane-group-h' ? 'width' : 'height';
-            var _styleProp = className === 'pane-group-h' ? 'height' : 'width';
-            group.setData(Object.clone(pane.data()));
             group.style.cssText = pane.style.cssText;
+            group.data('perc-height', pane.data('perc-height'));
+            group.data('perc-width', pane.data('perc-width'));
             group.data('styleProperty', styleProp);
             pane.attr('style', null);
 
@@ -136,6 +147,22 @@
             group.append(pane);
             return group;
         } else return parent;
+    }
+
+    function unwrapFromGroup (pane) {
+        var group = pane.parent();
+        var parent = group.parent();
+
+        pane.data('perc-height', group.data('perc-height'));
+        pane.data('perc-width', group.data('perc-width'));
+        pane.style.cssText = group.style.cssText;
+
+        group.removeChild(pane);
+        parent.insertBefore(pane, group);
+        parent.removeChild(group);
+
+        if (pane.previousSibling) pane.previousSibling.data('pane2', pane);
+        if (pane.nextSibling) pane.nextSibling.data('pane1', pane);
     }
 
     function updateDimensions (group, styleAttr) {
@@ -227,6 +254,9 @@
 
                 sep.data('startX', event.pageX);
                 sep.data('startY', event.pageY);
+
+                triggerResize(instance, pane1);
+                triggerResize(instance, pane2);
             }
         }
     }
@@ -258,6 +288,17 @@
 
         if (instance.pane.separator) {
             instance.pane.separator = null;
+        }
+    }
+
+    function triggerResize (instance, pane) {
+        if (pane.hasClass('pane-group')) {
+            var panes = pane.querySelectorAll('.pane');
+            panes.forEach(function (pane) {
+                instance.events.trigger('pane.resize', pane);
+            });
+        } else {
+            instance.events.trigger('pane.resize', pane);
         }
     }
 })());

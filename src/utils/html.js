@@ -101,7 +101,7 @@
             else
                 this.style.height = value;
         } else
-            return this.getBoundingClientRect().height;
+            return this.clientHeight;
     });
 
     safeExtend(HTMLElement.prototype, 'width', function () {
@@ -112,10 +112,29 @@
             else
                 this.style.width = value;
         } else
-            return this.getBoundingClientRect().width;
+            return this.clientWidth;
+    });
+
+    safeExtend(window, 'guid', function () {
+        return 'GUID-' + s4() + '-' + s4() + '-' + s4();
+    });
+
+    safeExtend(HTMLElement.prototype, 'guid', function () {
+        var guid = null, overlap = null;
+        do {
+            guid = window.guid();
+            overlap = document.querySelector('#' + guid);
+        } while(overlap);
+        this.attr('id', guid);
+        return guid;
     });
 
     function safeExtend(prototype, property, value) {
         if(!prototype[property]) prototype[property] = value;
+    }
+
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16).substring(1);
     }
 })());

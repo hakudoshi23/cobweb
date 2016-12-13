@@ -6,6 +6,7 @@ $SEPARATOR_BG: #FF8800;
 .pane {
     background-color: $PANE_BG;
     position: relative;
+    overflow: hidden;
     float: left;
 
     .pane-anchor {
