@@ -16,31 +16,36 @@
 				+ About Us
 			+ Outline Window (scene nodes)
 			+ Properties Window (selected object)
+				+ Object modifiers
+					+ Mirror
+					+ Subsurf
 			+ Console Window (Input & Output)
 			+ 3D Window (render)
+				+ Preset views (X, Y, Z)
+				+ Background images for predefined views (sketch)
+				+ Add background images
+				+ Scale & reposition background images
 				+ Interaction Modes
+					+ Moving controls
+						+ Regular smooth movement
+						+ With precission (smaller scale)
+						+ Aligned to an axis
+						+ By fixed amount (10 by 10)
+						+ Type numbers
 					+ Object Mode (Object as a whole)
-						+ Move object
-							+ Continuous (default)
-							+ With precission (small scale)
-							+ Aligned to an axis
-							+ By fixed amount (10 by 10)
-							+ Manually
-						+ Rotate object
-							+ Continuous (default)
-							+ With precission (small scale)
-							+ Aligned to an axis
-							+ By fixed amount (10 by 10)
-							+ Manually
-						+ Scale object
-							+ Continuous (default)
-							+ With precission (small scale)
-							+ Aligned to an axis
-							+ By fixed amount (10 by 10)
-							+ Manually
+						+ Duplicate (Control + C & Control + V)
+						+ Move, Rotate & Scale selection
 					+ Edit mode (Vertices, Edges & Faces)
 						+ Limit selection (Vertices | Edges | Faces)
-						+ Move, Rotate & Scale.
+						+ Select only visible elements (not hidden)
+						+ Select loops (Vertices | Faces)
+						+ Select by mouse area (rectangle)
+						+ Add & remove selected items /w Control
+						+ Move, Rotate & Scale selection
+						+ Add loop cut (subdivide)
+						+ Edge slide (move group by its edges)
+						+ Duplicate selection
+						+ Extrude selection
 						+ [TODO]
 					+ Sculpting Mode [TODO]
 					+ Texture Paint Mode [TODO]
