@@ -20,12 +20,19 @@
 				+ Expand & collapse childrens
 				+ Toggle visibility, selection & rendering
 			+ UV / Image editor
+				+ Select texture from availables
+				+ Display UVs on image
 				+ View mode
 				+ Edit mode
 					+ Brush settings
+						+ Color
 						+ Radius
 						+ Intensity
 			+ Properties Window (selected object)
+				+ Material
+					+ See all available materials
+					+ Material result preview
+					+ Change properties (specular, etc.)
 				+ Object modifiers
 					+ Mirror
 						+ Select axis to apply (1 or more)
@@ -77,9 +84,7 @@
 						+ Dyntopo (increase triangle count with each stroke)
 							+ Detail size (triangles to be added)
 							+ Detail relative to scale
-					+ Texture Paint Mode [TODO]
-					+ Weight Paint Mode [TODO]
-					+ Vertex Paint Mode [TODO]
+					+ Texture Paint Mode
                 + Render Modes
                 	+ Solid
                 	+ Wireframe
@@ -103,5 +108,3 @@
 			+ Spot Type Properties
 		+ Object Node
 			+ Automatic Bounding Box (Octree?)
-			+ Object Modifiers [TODO]
-			+ Material [TODO]
