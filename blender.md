@@ -19,7 +19,12 @@
 				+ Show tree structure
 				+ Expand & collapse childrens
 				+ Toggle visibility, selection & rendering
-			+ UV / Image editor [TODO]
+			+ UV / Image editor
+				+ View mode
+				+ Edit mode
+					+ Brush settings
+						+ Radius
+						+ Intensity
 			+ Properties Window (selected object)
 				+ Object modifiers
 					+ Mirror
