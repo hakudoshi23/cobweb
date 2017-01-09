@@ -8,6 +8,7 @@
 		+ Everything has a keyboard shortcut
 		+ Pane Types
 			+ User Preferences Window
+			+ Console Window (Input & Output)
 			+ Info Window (main menu)
 				+ Load files from disk
 				+ Save files in custom format
@@ -15,23 +16,29 @@
 				+ Save screenshot
 				+ About Us
 			+ Outline Window (scene nodes)
+				+ Show tree structure
+				+ Expand & collapse childrens
+				+ Toggle visibility, selection & rendering
+			+ UV / Image editor [TODO]
 			+ Properties Window (selected object)
 				+ Object modifiers
 					+ Mirror
+						+ Select axis to apply (1 or more)
 					+ Subsurf
-			+ Console Window (Input & Output)
+						+ Mean crease (resist smoothing, stay sharp)
+						+ Increase / decrease level
 			+ 3D Window (render)
 				+ Preset views (X, Y, Z)
-				+ Background images for predefined views (sketch)
 				+ Add background images
+				+ Background images for predefined views (sketch)
 				+ Scale & reposition background images
+				+ Moving controls
+					+ Regular smooth movement
+					+ With precision (smaller scale)
+					+ Aligned to an axis
+					+ By fixed amount (10 by 10)
+					+ Type numbers
 				+ Interaction Modes
-					+ Moving controls
-						+ Regular smooth movement
-						+ With precission (smaller scale)
-						+ Aligned to an axis
-						+ By fixed amount (10 by 10)
-						+ Type numbers
 					+ Object Mode (Object as a whole)
 						+ Duplicate (Control + C & Control + V)
 						+ Move, Rotate & Scale selection
@@ -46,8 +53,25 @@
 						+ Edge slide (move group by its edges)
 						+ Duplicate selection
 						+ Extrude selection
-						+ [TODO]
-					+ Sculpting Mode [TODO]
+						+ Add & remove face (selected vertices)
+					+ Sculpting Mode
+						+ Brush settings
+							+ Radius
+							+ Strength
+							+ Add or substract
+						+ Multiple brushes
+							+ Sculp Draw
+							+ Smooth
+							+ Clay Strips
+							+ Snake Hook
+							+ Thumb
+							+ Crease
+							+ Flatten
+							+ Grab
+						+ Symetry along an axis (not modifier)
+						+ Dyntopo (increase triangle count with each stroke)
+							+ Detail size (triangles to be added)
+							+ Detail relative to scale
 					+ Texture Paint Mode [TODO]
 					+ Weight Paint Mode [TODO]
 					+ Vertex Paint Mode [TODO]
