@@ -16,7 +16,21 @@
 				+ Save screenshot
 				+ About Us
 			+ Outline Window (scene nodes)
-				+ Show tree structure
+				+ Scene Tree Structure
+					+ Parent & children navigation
+					+ Scene Properties
+					+ World Properties
+					+ Object Properties
+					+ Different node types
+						+ Camera Node
+							+ Camera Properties (proj / ortho)
+						+ Lamp Node
+							+ Lamp Properties (specular, diffuse, etc.)
+							+ Point Type Properties
+							+ Sun Type Properties
+							+ Spot Type Properties
+						+ Object Node
+							+ Automatic Bounding Box (Octree?)
 				+ Expand & collapse childrens
 				+ Toggle visibility, selection & rendering
 			+ UV / Image editor
@@ -93,18 +107,3 @@
                 	+ Material
                 	+ Realistic
               	+ Layers System (Group objects by layer & toggle them)
-+ Scene Tree Structure
-	+ Parent & children navigation
-    + Scene Properties
-    + World Properties
-    + Object Properties
-	+ Different node types
-		+ Camera Node
-        	+ Camera Properties (proj / ortho)
-		+ Lamp Node
-			+ Lamp Properties (specular, diffuse, etc.)
-			+ Point Type Properties
-			+ Sun Type Properties
-			+ Spot Type Properties
-		+ Object Node
-			+ Automatic Bounding Box (Octree?)
