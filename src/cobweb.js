@@ -19,7 +19,7 @@
         this.container.addClass(this.options.container.className);
         this.container.data('instance', this);
 
-        this.logger = new Logger(this);
+        this.logger = new Logger(this, true);
         this.events = new EventHandler(this);
         Cobweb.prototype.modules.load(this);
     };

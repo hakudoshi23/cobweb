@@ -2,14 +2,18 @@
     'use strict';
 
     Cobweb.prototype.modules.add('scene', function (instance) {
-        var root = tree({
-            
-        });
-
-        var scene = {
-            root: root
+        instance.scene = {
+            root: TreeNode.extend({})
         };
 
-        instance.scene = scene;
-    });
+        var mat = mat4.create();
+        mat4.rotateY(mat, mat, 0.8);
+
+        instance.scene.root.add({
+            type: 'object',
+            primitive: instance.graphics.gl.TRIANGLES,
+            mesh: GL.Mesh.cube(),
+            model: mat,
+        });
+    }, ['graphics']);
 })());

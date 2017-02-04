@@ -12,7 +12,7 @@
         Array.prototype.splice.call(arguments, 0, 1);
         for (var i = 0; i < listeners.length; i++)
             listeners[i].apply(null, arguments);
-        console.debug(name);
+        this.instance.logger.debug(name, arguments);
     };
 
     EventHandler.prototype.on = function(name, callback) {

@@ -5,18 +5,13 @@
         all: {},
         add: function (name, init, dependencies) {
             dependencies = dependencies || [];
-
-            if (typeof name !== 'string') throw new Error('Parameter 1: expected string, found ' + typeof name);
-            if (!Array.isArray(dependencies)) throw new Error('Parameter 2: expected array, found ' + typeof dependencies);
-            if (typeof init !== 'function') throw new Error('Parameter 3: expected function, found ' + typeof init);
-
+            
             this.all[name] = {
                 dependencies: dependencies,
                 init: init
             };
         },
         load: function (instance) {
-            instance.modules = {};
             addReverseDependencies(this.all);
             var sortedNames = topologicalSort(instance, this.all);
             for (var i = 0; i < sortedNames.length; i++ ) {

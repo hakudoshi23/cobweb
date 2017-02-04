@@ -19,13 +19,7 @@
 
     Cobweb.prototype.modules.add('graphics', function (instance) {
         instance.graphics = new Graphics(instance);
-        instance.scene.root.add({
-            type: 'object',
-            primitive: instance.graphics.gl.TRIANGLES,
-            model: mat4.create(),
-            mesh: GL.Mesh.cube(),
-        });
-    }, ['scene']);
+    });
 
     function drawRenderTarget (instance, canvas) {
         var pane = canvas.parent('.pane');
@@ -46,7 +40,6 @@
             gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, buffer);
             imageData.data.set(buffer);
             context.putImageData(imageData, 0, 0);
-            context.translate(100, 100);
         }
     }
 })());

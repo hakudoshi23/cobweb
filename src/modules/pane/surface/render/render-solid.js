@@ -42,7 +42,6 @@
 
     			uniforms.u_model = obj.model;
     			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
-                mat4.rotateY(surface.view, surface.view, 0.01);
             }
         });
 
