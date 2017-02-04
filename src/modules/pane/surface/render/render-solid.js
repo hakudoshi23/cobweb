@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.plugins.add('render-solid', function (instance) {
+    Cobweb.prototype.modules.add('render-solid', function (instance) {
         var shader = new Shader(
             'precision highp float;' +
             'attribute vec3 a_vertex;' +
@@ -34,19 +34,17 @@
         };
 
         instance.graphics.renders.add('solid', function (surface) {
-            for (var name in instance.scene) {
-                var obj = instance.scene[name];
-                if (obj) {
-        			mat4.multiply(temp, surface.view, obj.model);
-        			mat4.multiply(mvp, surface.proj, temp);
+            var objs = instance.scene.root.dfs();
+            for (var i = 0; i < objs.length; i++) {
+                var obj = objs[i].data;
+    			mat4.multiply(temp, surface.view, obj.model);
+    			mat4.multiply(mvp, surface.proj, temp);
 
-        			uniforms.u_model = obj.model;
-        			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
-                    mat4.rotateY(surface.view, surface.view, 0.01);
-                }
+    			uniforms.u_model = obj.model;
+    			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
+                mat4.rotateY(surface.view, surface.view, 0.01);
             }
         });
-
 
     }, ['graphics-render']);
 })());

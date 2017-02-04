@@ -12,9 +12,7 @@
         Array.prototype.splice.call(arguments, 0, 1);
         for (var i = 0; i < listeners.length; i++)
             listeners[i].apply(null, arguments);
-        this.instance.logger.debug('Event triggered: ' + name);
-        if (arguments.length > 0)
-            this.instance.logger.debug(arguments);
+        console.debug(name);
     };
 
     EventHandler.prototype.on = function(name, callback) {

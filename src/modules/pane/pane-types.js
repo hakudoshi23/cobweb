@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.plugins.add('pane-types', function (instance) {
+    Cobweb.prototype.modules.add('pane-types', function (instance) {
         var paneTypes = {
             all: {},
             add: function (name, callback) {
@@ -21,10 +21,6 @@
         paneTypes.add('default', function (pane, instance) {
             instance.logger.debug('Default pane type (this does nothing)');
         });
-
-        var root = document.querySelector('.cb-container .pane');
-        var type = paneTypes.defaultType;
-        if (type) paneTypes.setType(root, type);
 
         instance.events.on('pane.split', function (oldPane, newPane) {
             var oldType = oldPane.attrData('pane-type');

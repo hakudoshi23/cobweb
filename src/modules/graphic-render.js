@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.plugins.add('graphics-render', function (instance) {
+    Cobweb.prototype.modules.add('graphics-render', function (instance) {
         instance.graphics.renders = {
             all: {},
             add: function (name, callback) {

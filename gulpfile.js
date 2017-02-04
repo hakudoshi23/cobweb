@@ -19,8 +19,8 @@ var config = {
                 'src/events.js',
                 'src/logger.js',
                 'src/cobweb.js',
-                'src/plugins.js',
-                'src/plugins/**/*.js',
+                'src/modules.js',
+                'src/modules/**/*.js',
             ]
         }
     }

@@ -41,7 +41,7 @@
     safeExtend(HTMLElement.prototype, 'data', function (attr, value) {
         if (!window.__data_cache) window.__data_cache = new WeakMap();
         var elAttrs = window.__data_cache.get(this) || {};
-        if (value) {
+        if (value !== undefined) {
             elAttrs[attr] = value;
             window.__data_cache.set(this, elAttrs);
         } else {

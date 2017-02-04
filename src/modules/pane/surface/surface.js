@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.plugins.add('surface', function (instance) {
+    Cobweb.prototype.modules.add('surface', function (instance) {
         instance.pane.types.add('surface', function (pane, instance) {
             var canvas = document.createElement('canvas');
             pane.append(canvas);
@@ -27,7 +27,6 @@
         var root = document.querySelector('.pane');
         instance.pane.setType(root, 'surface');
         instance.pane.setRender(root, 'solid');
-        instance.events.trigger('pane.resize', root);
     }, ['pane-types', 'surface-render']);
 
     function updateCanvasSize (pane) {
