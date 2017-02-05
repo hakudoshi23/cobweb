@@ -4,8 +4,8 @@
     Cobweb.prototype.modules.add('pane-types', function (instance) {
         var paneTypes = {
             all: {},
-            add: function (name, callback) {
-                this.all[name] = callback;
+            add: function (name, callbacks) {
+                this.all[name] = callbacks;
             },
             get: function (name) {
                 return this.all[name];
@@ -18,10 +18,6 @@
             }
         };
 
-        paneTypes.add('default', function (pane, instance) {
-            instance.logger.debug('Default pane type (this does nothing)');
-        });
-
         instance.events.on('pane.split', function (oldPane, newPane) {
             var oldType = oldPane.attrData('pane-type');
             if (oldType) instance.pane.setType(newPane, oldType);
@@ -31,7 +27,10 @@
 
         instance.pane.setType = function (pane, name) {
             if (this.types.has(name)) {
-                this.types.get(name)(pane, instance);
+                var typeCallbacks = this.types.get(name);
+                typeCallbacks.onPaneType(pane, instance);
+                var paneHeader = pane.querySelector('.pane-header');
+                typeCallbacks.onCreateHeader(paneHeader, instance);
                 pane.attrData('pane-type', name);
             }
         };

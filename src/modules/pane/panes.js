@@ -8,7 +8,7 @@
                 size: 3
             },
             callbacks: {
-                //onPaneCreate: onPaneCreate,
+                onPaneCreate: onPaneCreate,
                 onPaneSplit: onPaneSplit,
                 onPaneResize: onPaneResize,
                 //onPaneMerge: onPaneMerge,
@@ -17,7 +17,7 @@
         });
 
         function onPaneCreate (pane) {
-            console.debug('onPaneCreate', pane);
+            instance.events.trigger('pane.create', pane);
         }
 
         function onPaneSplit (origin, newPane) {
