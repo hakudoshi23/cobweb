@@ -28,7 +28,7 @@
 
         var uniforms = {
             u_color: [1, 1, 1, 1],
-            u_lightvector: vec3.normalize(vec3.create(), [1, 2, 3]),
+            u_lightvector: vec3.normalize(vec3.create(), [1, 2, -3]),
             u_model: null,
             u_mvp: mvp
         };
@@ -37,7 +37,9 @@
             var objs = instance.scene.root.dfs();
             for (var i = 0; i < objs.length; i++) {
                 var obj = objs[i].data;
-    			mat4.multiply(temp, surface.view, obj.model);
+
+                surface.getView(temp);
+    			mat4.multiply(temp, temp, obj.model);
     			mat4.multiply(mvp, surface.proj, temp);
 
     			uniforms.u_model = obj.model;

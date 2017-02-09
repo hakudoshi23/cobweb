@@ -36,11 +36,27 @@
     }, ['interaction-mode', 'surface']);
 
     function runCallback (callbacks, event) {
+        var realCoords = getLocalCoordinates(event);
         switch (event.type) {
-            case 'mousemove': return callbacks.onMouseMove(event);
-            case 'mousedown': return callbacks.onMouseDown(event);
-            case 'mouseup': return callbacks.onMouseUp(event);
-            case 'click': return callbacks.onClick(event);
+            case 'mousemove': return callbacks.onMouseMove(event, realCoords);
+            case 'mousedown': return callbacks.onMouseDown(event, realCoords);
+            case 'mouseup': return callbacks.onMouseUp(event, realCoords);
+            case 'click': return callbacks.onClick(event, realCoords);
         }
+    }
+
+    function getLocalCoordinates (event) {
+        var coordinates;
+        if (event.pageX || event.pageY) {
+            coordinates = [event.pageX, event.pageY];
+        } else {
+            coordinates = [
+                event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft,
+                event.clientY + document.body.scrollTop + document.documentElement.scrollTop
+            ];
+        }
+        coordinates[0] -= event.target.offsetLeft;
+        coordinates[1] -= event.target.offsetTop;
+        return coordinates;
     }
 })());

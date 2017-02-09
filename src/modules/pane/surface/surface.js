@@ -15,9 +15,11 @@
         });
 
         window.addEventListener('resize', function (event) {
-            var surfaces = instance.pane.container.querySelectorAll('.pane canvas');
-            for (var i = 0; i < surfaces.length; i++)
+            var surfaces = instance.pane.internal.container
+                .querySelectorAll('.pane canvas');
+            for (var i = 0; i < surfaces.length; i++) {
                 updateCanvasSize(instance, surfaces[i].parentNode);
+            }
         });
 
         instance.events.on('pane.create', function (pane) {
@@ -33,18 +35,23 @@
         canvas.className = 'surface';
         pane.append(canvas);
 
-        var data = {
-            proj: mat4.create(),
-            view: mat4.create()
-        };
-        instance.surface.data = {};
+        instance.surface.data = instance.surface.data || {};
         instance.surface.data[canvas.id] = {};
-        instance.surface.data[canvas.id].surface = data;
+        instance.surface.data[canvas.id].surface = {
+            proj: mat4.create(),
+            center: [0, 0, 0],
+            rotation: [0, 0],
+            distance: 10,
+            getView: function (view) {
+                var up = [0, 1, 0];
+                var eye = [0, 0, -this.distance];
+                vec3.rotateX(eye, eye, this.rotation[1]);
+                vec3.rotateY(eye, eye, -this.rotation[0]);
+                vec3.add(eye, eye, this.center);
+                mat4.lookAt(view, eye, this.center, up);
+            }
+        };
 
-        mat4.perspective(data.proj, -45 * DEG2RAD,
-            canvas.width / canvas.height, 0.1, 1000);
-        mat4.lookAt(data.view, [0,2,4], [0,0,0], [0,1,0]);
-        mat4.scale(data.view, data.view, [1,1.2,1]);
         updateCanvasSize(instance, pane);
 
         instance.events.trigger('surface.create', canvas);
@@ -71,6 +78,6 @@
         canvas.height = height;
         canvas.width = width;
 
-        mat4.perspective(data.surface.proj, -45 * DEG2RAD, width / height, 0.1, 1000);
+        mat4.perspective(data.surface.proj, 45 * DEG2RAD, width / height, 0.1, 1000);
     }
 })());

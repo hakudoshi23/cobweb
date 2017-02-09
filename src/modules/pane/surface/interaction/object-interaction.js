@@ -3,18 +3,18 @@
 
     Cobweb.prototype.modules.add('object-interaction', function (instance) {
         instance.surface.interaction.add('object', {
-            onMouseMove: function (event) {
+            onMouseMove: function (event, realCoords) {
                 return true;
             },
-            onMouseDown: function (event) {
+            onMouseDown: function (event, realCoords) {
                 instance.logger.debug('onMouseDown', event);
                 return true;
             },
-            onMouseUp: function (event) {
+            onMouseUp: function (event, realCoords) {
                 instance.logger.debug('onMouseUp', event);
                 return true;
             },
-            onClick: function (event) {
+            onClick: function (event, realCoords) {
                 instance.logger.debug('onClick', event);
                 return true;
             }
