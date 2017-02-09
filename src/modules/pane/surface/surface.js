@@ -18,14 +18,16 @@
                 updateCanvasSize(surfaces[i].parentNode);
         });
 
-        var root = document.querySelector('.pane');
-        instance.pane.setType(root, 'surface');
+        instance.events.on('pane.create', function (pane) {
+            instance.pane.setType(pane, 'surface');
+        });
 
         instance.surface = {};
     }, ['pane-types']);
 
     function onSurfacePaneType (pane, instance) {
         var canvas = document.createElement('canvas');
+        canvas.className = 'surface';
         pane.append(canvas);
 
         var data = {
@@ -38,6 +40,8 @@
         mat4.scale(data.view, data.view, [1,1.2,1]);
         pane.data('surface', data);
         updateCanvasSize(pane);
+
+        instance.events.trigger('surface.create', canvas);
     }
 
     function onCreateSurfaceHeader (header, instance) {

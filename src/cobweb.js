@@ -22,6 +22,7 @@
         this.logger = new Logger(this, true);
         this.events = new EventHandler(this);
         Cobweb.prototype.modules.load(this);
+        this.events.trigger('app.loaded');
     };
 
     window.Cobweb = Cobweb;

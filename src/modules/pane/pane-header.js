@@ -5,10 +5,6 @@
         instance.events.on('pane.create', function (pane) {
             onCreateCallback(pane, instance);
         });
-
-        var panes = instance.pane.container.querySelectorAll('.pane');
-        for (var i = 0; i < panes.length; i++)
-            onCreateCallback(panes[i], instance);
     }, ['pane-types']);
 
     function onCreateCallback (pane, instance) {

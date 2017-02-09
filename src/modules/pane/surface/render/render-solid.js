@@ -45,5 +45,8 @@
             }
         });
 
+        instance.events.on('surface.create', function (surface) {
+            instance.surface.setRender(surface, 'solid');
+        });
     }, ['surface-render']);
 })());

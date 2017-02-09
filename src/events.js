@@ -10,9 +10,9 @@
         var name = arguments[0];
         var listeners = this.listeners[name] || [];
         Array.prototype.splice.call(arguments, 0, 1);
+        this.instance.logger.debug(name, arguments);
         for (var i = 0; i < listeners.length; i++)
             listeners[i].apply(null, arguments);
-        this.instance.logger.debug(name, arguments);
     };
 
     EventHandler.prototype.on = function(name, callback) {

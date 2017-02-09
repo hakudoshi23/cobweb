@@ -2,19 +2,23 @@
     'use strict';
 
     Cobweb.prototype.modules.add('pane', function (instance) {
-        instance.pane = new Pane({
-            container: instance.options.container.selector,
-            separator: {
-                size: 3
-            },
-            callbacks: {
-                onPaneCreate: onPaneCreate,
-                onPaneSplit: onPaneSplit,
-                onPaneResize: onPaneResize,
-                //onPaneMerge: onPaneMerge,
-                //onPaneDestroy: onPaneDestroy,
-            }
+        instance.events.on('app.loaded', function () {
+            instance.pane.internal = new Pane({
+                container: instance.options.container.selector,
+                separator: {
+                    size: 3
+                },
+                callbacks: {
+                    onPaneCreate: onPaneCreate,
+                    onPaneSplit: onPaneSplit,
+                    onPaneResize: onPaneResize,
+                    //onPaneMerge: onPaneMerge,
+                    //onPaneDestroy: onPaneDestroy,
+                }
+            });
         });
+
+        instance.pane = {};
 
         function onPaneCreate (pane) {
             instance.events.trigger('pane.create', pane);
