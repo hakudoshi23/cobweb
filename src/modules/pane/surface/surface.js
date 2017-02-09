@@ -8,9 +8,14 @@
         });
 
         instance.events.on('pane.resize', function (pane) {
-            if (pane.attrData('pane-type') === 'surface') {
+            if (pane.attrData('pane-type') === 'surface')
                 updateCanvasSize(pane);
-            }
+        });
+
+        window.addEventListener('resize', function (event) {
+            var surfaces = instance.pane.container.querySelectorAll('.pane canvas');
+            for (var i = 0; i < surfaces.length; i++)
+                updateCanvasSize(surfaces[i].parentNode);
         });
 
         var root = document.querySelector('.pane');
