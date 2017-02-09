@@ -45,5 +45,5 @@
             }
         });
 
-    }, ['graphics-render']);
+    }, ['surface-render']);
 })());

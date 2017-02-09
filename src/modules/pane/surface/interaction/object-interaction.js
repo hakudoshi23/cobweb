@@ -2,8 +2,7 @@
     'use strict';
 
     Cobweb.prototype.modules.add('object-interaction', function (instance) {
-
-        instance.interaction.add('object', {
+        instance.surface.interaction.add('object', {
             onMouseDown: function (event) {
                 instance.logger.debug('onMouseDown', event);
             },
@@ -15,5 +14,5 @@
             }
         });
 
-    }, ['surface-render']);
+    }, ['surface-interaction']);
 })());

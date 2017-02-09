@@ -32,7 +32,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.viewport(0, 0, width, height);
 
-        var render = instance.pane.getRender(pane);
+        var render = instance.surface.getRender(canvas);
         if (render) render(surface);
 
         var context = canvas.getContext('2d');

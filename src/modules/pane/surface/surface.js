@@ -20,8 +20,9 @@
 
         var root = document.querySelector('.pane');
         instance.pane.setType(root, 'surface');
-        instance.pane.setRender(root, 'solid');
-    }, ['pane-types', 'surface-render']);
+
+        instance.surface = {};
+    }, ['pane-types']);
 
     function onSurfacePaneType (pane, instance) {
         var canvas = document.createElement('canvas');

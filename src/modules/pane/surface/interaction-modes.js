@@ -2,7 +2,7 @@
     'use strict';
 
     Cobweb.prototype.modules.add('interaction-mode', function (instance) {
-        var interactionModes = {
+        instance.surface.interaction = {
             all: {},
             add: function (name, callbacks) {
                 this.all[name] = callbacks;
@@ -17,7 +17,5 @@
                 return !!this.all[name];
             }
         };
-
-        instance.interaction = interactionModes;
-    });
+    }, ['surface']);
 })());
