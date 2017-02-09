@@ -22,11 +22,11 @@
         });
 
         function onSurfaceEvent (event) {
-            var common = instance.surface.interaction.get('common');
-            var keepRunning = runCallback(common, event);
+            var callbacks = instance.surface.getInteraction(event.target);
+            var keepRunning = runCallback(callbacks, event);
             if (keepRunning) {
-                var callbacks = instance.surface.getInteraction(event.target);
-                runCallback(callbacks, event);
+                var common = instance.surface.interaction.get('common');
+                runCallback(common, event);
             }
         }
 

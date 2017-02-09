@@ -7,11 +7,11 @@
                 return true;
             },
             onMouseDown: function (event) {
-                instance.logger.debug('COMMON - onMouseDown', event);
+                event.target.dataset.moving = 'true';
                 return true;
             },
             onMouseUp: function (event) {
-                instance.logger.debug('COMMON - onMouseUp', event);
+                delete event.target.dataset.moving;
                 return true;
             },
             onClick: function (event) {
