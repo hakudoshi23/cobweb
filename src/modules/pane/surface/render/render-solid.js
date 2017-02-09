@@ -28,7 +28,7 @@
 
         var uniforms = {
             u_color: [1, 1, 1, 1],
-            u_lightvector: vec3.normalize(vec3.create(), [1, 2, -3]),
+            u_lightvector: vec3.normalize(vec3.create(), [1, -5, -3]),
             u_model: null,
             u_mvp: mvp
         };

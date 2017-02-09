@@ -12,7 +12,6 @@
                     var data = instance.surface.data[canvas.id];
                     if (data) {
                         var delta = getCoordsDelta(mouseDownCoords, realCoords);
-                        console.debug('delta: ', delta, originalRotation);
                         combine(data.surface.rotation, originalRotation, delta);
                     }
                 }

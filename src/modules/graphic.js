@@ -13,7 +13,7 @@
             for (var i = 0; i < renderTargets.length; i++)
                 drawRenderTarget(instance, renderTargets[i]);
         };
-        this.gl.clearColor(0.4, 0.4, 0.4, 1);
+        this.gl.clearColor(0.349, 0.349, 0.349, 1);
         this.gl.enable(this.gl.DEPTH_TEST);
     };
 

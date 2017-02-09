@@ -40,8 +40,8 @@
         instance.surface.data[canvas.id].surface = {
             proj: mat4.create(),
             center: [0, 0, 0],
-            rotation: [0, 0],
-            distance: 10,
+            rotation: [0, -0.4],
+            distance: 5,
             getView: function (view) {
                 var up = [0, 1, 0];
                 var eye = [0, 0, -this.distance];
