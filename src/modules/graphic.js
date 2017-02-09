@@ -22,10 +22,7 @@
     });
 
     function drawRenderTarget (instance, canvas) {
-        var pane = canvas.parent('.pane');
-        var imageData = pane.data('imgData');
-        var surface = pane.data('surface');
-        var buffer = pane.data('buffer');
+        var data = instance.surface.data[canvas.id];
         var gl = instance.graphics.gl;
 
         var width  = canvas.clientWidth, height = canvas.clientHeight;
@@ -33,13 +30,13 @@
         gl.viewport(0, 0, width, height);
 
         var render = instance.surface.getRender(canvas);
-        if (render) render(surface);
+        if (render) render(data.surface);
 
         var context = canvas.getContext('2d');
         if (context) {
-            gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, buffer);
-            imageData.data.set(buffer);
-            context.putImageData(imageData, 0, 0);
+            gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data.buffer);
+            data.imgData.data.set(data.buffer);
+            context.putImageData(data.imgData, 0, 0);
         }
     }
 })());

@@ -4,6 +4,9 @@
     Cobweb.prototype.modules.add('common-interaction', function (instance) {
         instance.surface.interaction.add('common', {
             onMouseMove: function (event) {
+                if (event.target.dataset.moving) {
+                    console.debug('drag');
+                }
                 return true;
             },
             onMouseDown: function (event) {
