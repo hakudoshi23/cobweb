@@ -22,10 +22,6 @@
             }
         });
 
-        instance.events.on('pane.create', function (pane) {
-            instance.pane.setType(pane, 'surface');
-        });
-
         instance.surface = {};
     }, ['pane-types']);
 

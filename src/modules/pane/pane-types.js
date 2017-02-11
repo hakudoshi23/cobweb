@@ -31,8 +31,12 @@
                 typeCallbacks.onPaneType(pane, instance);
                 var paneHeader = pane.querySelector('.pane-header');
                 typeCallbacks.onCreateHeader(paneHeader, instance);
-                pane.attrData('pane-type', name);
+                pane.dataset.paneType = name;
             }
+        };
+
+        instance.pane.getType = function (pane) {
+            return pane.dataset.paneType;
         };
     }, ['pane']);
 })());

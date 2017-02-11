@@ -16,6 +16,9 @@
                     //onPaneDestroy: onPaneDestroy,
                 }
             });
+
+            var root = instance.pane.internal.container.querySelector('.pane');
+            instance.pane.setType(root, 'surface');
         });
 
         instance.pane = {};
