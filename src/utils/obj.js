@@ -1,17 +1,6 @@
 ((function(){
     'use strict';
 
-    window.extend = function (defaults, properties) {
-        for (var property in properties)
-            if (property && properties.hasOwnProperty(property)) {
-                var value = properties[property];
-                if (typeof value === 'object')
-                    extend(defaults[property], properties[property]);
-                else
-                    defaults[property] = properties[property];
-            }
-    };
-
     safeExtend(Object, 'clone', function (obj) {
         var newObj = {};
         for (var property in obj)
@@ -27,5 +16,22 @@
 
     function safeExtend(prototype, property, value) {
         if(!prototype[property]) prototype[property] = value;
+    }
+
+    window.extend = _extend;
+
+    function _extend(options, defaults) {
+        for (var prop in defaults) {
+            if (prop && defaults.hasOwnProperty(prop)) {
+                var value = defaults[prop];
+                if (typeof value === 'object') {
+                    if (options[prop]) {
+                        _extend(options[prop], value);
+                    } else
+                        options[prop] = value;
+                } else if (typeof options[prop] === 'undefined')
+                    options[prop] = value;
+            }
+        }
     }
 })());

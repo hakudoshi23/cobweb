@@ -9,8 +9,8 @@
     };
 
     var Cobweb = function (options) {
-        this.options = defaultOptions;
-        extend(this.options, options || {});
+        this.options = options || {};
+        extend(this.options, defaultOptions);
 
         this.container = document.querySelector(this.options.container.selector);
         if (!this.container)
