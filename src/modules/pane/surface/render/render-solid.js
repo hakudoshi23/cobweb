@@ -41,6 +41,7 @@
                 if (obj.type === 'object') {
                     var lightDirection = vec3.create();
                     surface.getCameraPosition(lightDirection);
+                    vec3.add(lightDirection, lightDirection, [-1, 0, 2]);
                     vec3.normalize(lightDirection, lightDirection);
                     uniforms.u_lightvector = lightDirection;
 
