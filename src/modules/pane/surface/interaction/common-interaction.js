@@ -18,24 +18,24 @@
                 return false;
             },
             onMouseDown: function (event, realCoords) {
-                event.target.dataset.moving = 'true';
-
-                var canvas = event.target;
-                var data = instance.surface.data[canvas.id];
-                originalRotation = data.surface.rotation.slice();
-                mouseDownCoords = realCoords;
-
+                if (event.which === 2) {
+                    event.target.dataset.moving = 'true';
+                    var canvas = event.target;
+                    var data = instance.surface.data[canvas.id];
+                    originalRotation = data.surface.rotation.slice();
+                    mouseDownCoords = realCoords;
+                }
                 return true;
             },
             onMouseUp: function (event, realCoords) {
-                delete event.target.dataset.moving;
-
-                var canvas = event.target;
-                var data = instance.surface.data[canvas.id];
-                var delta = getCoordsDelta(mouseDownCoords, realCoords);
-                combine(data.surface.rotation, originalRotation, delta);
-                mouseDownCoords = null;
-
+                if (event.which === 2) {
+                    delete event.target.dataset.moving;
+                    var canvas = event.target;
+                    var data = instance.surface.data[canvas.id];
+                    var delta = getCoordsDelta(mouseDownCoords, realCoords);
+                    combine(data.surface.rotation, originalRotation, delta);
+                    mouseDownCoords = null;
+                }
                 return true;
             },
             onClick: function (event, realCoords) {
