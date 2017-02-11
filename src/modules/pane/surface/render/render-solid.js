@@ -19,7 +19,8 @@
             'uniform vec4 u_color;' +
             'void main() {' +
             '  vec3 N = normalize(v_normal);' +
-            '  gl_FragColor = u_color * max(0.0, dot(u_lightvector,N));' +
+            '  vec4 ambient = vec4(0.1, 0.1, 0.1, 1);' +
+            '  gl_FragColor = ambient + u_color * max(0.0, dot(u_lightvector,N));' +
             '}'
         );
 
@@ -27,8 +28,8 @@
         var mvp = mat4.create();
 
         var uniforms = {
-            u_color: [1, 1, 1, 1],
-            u_lightvector: vec3.normalize(vec3.create(), [1, -5, -3]),
+            u_color: [0.7, 0.7, 0.7, 1],
+            u_lightvector: null,
             u_model: null,
             u_mvp: mvp
         };
@@ -37,13 +38,19 @@
             var objs = instance.scene.root.dfs();
             for (var i = 0; i < objs.length; i++) {
                 var obj = objs[i].data;
+                if (obj.type === 'object') {
+                    var lightDirection = vec3.create();
+                    surface.getCameraPosition(lightDirection);
+                    vec3.normalize(lightDirection, lightDirection);
+                    uniforms.u_lightvector = lightDirection;
 
-                surface.getView(temp);
-    			mat4.multiply(temp, temp, obj.model);
-    			mat4.multiply(mvp, surface.proj, temp);
+                    surface.getViewMatrix(temp);
+        			mat4.multiply(temp, temp, obj.model);
+        			mat4.multiply(mvp, surface.proj, temp);
 
-    			uniforms.u_model = obj.model;
-    			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
+        			uniforms.u_model = obj.model;
+        			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
+                }
             }
         });
 

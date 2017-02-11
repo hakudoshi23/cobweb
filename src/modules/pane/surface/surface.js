@@ -42,13 +42,16 @@
             center: [0, 0, 0],
             rotation: [0, -0.4],
             distance: 5,
-            getView: function (view) {
-                var up = [0, 1, 0];
-                var eye = [0, 0, -this.distance];
+            getViewMatrix: function (view) {
+                var eye = [0, 0, 0];
+                this.getCameraPosition(eye);
+                mat4.lookAt(view, eye, this.center, [0, 1, 0]);
+            },
+            getCameraPosition: function (eye) {
+                eye[2] = -this.distance;
                 vec3.rotateX(eye, eye, this.rotation[1]);
                 vec3.rotateY(eye, eye, -this.rotation[0]);
                 vec3.add(eye, eye, this.center);
-                mat4.lookAt(view, eye, this.center, up);
             }
         };
 

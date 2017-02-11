@@ -15,5 +15,10 @@
             mesh: GL.Mesh.cube(),
             model: mat,
         });
+        instance.scene.root.add({
+            type: 'ligth',
+            color: [1, 1, 1],
+            intensity: 1
+        });
     }, ['graphics']);
 })());
