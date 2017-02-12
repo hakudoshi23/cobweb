@@ -31,9 +31,9 @@
         canvas.className = 'surface';
         pane.append(canvas);
 
-        instance.surface.data = instance.surface.data || {};
-        instance.surface.data[canvas.id] = {};
-        instance.surface.data[canvas.id].surface = {
+        instance.surface.map = instance.surface.map || {};
+        instance.surface.map[canvas.id] = {};
+        instance.surface.map[canvas.id].surface = {
             proj: mat4.create(),
             center: [0, 0, 0],
             rotation: [0, -0.4],
@@ -65,7 +65,7 @@
     function updateCanvasSize (instance, pane) {
         var canvas = pane.querySelector('canvas');
         var context = canvas.getContext('2d');
-        var data = instance.surface.data[canvas.id];
+        var data = instance.surface.map[canvas.id];
 
         var header = pane.querySelector('.pane-header');
         var headerHeight = header ? header.height() : 0;

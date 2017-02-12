@@ -21,7 +21,7 @@
     });
 
     function drawRenderTarget (instance, canvas) {
-        var data = instance.surface.data[canvas.id];
+        var data = instance.surface.map[canvas.id];
         var gl = instance.graphics.gl;
 
         var width  = canvas.clientWidth, height = canvas.clientHeight;

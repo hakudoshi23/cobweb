@@ -9,7 +9,7 @@
             onMouseMove: function (event, realCoords) {
                 if (event.target.dataset.moving) {
                     var canvas = event.target;
-                    var data = instance.surface.data[canvas.id];
+                    var data = instance.surface.map[canvas.id];
                     if (data) {
                         var delta = getCoordsDelta(mouseDownCoords, realCoords);
                         combine(data.surface.rotation, originalRotation, delta);
@@ -21,7 +21,7 @@
                 if (event.which === 2) {
                     event.target.dataset.moving = 'true';
                     var canvas = event.target;
-                    var data = instance.surface.data[canvas.id];
+                    var data = instance.surface.map[canvas.id];
                     originalRotation = data.surface.rotation.slice();
                     mouseDownCoords = realCoords;
                 }
@@ -31,7 +31,7 @@
                 if (event.which === 2) {
                     delete event.target.dataset.moving;
                     var canvas = event.target;
-                    var data = instance.surface.data[canvas.id];
+                    var data = instance.surface.map[canvas.id];
                     var delta = getCoordsDelta(mouseDownCoords, realCoords);
                     combine(data.surface.rotation, originalRotation, delta);
                     mouseDownCoords = null;
