@@ -15,6 +15,7 @@
         };
 
         instance.events.on('surface.create', function (surface) {
+            surface.onmousewheel = onSurfaceEvent;
             surface.onmousemove = onSurfaceEvent;
             surface.onmousedown = onSurfaceEvent;
             surface.onmouseup = onSurfaceEvent;
@@ -38,6 +39,7 @@
     function runCallback (callbacks, event) {
         var realCoords = getLocalCoordinates(event);
         switch (event.type) {
+            case 'mousewheel': return callbacks.onMouseWheel(event, realCoords);
             case 'mousemove': return callbacks.onMouseMove(event, realCoords);
             case 'mousedown': return callbacks.onMouseDown(event, realCoords);
             case 'mouseup': return callbacks.onMouseUp(event, realCoords);

@@ -36,8 +36,8 @@
         instance.surface.map[canvas.id].surface = {
             proj: mat4.create(),
             center: [0, 0, 0],
-            rotation: [0, -0.4],
-            distance: 5,
+            rotation: [0.9, -0.4],
+            distance: 10,
             getViewMatrix: function (view) {
                 var eye = [0, 0, 0];
                 this.getCameraPosition(eye);

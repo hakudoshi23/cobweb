@@ -6,6 +6,15 @@
 
     Cobweb.prototype.modules.add('common-interaction', function (instance) {
         instance.surface.interaction.add('common', {
+            onMouseWheel: function (event, realCoords) {
+                var canvas = event.target;
+                var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+
+                var data = instance.surface.map[canvas.id];
+                data.surface.distance -= delta;
+
+                return true;
+            },
             onMouseMove: function (event, realCoords) {
                 if (event.target.dataset.moving) {
                     var canvas = event.target;
