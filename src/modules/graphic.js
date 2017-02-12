@@ -2,7 +2,6 @@
     'use strict';
 
     var Graphics = function (instance) {
-        this.instance = instance;
         this.gl = GL.create({
             height: screen.height,
             width: screen.width

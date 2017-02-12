@@ -1,8 +1,7 @@
 ((function() {
     'use strict';
 
-    var EventHandler = function (instance) {
-        this.instance = instance;
+    var EventHandler = function () {
         this.listeners = {};
     };
 
@@ -10,7 +9,7 @@
         var name = arguments[0];
         var listeners = this.listeners[name] || [];
         Array.prototype.splice.call(arguments, 0, 1);
-        this.instance.logger.debug(name, arguments);
+        console.debug(name, arguments);
         for (var i = 0; i < listeners.length; i++)
             listeners[i].apply(null, arguments);
     };

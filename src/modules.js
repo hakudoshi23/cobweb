@@ -26,18 +26,6 @@
                 }
             }
             instance.events.trigger('modules.loaded.all', sortedNames);
-        },
-        print: function (instance) {
-            if (instance) {
-                for (var name in this.all) {
-                    var module = this.all[name];
-                    instance.logger.debug('Name: ', name);
-                    instance.logger.debug('\tDependencies: ', module.dependencies);
-                    instance.logger.debug('\tDependant: ', module.dependant);
-                }
-            } else {
-                console.error('Error: "load" should be called before "print"');
-            }
         }
     };
 
