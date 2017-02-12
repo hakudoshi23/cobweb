@@ -90,7 +90,7 @@ gulp.task('js-lint', function () {
         .pipe(plugins.xo());
 });
 
-gulp.task('demo', function () {
+gulp.task('server', function () {
     return gulp.src('.')
         .pipe(plugins.webserver({
           livereload: true,
