@@ -19,7 +19,7 @@
             'uniform vec4 u_color;' +
             'void main() {' +
             '  vec3 N = normalize(v_normal);' +
-            '  vec4 ambient = vec4(0.1, 0.1, 0.1, 1);' +
+            '  vec4 ambient = vec4(0.4, 0.4, 0.4, 1);' +
             '  gl_FragColor = ambient + u_color * max(0.0, dot(u_lightvector,N));' +
             '}'
         );
@@ -41,7 +41,7 @@
                 if (obj.type === 'object') {
                     var lightDirection = vec3.create();
                     surface.getCameraPosition(lightDirection);
-                    vec3.add(lightDirection, lightDirection, [-1, 0, 2]);
+                    vec3.add(lightDirection, lightDirection, [1, 2, 0]);
                     vec3.normalize(lightDirection, lightDirection);
                     uniforms.u_lightvector = lightDirection;
 
