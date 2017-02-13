@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('pane', function (instance) {
+    Modules.prototype.add('pane', function (instance) {
         instance.events.on('app.loaded', function () {
             instance.pane.internal = new Pane({
                 container: instance.options.container.selector,

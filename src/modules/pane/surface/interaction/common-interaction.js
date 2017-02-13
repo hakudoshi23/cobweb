@@ -4,7 +4,7 @@
     var originalRotation = null;
     var mouseDownCoords = null;
 
-    Cobweb.prototype.modules.add('common-interaction', function (instance) {
+    Modules.prototype.add('common-interaction', function (instance) {
         instance.surface.interactions.common = {
             onMouseWheel: function (event, realCoords) {
                 var canvas = event.target;

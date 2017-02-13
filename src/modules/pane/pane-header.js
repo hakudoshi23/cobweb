@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('pane-header', function (instance) {
+    Modules.prototype.add('pane-header', function (instance) {
         instance.events.on('pane.create', function (pane) {
             onCreateCallback(pane, instance);
         });

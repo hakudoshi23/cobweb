@@ -9,6 +9,8 @@
     };
 
     var Cobweb = function (options) {
+        var instance = this;
+
         this.options = options || {};
         extend(this.options, defaultOptions);
 
@@ -21,8 +23,12 @@
 
         this.logger = new Logger(this, true);
         this.events = new EventHandler(true);
-        Cobweb.prototype.modules.load(this);
-        this.events.trigger('app.loaded');
+        this.modules = new Modules([this], {
+            onLoadedAll: function (names) {
+                instance.events.trigger('modules.loaded.all', names);
+                instance.events.trigger('app.loaded');
+            }
+        });
     };
 
     window.Cobweb = Cobweb;

@@ -16,7 +16,7 @@
         this.gl.enable(this.gl.DEPTH_TEST);
     };
 
-    Cobweb.prototype.modules.add('graphics', function (instance) {
+    Modules.prototype.add('graphics', function (instance) {
         instance.graphics = new Graphics(instance);
     });
 

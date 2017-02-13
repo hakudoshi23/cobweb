@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('surface-interaction', function (instance) {
+    Modules.prototype.add('surface-interaction', function (instance) {
         instance.surface.interactions = {};
 
         instance.surface.setInteraction = function (surface, name) {

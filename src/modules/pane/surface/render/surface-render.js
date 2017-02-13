@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('surface-render', function (instance) {
+    Modules.prototype.add('surface-render', function (instance) {
         instance.surface.renders = {};
 
         instance.surface.setRender = function (surface, name) {

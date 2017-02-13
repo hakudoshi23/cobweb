@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('object-interaction', function (instance) {
+    Modules.prototype.add('object-interaction', function (instance) {
         instance.surface.interactions.object = {
             onMouseWheel: function (event, realCoords) {
                 return true;

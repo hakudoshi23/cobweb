@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('pane-types', function (instance) {
+    Modules.prototype.add('pane-types', function (instance) {
 
         instance.events.on('pane.split', function (oldPane, newPane) {
             var oldType = oldPane.attrData('pane-type');

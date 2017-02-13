@@ -3,7 +3,7 @@
 
     var surfaceIndex = 0;
 
-    Cobweb.prototype.modules.add('surface', function (instance) {
+    Modules.prototype.add('surface', function (instance) {
         instance.pane.types.surface = {
             onPaneType: onSurfacePaneType,
             onCreateHeader: onCreateSurfaceHeader

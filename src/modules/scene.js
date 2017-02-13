@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('scene', function (instance) {
+    Modules.prototype.add('scene', function (instance) {
         instance.scene = {
             root: TreeNode.extend({})
         };

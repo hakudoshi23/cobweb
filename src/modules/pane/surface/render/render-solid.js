@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('render-solid', function (instance) {
+    Modules.prototype.add('render-solid', function (instance) {
         var shader = new Shader(
             'precision highp float;' +
             'attribute vec3 a_vertex;' +
