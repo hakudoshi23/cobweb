@@ -70,7 +70,7 @@ gulp.task('sass', function () {
             compatibility: 'ie8'
         }))
         .pipe(plugins.concat('cobweb.min.css'))
-        .pipe(plugins.sourcemaps.write())
+        .pipe(plugins.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dist))
         .on('error', swallowError);
 });
@@ -80,7 +80,7 @@ gulp.task('js', function () {
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.concat('cobweb.min.js'))
         .pipe(plugins.uglify().on('error', swallowError))
-        .pipe(plugins.sourcemaps.write())
+        .pipe(plugins.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dist))
         .on('error', swallowError);
 });
