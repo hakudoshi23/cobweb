@@ -48,6 +48,12 @@
                 vec3.rotateX(eye, eye, this.rotation[1]);
                 vec3.rotateY(eye, eye, -this.rotation[0]);
                 vec3.add(eye, eye, this.center);
+            },
+            getCameraDirection: function (direction) {
+                var eye = [0, 0, 0];
+                this.getCameraPosition(eye);
+                vec3.sub(direction, eye, this.center);
+                vec3.normalize(direction, direction);
             }
         };
 
