@@ -2,16 +2,15 @@
     'use strict';
 
     Cobweb.prototype.modules.add('surface-interaction', function (instance) {
+        instance.surface.interactions = {};
+
         instance.surface.setInteraction = function (surface, name) {
-            var interactions = instance.surface.interaction;
-            if (interactions.has(name))
-                surface.attrData('surface-interaction', name);
+            surface.dataset.interaction = name;
         };
 
-        instance.surface.getInteraction = function (surface) {
-            var interactions = instance.surface.interaction;
-            var name = surface.attrData('surface-interaction');
-            return interactions.get(name);
+        instance.surface.getInteractionCallbacks = function (surface) {
+            var interactionName = surface.dataset.interaction;
+            return instance.surface.interactions[interactionName];
         };
 
         instance.events.on('surface.create', function (surface) {
@@ -23,18 +22,19 @@
         });
 
         function onSurfaceEvent (event) {
-            var callbacks = instance.surface.getInteraction(event.target);
+            var callbacks = instance.surface.getInteractionCallbacks(event.target);
             var keepRunning = runCallback(callbacks, event);
             if (keepRunning) {
-                var common = instance.surface.interaction.get('common');
+                var common = instance.surface.interactions.common;
                 runCallback(common, event);
             }
         }
 
         instance.events.on('pane.split', function (oldPane, newPane) {
-            newPane.attrData('surface-interaction', oldPane.attrData('surface-interaction'));
+            var initialValue = oldPane.dataset.interaction;
+            newPane.dataset.interaction = initialValue;
         });
-    }, ['interaction-mode']);
+    }, ['surface']);
 
     function runCallback (callbacks, event) {
         var realCoords = getLocalCoordinates(event);

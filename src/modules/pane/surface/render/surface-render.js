@@ -2,16 +2,15 @@
     'use strict';
 
     Cobweb.prototype.modules.add('surface-render', function (instance) {
+        instance.surface.renders = {};
+
         instance.surface.setRender = function (surface, name) {
-            var renders = instance.surface.renders;
-            if (renders.has(name))
-                surface.attrData('render', name);
+            surface.dataset.render = name;
         };
 
         instance.surface.getRender = function (surface) {
-            var renders = instance.surface.renders;
-            var name = surface.attrData('render');
-            return renders.get(name);
+            var renderName = surface.dataset.render;
+            return instance.surface.renders[renderName];
         };
 
         var panes = document.querySelectorAll('.pane');
@@ -25,5 +24,5 @@
         instance.events.on('pane.split', function (oldPane, newPane) {
             newPane.attrData('surface-render', oldPane.attrData('surface-render'));
         });
-    }, ['render-modes']);
+    }, ['surface']);
 })());

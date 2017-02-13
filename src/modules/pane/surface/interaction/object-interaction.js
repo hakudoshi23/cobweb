@@ -2,7 +2,7 @@
     'use strict';
 
     Cobweb.prototype.modules.add('object-interaction', function (instance) {
-        instance.surface.interaction.add('object', {
+        instance.surface.interactions.object = {
             onMouseWheel: function (event, realCoords) {
                 return true;
             },
@@ -18,7 +18,7 @@
             onClick: function (event, realCoords) {
                 return true;
             }
-        });
+        };
 
         instance.events.on('surface.create', function (surface) {
             instance.surface.setInteraction(surface, 'object');

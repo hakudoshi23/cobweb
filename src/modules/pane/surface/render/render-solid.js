@@ -34,7 +34,7 @@
             u_mvp: mvp
         };
 
-        instance.surface.renders.add('solid', function (surface) {
+        instance.surface.renders.solid = function (surface) {
             var objs = instance.scene.root.dfs();
             for (var i = 0; i < objs.length; i++) {
                 var obj = objs[i].data;
@@ -53,7 +53,7 @@
         			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
                 }
             }
-        });
+        };
 
         instance.events.on('surface.create', function (surface) {
             instance.surface.setRender(surface, 'solid');

@@ -4,10 +4,10 @@
     var surfaceIndex = 0;
 
     Cobweb.prototype.modules.add('surface', function (instance) {
-        instance.pane.types.add('surface', {
+        instance.pane.types.surface = {
             onPaneType: onSurfacePaneType,
             onCreateHeader: onCreateSurfaceHeader
-        });
+        };
 
         instance.events.on('pane.resize', function (pane) {
             if (pane.attrData('pane-type') === 'surface')

@@ -5,7 +5,7 @@
     var mouseDownCoords = null;
 
     Cobweb.prototype.modules.add('common-interaction', function (instance) {
-        instance.surface.interaction.add('common', {
+        instance.surface.interactions.common = {
             onMouseWheel: function (event, realCoords) {
                 var canvas = event.target;
                 var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
@@ -50,7 +50,7 @@
             onClick: function (event, realCoords) {
                 return true;
             }
-        });
+        };
     }, ['surface-interaction']);
 
     function combine (target, originalRotation, delta) {
