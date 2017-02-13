@@ -46,8 +46,8 @@
                     uniforms.u_lightvector = lightDirection;
 
                     surface.getViewMatrix(temp);
-        			mat4.multiply(temp, temp, obj.model);
-        			mat4.multiply(mvp, surface.proj, temp);
+        			mat4.multiply(temp, surface.proj, temp);
+        			mat4.multiply(mvp, temp, obj.model);
 
         			uniforms.u_model = obj.model;
         			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);

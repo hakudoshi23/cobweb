@@ -6,11 +6,14 @@
             root: TreeNode.extend({})
         };
 
+        var model = mat4.create();
+        mat4.translate(model, model, [1, 1, 0]);
+
         instance.scene.root.add({
             type: 'object',
             primitive: instance.graphics.gl.TRIANGLES,
             mesh: GL.Mesh.cube(),
-            model: mat4.create(),
+            model: model,
         });
         instance.scene.root.add({
             type: 'object',

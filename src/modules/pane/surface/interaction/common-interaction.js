@@ -27,12 +27,21 @@
                 return false;
             },
             onMouseDown: function (event, realCoords) {
+                var canvas = event.target;
+                var data = instance.surface.map[canvas.id];
                 if (event.which === 2) {
                     event.target.dataset.moving = 'true';
-                    var canvas = event.target;
-                    var data = instance.surface.map[canvas.id];
                     originalRotation = data.surface.rotation.slice();
                     mouseDownCoords = realCoords;
+                } else if (event.which === 1) {
+                    var surface = data.surface;
+                    var camDir = vec3.create();
+                    var camPos = vec3.create();
+                    surface.getCameraDirection(camDir);
+                    surface.getCameraPosition(camPos);
+                    console.debug(camPos, camDir);
+                    var ray = new Math.Ray(camPos, camDir);
+                    console.debug(ray);
                 }
                 return true;
             },
