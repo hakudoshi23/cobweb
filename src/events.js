@@ -1,7 +1,8 @@
 ((function() {
     'use strict';
 
-    var EventHandler = function () {
+    var EventHandler = function (isDebug) {
+        this.isDebug = !!isDebug;
         this.listeners = {};
     };
 
@@ -9,7 +10,7 @@
         var name = arguments[0];
         var listeners = this.listeners[name] || [];
         Array.prototype.splice.call(arguments, 0, 1);
-        console.debug(name, arguments);
+        if (this.isDebug) console.debug(name, arguments);
         for (var i = 0; i < listeners.length; i++)
             listeners[i].apply(null, arguments);
     };

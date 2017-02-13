@@ -20,7 +20,7 @@
         this.container.data('instance', this);
 
         this.logger = new Logger(this, true);
-        this.events = new EventHandler(this);
+        this.events = new EventHandler(true);
         Cobweb.prototype.modules.load(this);
         this.events.trigger('app.loaded');
     };
