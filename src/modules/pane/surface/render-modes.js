@@ -1,8 +1,8 @@
 ((function () {
     'use strict';
 
-    Cobweb.prototype.modules.add('graphics-render', function (instance) {
-        instance.graphics.renders = {
+    Cobweb.prototype.modules.add('render-modes', function (instance) {
+        instance.surface.renders = {
             all: {},
             add: function (name, callback) {
                 this.all[name] = callback;
@@ -17,5 +17,5 @@
                 return !!this.all[name];
             }
         };
-    }, ['graphics']);
+    }, ['surface']);
 })());

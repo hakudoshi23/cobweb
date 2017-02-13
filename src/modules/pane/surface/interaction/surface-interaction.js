@@ -34,7 +34,7 @@
         instance.events.on('pane.split', function (oldPane, newPane) {
             newPane.attrData('surface-interaction', oldPane.attrData('surface-interaction'));
         });
-    }, ['interaction-mode', 'surface']);
+    }, ['interaction-mode']);
 
     function runCallback (callbacks, event) {
         var realCoords = getLocalCoordinates(event);

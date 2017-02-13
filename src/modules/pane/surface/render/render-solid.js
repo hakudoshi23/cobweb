@@ -34,7 +34,7 @@
             u_mvp: mvp
         };
 
-        instance.graphics.renders.add('solid', function (surface) {
+        instance.surface.renders.add('solid', function (surface) {
             var objs = instance.scene.root.dfs();
             for (var i = 0; i < objs.length; i++) {
                 var obj = objs[i].data;
