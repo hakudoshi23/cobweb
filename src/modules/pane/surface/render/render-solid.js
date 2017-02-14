@@ -2,27 +2,18 @@
     'use strict';
 
     Modules.prototype.add('render-solid', function (instance) {
-        var shader = new Shader(
-            'precision highp float;' +
-            'attribute vec3 a_vertex;' +
-            'attribute vec3 a_normal;' +
-            'varying vec3 v_normal;' +
-            'uniform mat4 u_mvp;' +
-            'uniform mat4 u_model;' +
-            'void main() {' +
-            '    v_normal = (u_model * vec4(a_normal,0.0)).xyz;' +
-            '    gl_Position = u_mvp * vec4(a_vertex,1.0);' +
-            '}',
-            'precision highp float;' +
-            'varying vec3 v_normal;' +
-            'uniform vec3 u_lightvector;' +
-            'uniform vec4 u_color;' +
-            'void main() {' +
-            '  vec3 N = normalize(v_normal);' +
-            '  vec4 ambient = vec4(0.4, 0.4, 0.4, 1);' +
-            '  gl_FragColor = ambient + u_color * max(0.0, dot(u_lightvector,N));' +
-            '}'
-        );
+        var shader = null;
+        var firstSource = null;
+        var vertSource = Ajax.get('/shader/solid.vert', function (response) {
+            if (firstSource) {
+                shader = new Shader(response, firstSource);
+            } firstSource = response;
+        });
+        var fragSource = Ajax.get('/shader/solid.frag', function (response) {
+            if (firstSource) {
+                shader = new Shader(firstSource, response);
+            } firstSource = response;
+        });
 
         var grid = {
             type: 'object',
@@ -68,6 +59,6 @@
         uniforms.u_color = obj.selected ? [1,0,0,1] : [0.7, 0.7, 0.7, 1];
 
         uniforms.u_model = obj.model;
-        shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
+        if (shader) shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
     }
 })());

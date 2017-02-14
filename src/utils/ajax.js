@@ -35,6 +35,10 @@
     }
 
     function get (url, data, success) {
+        if (!success) {
+            success = data;
+            data = null;
+        }
         return Ajax.ajax({
             url: url,
             data: data,
@@ -44,6 +48,10 @@
     }
 
     function getJSON (url, data, success) {
+        if (!success) {
+            success = data;
+            data = null;
+        }
         return Ajax.ajax({
             url: url,
             data: data,
@@ -55,6 +63,10 @@
     }
 
     function post (url, data, success) {
+        if (!success) {
+            success = data;
+            data = null;
+        }
         return Ajax.ajax({
             url: url,
             data: data,
