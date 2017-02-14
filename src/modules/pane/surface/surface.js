@@ -39,20 +39,36 @@
             rotation: [0, 0],
             distance: 10,
             getViewMatrix: function (view) {
+                view = view || mat4.create();
                 var eye = [0, 0, 0];
                 this.getCameraPosition(eye);
                 mat4.lookAt(view, eye, this.center, [0, -1, 0]);
+                return view;
             },
             getCameraPosition: function (eye) {
+                eye = eye || vec3.create();
                 vec3.set(eye, 0, 0, -this.distance);
                 vec3.rotateX(eye, eye, -this.rotation[1]);
                 vec3.rotateY(eye, eye, this.rotation[0]);
+                return eye;
             },
             getCameraDirection: function (direction) {
-                var eye = [0, 0, 0];
-                this.getCameraPosition(eye);
+                direction = direction || vec3.create();
+                var eye = this.getCameraPosition();
                 vec3.sub(direction, this.center, eye);
                 vec3.normalize(direction, direction);
+                return direction;
+            },
+            getRayFromCamera: function (ray, canvasCoords, canvasSize) {
+                ray = ray || new Math.Ray();
+                this.getCameraPosition(ray.start);
+                vec3.set(ray.direction, canvasCoords[0] / (canvasSize[0] * 0.5) - 1.0,
+                    canvasCoords[1] / (canvasSize[1] * 0.5) - 1.0, 1);
+                var auxMat = mat4.create();
+                mat4.multiply(auxMat, this.proj, this.getViewMatrix());
+                mat4.invert(auxMat, auxMat);
+                vec3.transformMat4(ray.direction, ray.direction, auxMat);
+                return ray;
             }
         };
 

@@ -35,13 +35,15 @@
                     mouseDownCoords = realCoords;
                 } else if (event.which === 1) {
                     var surface = data.surface;
-                    var camDir = vec3.create();
-                    var camPos = vec3.create();
-                    surface.getCameraDirection(camDir);
-                    surface.getCameraPosition(camPos);
-                    console.debug(camPos, camDir);
-                    var ray = new Math.Ray(camPos, camDir);
-                    console.debug(ray);
+
+                    var ray = surface.getRayFromCamera(null, realCoords,
+                        [canvas.width, canvas.height]);
+
+                    /* @Refactor this is testing code, this shouldn't be here */
+                    var hitPoint = vec3.create();
+                    var cube = instance.scene.root.children[0];
+                    var hit = geo.testRayBBox(ray.start, ray.direction, cube.data.mesh.bounding, cube.data.model, hitPoint);
+                    console.debug(hit, hitPoint);
                 }
                 return true;
             },
