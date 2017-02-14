@@ -41,7 +41,7 @@
 
                     /* @Refactor this is testing code, this shouldn't be here */
                     var hitPoint = vec3.create();
-                    var cube = instance.scene.root.children[0];
+                    var cube = instance.scene.children[0];
                     var hit = geo.testRayBBox(ray.start, ray.direction, cube.data.mesh.bounding, cube.data.model, hitPoint);
                     console.debug(hit, hitPoint);
                 }

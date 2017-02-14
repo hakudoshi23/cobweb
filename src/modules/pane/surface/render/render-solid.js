@@ -43,7 +43,7 @@
 
             renderObject(surface, grid, shader);
 
-            var objs = instance.scene.root.dfs();
+            var objs = instance.scene.dfs();
             for (var i = 0; i < objs.length; i++) {
                 var obj = objs[i].data;
                 if (obj.type === 'object')
