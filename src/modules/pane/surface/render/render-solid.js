@@ -4,12 +4,12 @@
     Modules.prototype.add('render-solid', function (instance) {
         var shader = null;
         var firstSource = null;
-        var vertSource = Ajax.get('/shader/solid.vert', function (response) {
+        var vertSource = Ajax.get('shader/solid.vert', function (response) {
             if (firstSource) {
                 shader = new Shader(response, firstSource);
             } firstSource = response;
         });
-        var fragSource = Ajax.get('/shader/solid.frag', function (response) {
+        var fragSource = Ajax.get('shader/solid.frag', function (response) {
             if (firstSource) {
                 shader = new Shader(firstSource, response);
             } firstSource = response;
