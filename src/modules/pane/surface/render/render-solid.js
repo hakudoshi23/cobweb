@@ -24,34 +24,30 @@
             '}'
         );
 
-        var temp = mat4.create();
-        var mvp = mat4.create();
-
-        var uniforms = {
-            u_color: [0.7, 0.7, 0.7, 1],
-            u_lightvector: null,
-            u_model: null,
-            u_mvp: mvp
+        var grid = {
+            type: 'object',
+            primitive: instance.graphics.gl.LINES,
+            mesh: GL.Mesh.grid({
+                lines: 17,
+                size: 8
+            }),
+            model: mat4.create(),
         };
 
         instance.surface.renders.solid = function (surface) {
+            var lightDirection = vec3.create();
+            surface.getCameraPosition(lightDirection);
+            vec3.add(lightDirection, lightDirection, [1, 2, 0]);
+            vec3.normalize(lightDirection, lightDirection);
+            uniforms.u_lightvector = lightDirection;
+
+            renderObject(surface, grid, shader);
+
             var objs = instance.scene.root.dfs();
             for (var i = 0; i < objs.length; i++) {
                 var obj = objs[i].data;
-                if (obj.type === 'object') {
-                    var lightDirection = vec3.create();
-                    surface.getCameraPosition(lightDirection);
-                    vec3.add(lightDirection, lightDirection, [1, 2, 0]);
-                    vec3.normalize(lightDirection, lightDirection);
-                    uniforms.u_lightvector = lightDirection;
-
-                    surface.getViewMatrix(temp);
-        			mat4.multiply(temp, surface.proj, temp);
-        			mat4.multiply(mvp, temp, obj.model);
-
-        			uniforms.u_model = obj.model;
-        			shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
-                }
+                if (obj.type === 'object')
+                    renderObject(surface, obj, shader);
             }
         };
 
@@ -59,4 +55,21 @@
             instance.surface.setRender(surface, 'solid');
         });
     }, ['surface-render']);
+
+    var uniforms = {
+        u_color: [0.7, 0.7, 0.7, 1],
+        u_lightvector: null,
+        u_model: null,
+        u_mvp: mat4.create()
+    };
+
+    var temp = mat4.create();
+    function renderObject (surface, obj, shader) {
+        surface.getViewMatrix(temp);
+        mat4.multiply(temp, surface.proj, temp);
+        mat4.multiply(uniforms.u_mvp, temp, obj.model);
+
+        uniforms.u_model = obj.model;
+        shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
+    }
 })());
