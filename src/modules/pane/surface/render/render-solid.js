@@ -42,13 +42,9 @@
             uniforms.u_lightvector = lightDirection;
 
             renderObject(surface, grid, shader);
-
-            var objs = instance.scene.dfs();
-            for (var i = 0; i < objs.length; i++) {
-                var obj = objs[i].data;
-                if (obj.type === 'object')
-                    renderObject(surface, obj, shader);
-            }
+            instance.scene.getObjects().forEach(function (node) {
+                renderObject(surface, node.data, shader);
+            });
         };
 
         instance.events.on('surface.create', function (surface) {

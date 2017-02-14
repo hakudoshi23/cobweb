@@ -14,9 +14,21 @@
             model: model,
         });
         instance.scene.add({
-            type: 'ligth',
+            type: 'light',
             color: [1, 1, 1],
             intensity: 1
         });
+
+        instance.scene.getObjects = function () {
+            return this.dfs(function (node) {
+                return node.data.type === 'object';
+            });
+        };
+
+        instance.scene.getLights = function () {
+            return this.dfs(function (node) {
+                return node.data.type === 'light';
+            });
+        };
     }, ['graphics']);
 })());
