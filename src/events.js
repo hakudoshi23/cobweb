@@ -31,5 +31,12 @@
         }
     };
 
+    EventHandler.prototype.reset = function() {
+        var own = this;
+        Object.keys(this.listeners).forEach(function(key) {
+            delete own.listeners[key];
+        });
+    };
+
     window.EventHandler = EventHandler;
 })());
