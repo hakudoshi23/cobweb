@@ -65,6 +65,8 @@
         mat4.multiply(temp, surface.proj, temp);
         mat4.multiply(uniforms.u_mvp, temp, obj.model);
 
+        uniforms.u_color = obj.selected ? [1,0,0,1] : [0.7, 0.7, 0.7, 1];
+
         uniforms.u_model = obj.model;
         shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
     }

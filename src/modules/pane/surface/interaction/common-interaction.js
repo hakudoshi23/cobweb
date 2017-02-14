@@ -39,11 +39,14 @@
                     var ray = surface.getRayFromCamera(null, realCoords,
                         [canvas.width, canvas.height]);
 
-                    /* @Refactor this is testing code, this shouldn't be here */
-                    var hitPoint = vec3.create();
-                    var cube = instance.scene.children[0];
-                    var hit = geo.testRayBBox(ray.start, ray.direction, cube.data.mesh.bounding, cube.data.model, hitPoint);
-                    console.debug(hit, hitPoint);
+                    var isHit = false, hitPoint = vec3.create();
+                    instance.scene.getObjects().forEach(function (node) {
+                        isHit = geo.testRayBBox(ray.start, ray.direction, node.data.mesh.bounding, node.data.model, hitPoint);
+                        if (isHit) {
+                            console.debug(hitPoint, node.data);
+                            node.data.selected = true;
+                        } else delete node.data.selected;
+                    });
                 }
                 return true;
             },

@@ -4,14 +4,11 @@
     Modules.prototype.add('scene', function (instance) {
         instance.scene = TreeNode.extend({});
 
-        var model = mat4.create();
-        mat4.translate(model, model, [1, 1, 0]);
-
         instance.scene.add({
             type: 'object',
             primitive: instance.graphics.gl.TRIANGLES,
             mesh: GL.Mesh.cube(),
-            model: model,
+            model: mat4.create(),
         });
         instance.scene.add({
             type: 'light',
