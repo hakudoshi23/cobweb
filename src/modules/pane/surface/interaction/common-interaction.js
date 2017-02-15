@@ -44,6 +44,7 @@
 
                     var ray = surface.getRayFromCamera(null, realCoords,
                         [canvas.width, canvas.height]);
+                    console.debug(realCoords);
 
                     var isHit = false, hitPoint = vec3.create();
                     instance.scene.getObjects().forEach(function (node) {
@@ -74,7 +75,7 @@
     function combine (surface, originalRotation, delta) {
         if (!originalRotation) return;
         if (!upNormalMouseDown) delta[0] = -delta[0];
-        
+
         var rotation = surface.rotation;
         rotation[0] = originalRotation[0] + delta[0] * 0.005;
         rotation[1] = originalRotation[1] + delta[1] * 0.005;

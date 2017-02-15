@@ -68,6 +68,7 @@
                 mat4.multiply(auxMat, this.proj, this.getViewMatrix());
                 mat4.invert(auxMat, auxMat);
                 vec3.transformMat4(ray.direction, ray.direction, auxMat);
+                vec3.normalize(ray.direction, ray.direction);
                 return ray;
             },
             getUpDirection: function (up) {
