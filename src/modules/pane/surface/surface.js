@@ -42,14 +42,14 @@
                 view = view || mat4.create();
                 var eye = [0, 0, 0];
                 this.getCameraPosition(eye);
-                mat4.lookAt(view, eye, this.center, [0, -1, 0]);
+                mat4.lookAt(view, eye, this.center, this.getUpDirection());
                 return view;
             },
             getCameraPosition: function (eye) {
                 eye = eye || vec3.create();
                 vec3.set(eye, 0, 0, -this.distance);
-                vec3.rotateX(eye, eye, -this.rotation[1]);
-                vec3.rotateY(eye, eye, this.rotation[0]);
+                vec3.rotateX(eye, eye, this.rotation[1]);
+                vec3.rotateY(eye, eye, -this.rotation[0]);
                 return eye;
             },
             getCameraDirection: function (direction) {
@@ -69,6 +69,15 @@
                 mat4.invert(auxMat, auxMat);
                 vec3.transformMat4(ray.direction, ray.direction, auxMat);
                 return ray;
+            },
+            getUpDirection: function (up) {
+                up = up || vec3.create();
+                var vRotation = this.rotation[1];
+                if (vRotation >= Math.PI / 2 &&
+                    vRotation <= ((Math.PI * 3) / 2))
+                    vec3.set(up, 0, -1, 0);
+                else vec3.set(up, 0, 1, 0);
+                return up;
             }
         };
 
