@@ -9,7 +9,7 @@
 
     function onCreateCallback (pane, instance) {
         var header = createHeader();
-        pane.append(header);
+        pane.appendChild(header);
     }
 
     function createHeader () {

@@ -29,7 +29,7 @@
         var canvas = document.createElement('canvas');
         canvas.id = 'surface' + (surfaceIndex++);
         canvas.className = 'surface';
-        pane.append(canvas);
+        pane.appendChild(canvas);
 
         instance.surface.map = instance.surface.map || {};
         instance.surface.map[canvas.id] = {};
