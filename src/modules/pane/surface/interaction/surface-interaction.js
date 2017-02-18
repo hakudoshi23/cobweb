@@ -14,6 +14,7 @@
         };
 
         instance.events.on('surface.create', function (surface) {
+            surface.oncontextmenu = onContextMenu;
             surface.onmousewheel = onSurfaceEvent;
             surface.onmousemove = onSurfaceEvent;
             surface.onmousedown = onSurfaceEvent;
@@ -28,6 +29,11 @@
                 var common = instance.surface.interactions.common;
                 runCallback(common, event);
             }
+        }
+
+        function onContextMenu (event) {
+            event.preventDefault();
+            return false;
         }
 
         instance.events.on('pane.split', function (oldPane, newPane) {
