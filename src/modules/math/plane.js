@@ -1,8 +1,6 @@
 ((function () {
     'use strict';
 
-    window.Math = window.Math || {};
-
     var Plane = function (point, normal) {
         this.normal = normal || [0, 1, 0];
         this.point = point || vec3.create();

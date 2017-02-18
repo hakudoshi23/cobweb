@@ -27,7 +27,7 @@
 
         instance.surface.renders.solid = function (surface) {
             var lightDirection = vec3.create();
-            surface.getCameraPosition(lightDirection);
+            surface.camera.getCameraPosition(lightDirection);
             vec3.add(lightDirection, lightDirection, [1, 2, 0]);
             vec3.normalize(lightDirection, lightDirection);
             uniforms.u_lightvector = lightDirection;
@@ -52,8 +52,8 @@
 
     var temp = mat4.create();
     function renderObject (surface, obj, shader) {
-        surface.getViewMatrix(temp);
-        mat4.multiply(temp, surface.proj, temp);
+        surface.camera.getViewMatrix(temp);
+        mat4.multiply(temp, surface.camera.projection, temp);
         mat4.multiply(uniforms.u_mvp, temp, obj.model);
 
         uniforms.u_color = obj.selected ? [1,0,0,1] : [0.7, 0.7, 0.7, 1];

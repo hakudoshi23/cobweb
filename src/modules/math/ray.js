@@ -1,8 +1,6 @@
 ((function () {
     'use strict';
 
-    window.Math = window.Math || {};
-
     var Ray = function (start, direction) {
         this.direction = direction || [0, 0, 1];
         this.start = start || vec3.create();

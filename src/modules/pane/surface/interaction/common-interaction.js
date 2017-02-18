@@ -12,11 +12,8 @@
                 delta /= 2;
 
                 var data = instance.surface.map[canvas.id];
-
-                if (data.surface.distance < 5) delta /= 5;
-                data.surface.distance -= delta;
-
-                data.surface.distance = Math.max(data.surface.distance, 0);
+                data.camera.distance -= delta;
+                data.camera.distance = Math.max(data.camera.distance, 0);
 
                 return true;
             },
@@ -26,7 +23,7 @@
                     var data = instance.surface.map[canvas.id];
                     if (data) {
                         var delta = getCoordsDelta(mouseDownCoords, realCoords);
-                        combine(data.surface, originalRotation, delta);
+                        combine(data.camera, originalRotation, delta);
                     }
                 }
                 return false;
@@ -36,13 +33,11 @@
                 var data = instance.surface.map[canvas.id];
                 if (event.which === 2) {
                     event.target.dataset.moving = 'true';
-                    upNormalMouseDown = vec3.equals(data.surface.getUpDirection(), [0, 1, 0]);
-                    originalRotation = data.surface.rotation.slice();
+                    upNormalMouseDown = vec3.equals(data.camera.getUpDirection(), [0, 1, 0]);
+                    originalRotation = data.camera.rotation.slice();
                     mouseDownCoords = realCoords;
                 } else if (event.which === 1) {
-                    var surface = data.surface;
-
-                    var ray = surface.getRayFromCamera(null, realCoords,
+                    var ray = data.camera.getRayFromCamera(null, realCoords,
                         [canvas.width, canvas.height]);
                     console.debug(realCoords);
 

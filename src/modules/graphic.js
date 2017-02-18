@@ -29,7 +29,7 @@
         gl.viewport(0, 0, width, height);
 
         var render = instance.surface.getRender(canvas);
-        if (render) render(data.surface);
+        if (render) render(data);
 
         var context = canvas.getContext('2d');
         if (context) {
