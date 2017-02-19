@@ -36,19 +36,7 @@
                     upNormalMouseDown = vec3.equals(data.camera.getUpDirection(), [0, 1, 0]);
                     originalRotation = data.camera.rotation.slice();
                     mouseDownCoords = realCoords;
-                } else if (event.which === 1) {
-                    var ray = data.camera.getRayFromCamera(null, realCoords,
-                        [canvas.width, canvas.height]);
-                    console.debug(realCoords);
-
-                    var isHit = false, hitPoint = vec3.create();
-                    instance.scene.getObjects().forEach(function (node) {
-                        isHit = geo.testRayBBox(ray.start, ray.direction, node.data.mesh.bounding, node.data.model, hitPoint);
-                        if (isHit) {
-                            console.debug(hitPoint, node.data);
-                            node.data.selected = true;
-                        } else delete node.data.selected;
-                    });
+                    return false;
                 }
                 return true;
             },

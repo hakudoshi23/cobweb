@@ -1,8 +1,8 @@
 ((function () {
     'use strict';
 
-    Modules.prototype.add('object-interaction', function (instance) {
-        instance.surface.interactions.object = {
+    Modules.prototype.add('edit-interaction', function (instance) {
+        instance.surface.interactions.edit = {
             onMouseWheel: function (event, realCoords) {
                 return true;
             },
@@ -34,6 +34,10 @@
                 return true;
             }
         };
+
+        instance.events.on('surface.create', function (surface) {
+            instance.surface.setInteraction(surface, 'edit');
+        });
 
     }, ['surface-interaction']);
 })());
