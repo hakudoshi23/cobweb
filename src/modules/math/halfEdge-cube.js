@@ -13,6 +13,7 @@
         vhandle[5] = [ 1, -1, -1];
         vhandle[6] = [ 1,  1, -1];
         vhandle[7] = [-1,  1, -1];
+        mesh.addVertices(vhandle);
 
         var face_vhandles = [];
         face_vhandles.push(vhandle[0]);
