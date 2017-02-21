@@ -7,7 +7,7 @@
         instance.scene.add({
             type: 'object',
             primitive: instance.graphics.gl.TRIANGLES,
-            mesh: GL.Mesh.cube(),
+            mesh: Math.HalfEdgeCube(),
             model: mat4.create(),
         });
         instance.scene.add({
@@ -27,5 +27,5 @@
                 return node.data.type === 'light';
             });
         };
-    }, ['graphics']);
+    }, ['graphics', 'math-halfEdge-cube']);
 })());

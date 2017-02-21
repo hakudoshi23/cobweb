@@ -59,6 +59,15 @@
         uniforms.u_color = obj.selected ? [1,0,0,1] : [0.7, 0.7, 0.7, 1];
 
         uniforms.u_model = obj.model;
-        if (shader) shader.uniforms(uniforms).draw(obj.mesh, obj.primitive);
+
+        if (shader) {
+            shader.uniforms(uniforms);
+            if (obj.mesh instanceof Math.HalfEdgeMesh) {
+                var mesh = obj.mesh.getMesh();
+                shader.draw(mesh, obj.primitive);
+            } else {
+                shader.draw(obj.mesh, obj.primitive);
+            }
+        }
     }
 })());
