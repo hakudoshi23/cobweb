@@ -31,7 +31,7 @@
             onMouseDown: function (event, realCoords) {
                 var canvas = event.target;
                 var data = instance.surface.map[canvas.id];
-                if (event.which === 2) {
+                if (event.which === 3) {
                     event.target.dataset.moving = 'true';
                     upNormalMouseDown = vec3.equals(data.camera.getUpDirection(), [0, 1, 0]);
                     originalRotation = data.camera.rotation.slice();
@@ -41,7 +41,7 @@
                 return true;
             },
             onMouseUp: function (event, realCoords) {
-                if (event.which === 2) {
+                if (event.which === 3) {
                     delete event.target.dataset.moving;
                     var data = instance.surface.map[event.target.id];
                     mouseDownCoords = null;
