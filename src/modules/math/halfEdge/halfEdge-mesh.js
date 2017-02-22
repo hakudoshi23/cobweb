@@ -83,7 +83,13 @@
             this.faces = [];
         };
 
-        HalfEdgeMesh.prototype.getMesh = function (gl) {
+        var defaultMeshOptions = {
+            normals: 'vertex',
+            wireframe: false
+        };
+
+        HalfEdgeMesh.prototype.getMesh = function (options) {
+            options = Object.assign({}, defaultMeshOptions, options);
             if (this.mesh === null) {
                 var buffers = {};
 
