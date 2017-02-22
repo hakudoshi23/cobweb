@@ -86,33 +86,7 @@
         this.faces = [];
     };
 
-    var defaultMeshOptions = {
-        normals: 'vertex',
-        wireframe: false
-    };
-
-    HalfEdgeMesh.prototype.getMesh = function (options) {
-        options = Object.assign({}, defaultMeshOptions, options);
-        var buffers = {};
-
-        buffers.vertices = new Float32Array(this.vertices.length * 3);
-        for (var i = 0; i < this.vertices.length; i++) {
-            buffers.vertices[i * 3 + 0] = this.vertices[i][0];
-            buffers.vertices[i * 3 + 1] = this.vertices[i][1];
-            buffers.vertices[i * 3 + 2] = this.vertices[i][2];
-        }
-
-        var triangles = [];
-        for (i = 0; i < this.faces.length; i++) {
-            var ts = this.faces[i].getVerticesTriangulated();
-            for (var j = 0; j < ts.length; j++) {
-                triangles.push(ts[j][0]._halfEdge.ownIndex,
-                    ts[j][1]._halfEdge.ownIndex, ts[j][2]._halfEdge.ownIndex);
-            }
-        }
-        buffers.triangles = new Uint16Array(triangles);
-        return GL.Mesh.load(buffers);
-    };
+    HalfEdgeMesh.prototype.getMesh = GetMesh;
 
     function buildEdge (start, end, face) {
         var edge = {};
@@ -132,14 +106,14 @@
     }
 
     function VertexGetFaces () {
-        return this._halfEdge.outEdges.map(function (edge) {
+        return this.outEdges.map(function (edge) {
             return edge.face;
         });
     }
 
     function VertexComputeNormal () {
         var normal = [0, 0, 0];
-        this._halfEdge.getFaces().forEach(function (face) {
+        this.getFaces().forEach(function (face) {
             vec3.add(normal, normal, face.computeRawNormal());
         });
         vec3.normalize(normal, normal);
@@ -190,4 +164,47 @@
         vec3.normalize(normal, normal);
         return normal;
     };
+
+    function computeNormal (v1, v2, v3) {
+        var tmp1 = vec3.create();
+        var tmp2 = vec3.create();
+        vec3.sub(tmp1, v2, v1);
+        vec3.sub(tmp2, v3, v1);
+        vec3.cross(tmp1, tmp1, tmp2);
+        return tmp1;
+    }
+
+    function GetMesh (options) {
+        options = Object.assign({}, {
+            normals: 'vertex',
+            wireframe: false
+        }, options);
+        var buffers = {};
+
+        buffers.vertices = new Float32Array(this.vertices.length * 3);
+        for (var i = 0; i < this.vertices.length; i++) {
+            buffers.vertices[i * 3 + 0] = this.vertices[i][0];
+            buffers.vertices[i * 3 + 1] = this.vertices[i][1];
+            buffers.vertices[i * 3 + 2] = this.vertices[i][2];
+        }
+
+        buffers.normals = new Float32Array(this.vertices.length * 3);
+        for (i = 0; i < this.vertices.length; i++) {
+            var normal = this.vertices[i]._halfEdge.computeNormal();
+            buffers.normals[i * 3 + 0] = normal[0];
+            buffers.normals[i * 3 + 1] = normal[1];
+            buffers.normals[i * 3 + 2] = normal[2];
+        }
+
+        var triangles = [];
+        for (i = 0; i < this.faces.length; i++) {
+            var ts = this.faces[i].getVerticesTriangulated();
+            for (var j = 0; j < ts.length; j++) {
+                triangles.push(ts[j][0]._halfEdge.ownIndex,
+                    ts[j][1]._halfEdge.ownIndex, ts[j][2]._halfEdge.ownIndex);
+            }
+        }
+        buffers.triangles = new Uint16Array(triangles);
+        return GL.Mesh.load(buffers);
+    }
 })());
