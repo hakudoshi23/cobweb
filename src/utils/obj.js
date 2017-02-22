@@ -14,24 +14,29 @@
         return newObj;
     });
 
-    function safeExtend(prototype, property, value) {
-        if(!prototype[property]) prototype[property] = value;
-    }
-
-    window.extend = _extend;
-
-    function _extend(options, defaults) {
-        for (var prop in defaults) {
-            if (prop && defaults.hasOwnProperty(prop)) {
-                var value = defaults[prop];
-                if (typeof value === 'object') {
-                    if (options[prop]) {
-                        _extend(options[prop], value);
-                    } else
-                        options[prop] = value;
-                } else if (typeof options[prop] === 'undefined')
-                    options[prop] = value;
+    safeExtend(Object, 'assign', function(target, varArgs) {
+        if (target === null)
+            throw new TypeError('Cannot convert undefined or null to object');
+        var to = Object(target);
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        for (var index = 1; index < arguments.length; index++) {
+            var nextSource = arguments[index];
+            if (nextSource !== null) {
+                for (var nextKey in nextSource) {
+                    if (hasOwnProperty.call(nextSource, nextKey)) {
+                        to[nextKey] = nextSource[nextKey];
+                    }
+                }
             }
         }
+        return to;
+    });
+
+    safeExtend(Object, 'extend', function(options, defaults) {
+        return Object.assign({}, defaults, options);
+    });
+
+    function safeExtend(prototype, property, value) {
+        if(!prototype[property]) prototype[property] = value;
     }
 })());

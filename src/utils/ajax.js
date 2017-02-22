@@ -11,7 +11,7 @@
     };
 
     function ajax (options) {
-        _extend(options || {}, defaultAjaxOptions);
+        options = Object.assign({}, defaultAjaxOptions, options);
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4) {
@@ -89,20 +89,5 @@
             params += '&' + nextParam;
         }
         return params.slice(1);
-    }
-
-    function _extend(options, defaults) {
-        for (var prop in defaults) {
-            if (prop && defaults.hasOwnProperty(prop)) {
-                var value = defaults[prop];
-                if (typeof value === 'object') {
-                    if (options[prop]) {
-                        _extend(options[prop], value);
-                    } else
-                        options[prop] = value;
-                } else if (typeof options[prop] === 'undefined')
-                    options[prop] = value;
-            }
-        }
     }
 })());

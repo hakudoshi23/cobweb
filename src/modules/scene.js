@@ -2,7 +2,7 @@
     'use strict';
 
     Modules.prototype.add('scene', function (instance) {
-        instance.scene = TreeNode.extend({});
+        instance.scene = TreeNode.extend();
 
         instance.scene.add({
             type: 'object',

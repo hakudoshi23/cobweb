@@ -2,8 +2,8 @@
     'use strict';
 
     var TreeNode = function (parent, data) {
+        this.parent = parent || null;
         this.data = data || {};
-        this.parent = parent;
         this.children = [];
     };
 
@@ -44,13 +44,12 @@
         return out;
     };
 
-    TreeNode.extend = function (defaults) {
+    TreeNode.extend = function () {
         var _TreeNode = function (parent, data) {
             TreeNode.call(this, parent, data);
         };
         _TreeNode.prototype = Object.create(TreeNode.prototype);
         _TreeNode.prototype.constructor = _TreeNode;
-        extend(_TreeNode.prototype, defaults);
-        return new _TreeNode(null);
+        return new _TreeNode();
     };
 })());
