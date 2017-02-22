@@ -62,5 +62,5 @@
         }
 
         Math.HalfEdgeCube = cube;
-    }, ['math-halfEdgeMesh']);
+    }, ['math-halfEdge']);
 })());
