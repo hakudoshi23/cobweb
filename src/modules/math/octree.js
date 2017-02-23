@@ -39,9 +39,15 @@
 
 	OctreeNode.prototype.addItem = function (item) {
 		if (this.contains(item)) {
-			this.items.push(item);
-			this.splitIfNeeded();
-			return true;
+			if (this.children) {
+				for (var i = 0; i < 8; i++)
+					if (this.children[i].addItem(item))
+						return true;
+			} else {
+				this.items.push(item);
+				this.splitIfNeeded();
+				return true;
+			}
 		}
 		return false;
 	};
@@ -96,6 +102,32 @@
 
 	OctreeNode.prototype.contains = function (item) {
 		return isContained(item, this.bounds);
+	};
+
+	OctreeNode.prototype.getCollidingNodes = function (ray) {
+		var nodes = [];
+		var bounds = this.bounds;
+		var collidingPoint = [0, 0, 0];
+		if (Math.geo.rayAABBCollision(ray.start, ray.direction,
+			this.bounds.min, this.bounds.max, collidingPoint)) {
+			if (this.children) {
+				for (var i = 0; i < this.children.length; i++) {
+					var child = this.children[i];
+					nodes = nodes.concat(child.getCollidingNodes(ray));
+				}
+			} else {
+				nodes.push(this);
+			}
+		}
+		return nodes;
+	};
+
+	OctreeNode.prototype.getCollidingItems = function (ray) {
+		var items = [];
+		this.getCollidingNodes(ray).forEach(function (node) {
+			items = items.concat(node.items);
+		});
+		return items;
 	};
 
 	var Octree = function (options) {

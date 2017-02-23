@@ -18,10 +18,14 @@
 
                     var isHit = false, hitPoint = vec3.create();
                     instance.scene.getObjects().forEach(function (node) {
-                        isHit = geo.testRayBBox(ray.start, ray.direction, node.data.mesh.bounding, node.data.model, hitPoint);
+                        var items = node.data.bounds.getCollidingItems(ray);
+                        items.forEach(function (item) {
+                            console.debug(item._halfEdge.getFaces());
+                        });
+                        /*isHit = geo.testRayBBox(ray.start, ray.direction, node.data.mesh.bounding, node.data.model, hitPoint);
                         if (isHit) {
                             node.data.selected = true;
-                        } else delete node.data.selected;
+                        } else delete node.data.selected;*/
                     });
                     return false;
                 }
