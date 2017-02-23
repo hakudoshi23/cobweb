@@ -1,15 +1,21 @@
 ((function () {
     'use strict';
 
+    var octreeOptions = {};
+
     Modules.prototype.add('scene', function (instance) {
         instance.scene = TreeNode.extend();
 
-        instance.scene.add({
+        var cubeMesh = Math.HalfEdgeCube();
+        var cubeSceneNode = {
             type: 'object',
             primitive: instance.graphics.gl.TRIANGLES,
-            mesh: Math.HalfEdgeCube(),
+            mesh: cubeMesh,
+            bounds: new Math.Octree(octreeOptions),
             model: mat4.create(),
-        });
+        };
+        cubeSceneNode.bounds.addItems(cubeMesh.vertices);
+        instance.scene.add(cubeSceneNode);
         instance.scene.add({
             type: 'light',
             color: [1, 1, 1],

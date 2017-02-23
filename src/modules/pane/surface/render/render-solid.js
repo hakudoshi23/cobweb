@@ -19,7 +19,7 @@
             type: 'object',
             primitive: instance.graphics.gl.LINES,
             mesh: GL.Mesh.grid({
-                lines: 10,
+                lines: 11,
                 size: 10
             }),
             model: mat4.create(),
