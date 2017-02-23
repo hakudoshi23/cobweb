@@ -9,11 +9,14 @@
         this.halfEdges = [];
         this.vertices = [];
         this.faces = [];
+
+        this.bounds = new Math.Octree();
     };
 
     HalfEdgeMesh.prototype.addVertices = function (vertices) {
         if (arguments.length > 1) this.addVertices.apply(this, arguments);
         if (!Array.isArray(vertices)) return;
+        this.bounds.addItems(vertices);
         for (var i = 0; i < vertices.length; i++) {
             var vertex = vertices[i];
             var index = this.vertices.indexOf(vertex);
@@ -84,6 +87,39 @@
         this.halfEdges = [];
         this.vertices = [];
         this.faces = [];
+    };
+
+    HalfEdgeMesh.prototype.getFaces = function (ray) {
+        var uniqueFaces = [], collidingFaces = [];
+        var vertices = this.bounds.getCollidingItems(ray);
+        vertices.forEach(function (item) {
+            item._halfEdge.getFaces().forEach(function (face) {
+                if (uniqueFaces.indexOf(face) === -1)
+                    uniqueFaces.push(face);
+            });
+        });
+        uniqueFaces.forEach(function (face) {
+            var triangles = face.getVerticesTriangulated();
+            for (var i = 0; i < triangles.length; i++) {
+                var triangle = triangles[i];
+                if (Math.geo.rayTriangleCollision(ray.start, ray.direction,
+                    triangle[0], triangle[1], triangle[2])) {
+                    collidingFaces.push(face);
+                    break;
+                }
+            }
+        });
+        return collidingFaces;
+    };
+
+    HalfEdgeMesh.prototype.getFace = function (ray) {
+        var uniqueFaces = this.getFaces(ray);
+        uniqueFaces.sort(function (f1, f2) {
+            var d1 = vec3.dist(f1.computeCenter(), ray.start);
+            var d2 = vec3.dist(f2.computeCenter(), ray.start);
+            return d1 - d2;
+        });
+        return uniqueFaces[0];
     };
 
     HalfEdgeMesh.prototype.getMesh = GetMesh;
@@ -163,6 +199,16 @@
         var normal = this.computeRawNormal();
         vec3.normalize(normal, normal);
         return normal;
+    };
+
+    HalfEdgeFace.prototype.computeCenter = function () {
+        var vertices = this.getVertices();
+        var center = vertices.reduce(function(center, p, i) {
+            vec3.add(center, center, p);
+            return center;
+        }, [0, 0, 0]);
+        vec3.scale(center, center, 1 / vertices.length);
+        return center;
     };
 
     function computeNormal (v1, v2, v3) {

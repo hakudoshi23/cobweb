@@ -6,12 +6,12 @@
 		maxDepth: 5,
 	};
 
-	var OctreeNode = function (parent, depth, bounds) {
+	var OctreeNode = function (parent, depth, aabb) {
 		this.items = [];
 		this.children = null;
 		this.depth = depth || 0;
 		this.parent = parent || null;
-		this.bounds = bounds || { max: [0, 0, 0], min: [0, 0, 0] };
+		this.aabb = aabb || { max: [0, 0, 0], min: [0, 0, 0] };
 
 		this.root = this;
 		while (this.root.parent !== null)
@@ -23,7 +23,7 @@
         else {
             var allItems = [];
             for (var i = 0; i < this.children.length; i++)
-                allItems.push(this.children[i].getAllItems());
+                allItems = allItems.concat(this.children[i].getAllItems());
             return allItems;
         }
 	};
@@ -56,25 +56,25 @@
 		if (this.root.options.maxItems < this.items.length &&
 			this.root.options.maxDepth >= this.depth) {
 			var half = [
-				(this.bounds.max[0] - this.bounds.min[0]) * 0.5,
-				(this.bounds.max[1] - this.bounds.min[1]) * 0.5,
-				(this.bounds.max[2] - this.bounds.min[2]) * 0.5
+				(this.aabb.max[0] - this.aabb.min[0]) * 0.5,
+				(this.aabb.max[1] - this.aabb.min[1]) * 0.5,
+				(this.aabb.max[2] - this.aabb.min[2]) * 0.5
 			];
 			this.children = [];
 			for (var i = 0; i < 8; i++) {
-				var bounds = Object.create(this.bounds);
+				var aabb = Object.create(this.aabb);
 				var ref = [!(i & 1), !(i & 2), !(i & 4)];
-				bounds.min = [
-					this.bounds.min[0] + half[0] * ref[0],
-					this.bounds.min[1] + half[1] * ref[1],
-					this.bounds.min[2] + half[2] * ref[2]
+				aabb.min = [
+					this.aabb.min[0] + half[0] * ref[0],
+					this.aabb.min[1] + half[1] * ref[1],
+					this.aabb.min[2] + half[2] * ref[2]
 				];
-				bounds.max = [
-					bounds.min[0] + half[0],
-					bounds.min[1] + half[1],
-					bounds.min[2] + half[2]
+				aabb.max = [
+					aabb.min[0] + half[0],
+					aabb.min[1] + half[1],
+					aabb.min[2] + half[2]
 				];
-				this.children[i] = new OctreeNode(this, this.depth + 1, bounds);
+				this.children[i] = new OctreeNode(this, this.depth + 1, aabb);
 			}
 			while (this.items.length > 0) {
 				var item = this.items.pop();
@@ -101,15 +101,15 @@
 	};
 
 	OctreeNode.prototype.contains = function (item) {
-		return isContained(item, this.bounds);
+		return isContained(item, this.aabb);
 	};
 
 	OctreeNode.prototype.getCollidingNodes = function (ray) {
 		var nodes = [];
-		var bounds = this.bounds;
+		var aabb = this.aabb;
 		var collidingPoint = [0, 0, 0];
 		if (Math.geo.rayAABBCollision(ray.start, ray.direction,
-			this.bounds.min, this.bounds.max, collidingPoint)) {
+			this.aabb.min, this.aabb.max, collidingPoint)) {
 			if (this.children) {
 				for (var i = 0; i < this.children.length; i++) {
 					var child = this.children[i];
@@ -156,25 +156,25 @@
 	};
 
 	Octree.prototype.growIfNeeded = function (allItems) {
-		updateRootBounds(allItems, this.bounds);
+		updateRootBounds(allItems, this.aabb);
 	};
 
 	Math.Octree = Octree;
 
-	function isContained (item, bounds) {
+	function isContained (item, aabb) {
 		for (var j = 0; j < 3; j++) {
-			if (item[j] < bounds.min[j]) return false;
-			if (item[j] > bounds.max[j]) return false;
+			if (item[j] < aabb.min[j]) return false;
+			if (item[j] > aabb.max[j]) return false;
 		}
 		return true;
 	}
 
-	function updateRootBounds (items, bounds) {
+	function updateRootBounds (items, aabb) {
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i];
 			for (var j = 0; j < 3; j++) {
-				if (item[j] < bounds.min[j]) bounds.min[j] = item[j];
-				if (item[j] > bounds.max[j]) bounds.max[j] = item[j];
+				if (item[j] < aabb.min[j]) aabb.min[j] = item[j];
+				if (item[j] > aabb.max[j]) aabb.max[j] = item[j];
 			}
 		}
 	}

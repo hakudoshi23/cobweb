@@ -16,16 +16,16 @@
                     var ray = data.camera.getRayFromCamera(null, realCoords,
                         [canvas.width, canvas.height]);
 
-                    var isHit = false, hitPoint = vec3.create();
+                    var hitPoint = vec3.create();
                     instance.scene.getObjects().forEach(function (node) {
-                        var items = node.data.bounds.getCollidingItems(ray);
-                        items.forEach(function (item) {
-                            console.debug(item._halfEdge.getFaces());
-                        });
-                        /*isHit = geo.testRayBBox(ray.start, ray.direction, node.data.mesh.bounding, node.data.model, hitPoint);
-                        if (isHit) {
-                            node.data.selected = true;
-                        } else delete node.data.selected;*/
+                        var face = node.data.mesh.getFace(ray);
+                        if (face) {
+                            var normal = face.computeNormal();
+                            face.getVertices().forEach(function (vertex) {
+                                vec3.add(vertex, vertex, normal);
+                            });
+                            node.data.mesh.bounds.updateDimensions();
+                        }
                     });
                     return false;
                 }

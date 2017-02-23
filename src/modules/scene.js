@@ -1,20 +1,15 @@
 ((function () {
     'use strict';
 
-    var octreeOptions = {};
-
     Modules.prototype.add('scene', function (instance) {
         instance.scene = TreeNode.extend();
 
-        var cubeMesh = Math.HalfEdgeCube();
         var cubeSceneNode = {
             type: 'object',
             primitive: instance.graphics.gl.TRIANGLES,
-            mesh: cubeMesh,
-            bounds: new Math.Octree(octreeOptions),
+            mesh: Math.HalfEdgeCube(),
             model: mat4.create(),
         };
-        cubeSceneNode.bounds.addItems(cubeMesh.vertices);
         instance.scene.add(cubeSceneNode);
         instance.scene.add({
             type: 'light',
