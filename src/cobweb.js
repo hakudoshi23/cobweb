@@ -3,8 +3,7 @@
 
     var defaultOptions = {
         container: {
-            selector: '#cobweb',
-            className: 'cb-container'
+            selector: '#cobweb'
         }
     };
 
@@ -12,12 +11,11 @@
         this.options = Object.assign({}, defaultOptions, options);
         var instance = this;
 
-
         this.container = document.querySelector(this.options.container.selector);
         if (!this.container)
             throw new Error('Invalid container selector: \'' +
                 this.options.container.selector + '\'');
-        this.container.addClass(this.options.container.className);
+        this.container.addClass('cb-container');
         this.container.data('instance', this);
 
         this.logger = new Logger(this, true);
