@@ -6,12 +6,12 @@
 		maxDepth: 5,
 	};
 
-	var OctreeNode = function (parent, depth, aabb) {
+	var OctreeNode = function (parent, depth) {
 		this.items = [];
 		this.children = null;
 		this.depth = depth || 0;
 		this.parent = parent || null;
-		this.aabb = aabb || { max: [0, 0, 0], min: [0, 0, 0] };
+		this.aabb = { max: [0, 0, 0], min: [0, 0, 0] };
 
 		this.root = this;
 		while (this.root.parent !== null)
@@ -55,26 +55,10 @@
 	OctreeNode.prototype.splitIfNeeded = function () {
 		if (this.root.options.maxItems < this.items.length &&
 			this.root.options.maxDepth >= this.depth) {
-			var half = [
-				(this.aabb.max[0] - this.aabb.min[0]) * 0.5,
-				(this.aabb.max[1] - this.aabb.min[1]) * 0.5,
-				(this.aabb.max[2] - this.aabb.min[2]) * 0.5
-			];
 			this.children = [];
 			for (var i = 0; i < 8; i++) {
-				var aabb = Object.create(this.aabb);
-				var ref = [!(i & 1), !(i & 2), !(i & 4)];
-				aabb.min = [
-					this.aabb.min[0] + half[0] * ref[0],
-					this.aabb.min[1] + half[1] * ref[1],
-					this.aabb.min[2] + half[2] * ref[2]
-				];
-				aabb.max = [
-					aabb.min[0] + half[0],
-					aabb.min[1] + half[1],
-					aabb.min[2] + half[2]
-				];
-				this.children[i] = new OctreeNode(this, this.depth + 1, aabb);
+				this.children[i] = new OctreeNode(this, this.depth + 1);
+				this.children[i].updateDimensions(this.aabb, i);
 			}
 			while (this.items.length > 0) {
 				var item = this.items.pop();
@@ -130,6 +114,25 @@
 		return items;
 	};
 
+	OctreeNode.prototype.updateDimensions = function (parentAabb, index) {
+		var half = [
+			(parentAabb.max[0] - parentAabb.min[0]) * 0.5,
+			(parentAabb.max[1] - parentAabb.min[1]) * 0.5,
+			(parentAabb.max[2] - parentAabb.min[2]) * 0.5
+		];
+		var ref = [!(index & 1), !(index & 2), !(index & 4)];
+		this.aabb.min = [
+			parentAabb.min[0] + half[0] * ref[0],
+			parentAabb.min[1] + half[1] * ref[1],
+			parentAabb.min[2] + half[2] * ref[2]
+		];
+		this.aabb.max = [
+			this.aabb.min[0] + half[0],
+			this.aabb.min[1] + half[1],
+			this.aabb.min[2] + half[2]
+		];
+	};
+
 	var Octree = function (options) {
 		this.options = Object.assign({}, defaultOptions, options);
 		OctreeNode.call(this);
@@ -149,6 +152,11 @@
 		if (newItems) allItems.push(newItems);
 		this.shrinkIfNeeded(allItems);
 		this.growIfNeeded(allItems);
+		if (this.children) {
+			for (var i = 0; i < this.children.length; i++) {
+				this.children[i].updateDimensions(this.aabb, i);
+			}
+		}
 	};
 
 	Octree.prototype.shrinkIfNeeded = function (allItems) {
