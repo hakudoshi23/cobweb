@@ -7,6 +7,25 @@
                 return true;
             },
             onMouseMove: function (event, realCoords) {
+                if (!this.selection.isEmpty()) {
+                    var canvas = event.target;
+                    var data = instance.surface.map[canvas.id];
+
+                    var ray = data.camera.getRayFromCamera(null, realCoords,
+                        [canvas.width, canvas.height]);
+                    var cameraDirection = data.camera.getCameraDirection();
+                    var face = this.selection.faces[0];
+                    var faceCenter = face.computeCenter();
+
+                    var hitPoint = [0, 0, 0];
+                    if (Math.geo.rayPlaneCollision(ray.start, ray.direction, faceCenter, cameraDirection, hitPoint)) {
+                        var diff = [0, 0, 0];
+                        vec3.sub(diff, hitPoint, faceCenter);
+                        face.getVertices().forEach(function (vertex) {
+                            vec3.add(vertex, vertex, diff);
+                        });
+                    }
+                }
                 return true;
             },
             onMouseDown: function (event, realCoords) {
@@ -17,13 +36,12 @@
                         [canvas.width, canvas.height]);
 
                     var hitPoint = vec3.create();
+                    var selection = this.selection;
                     instance.scene.getObjects().forEach(function (node) {
+                        selection.clear();
                         var face = node.data.mesh.getFace(ray);
                         if (face) {
-                            var normal = face.computeNormal();
-                            face.getVertices().forEach(function (vertex) {
-                                vec3.add(vertex, vertex, normal);
-                            });
+                            selection.face(face);
                             node.data.mesh.bounds.updateDimensions();
                         }
                     });
