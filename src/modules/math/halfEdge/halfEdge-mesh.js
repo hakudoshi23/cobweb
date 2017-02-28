@@ -11,6 +11,11 @@
         this.faces = [];
 
         this.bounds = new Math.Octree();
+        this.bump();
+    };
+
+    HalfEdgeMesh.prototype.bump = function () {
+        this.lastBump = Date.now();
     };
 
     HalfEdgeMesh.prototype.addVertices = function (vertices) {
