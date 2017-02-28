@@ -63,11 +63,41 @@
         if (shader) {
             shader.uniforms(uniforms);
             if (obj.mesh instanceof Math.HalfEdgeMesh) {
-                var mesh = obj.mesh.getMesh();
+                var mesh = buildMeshFromHalfEdges(obj.mesh);
                 shader.draw(mesh, obj.primitive);
             } else {
                 shader.draw(obj.mesh, obj.primitive);
             }
         }
+    }
+
+    function buildMeshFromHalfEdges (halfEdgeMesh) {
+        var buffers = {};
+
+        buffers.vertices = new Float32Array(halfEdgeMesh.vertices.length * 3);
+        for (var i = 0; i < halfEdgeMesh.vertices.length; i++) {
+            buffers.vertices[i * 3 + 0] = halfEdgeMesh.vertices[i][0];
+            buffers.vertices[i * 3 + 1] = halfEdgeMesh.vertices[i][1];
+            buffers.vertices[i * 3 + 2] = halfEdgeMesh.vertices[i][2];
+        }
+
+        buffers.normals = new Float32Array(halfEdgeMesh.vertices.length * 3);
+        for (i = 0; i < halfEdgeMesh.vertices.length; i++) {
+            var normal = halfEdgeMesh.vertices[i]._halfEdge.computeNormal();
+            buffers.normals[i * 3 + 0] = normal[0];
+            buffers.normals[i * 3 + 1] = normal[1];
+            buffers.normals[i * 3 + 2] = normal[2];
+        }
+
+        var triangles = [];
+        for (i = 0; i < halfEdgeMesh.faces.length; i++) {
+            var ts = halfEdgeMesh.faces[i].getVerticesTriangulated();
+            for (var j = 0; j < ts.length; j++) {
+                triangles.push(ts[j][0]._halfEdge.ownIndex,
+                    ts[j][1]._halfEdge.ownIndex, ts[j][2]._halfEdge.ownIndex);
+            }
+        }
+        buffers.triangles = new Uint16Array(triangles);
+        return GL.Mesh.load(buffers);
     }
 })());
