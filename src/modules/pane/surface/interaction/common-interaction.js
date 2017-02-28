@@ -50,7 +50,8 @@
             },
             onClick: function (event, realCoords) {
                 return true;
-            }
+            },
+            onRender: function (surface) {}
         };
     }, ['surface-interaction']);
 

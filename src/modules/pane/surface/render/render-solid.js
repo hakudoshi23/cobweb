@@ -3,16 +3,8 @@
 
     Modules.prototype.add('render-solid', function (instance) {
         var shader = null;
-        var firstSource = null;
-        var vertSource = Ajax.get('shader/solid.vert', function (response) {
-            if (firstSource) {
-                shader = new Shader(response, firstSource);
-            } firstSource = response;
-        });
-        var fragSource = Ajax.get('shader/solid.frag', function (response) {
-            if (firstSource) {
-                shader = new Shader(firstSource, response);
-            } firstSource = response;
+        instance.asset.shader.get('solid', function (s) {
+            shader = s;
         });
 
         var grid = {
@@ -41,7 +33,7 @@
         instance.events.on('surface.create', function (surface) {
             instance.surface.setRender(surface, 'solid');
         });
-    }, ['surface-render']);
+    }, ['surface-render', 'shader']);
 
     var uniforms = {
         u_color: [0.7, 0.7, 0.7, 1],
@@ -56,8 +48,6 @@
         mat4.multiply(temp, surface.camera.projection, temp);
         mat4.multiply(uniforms.u_mvp, temp, obj.model);
 
-        uniforms.u_color = obj.selected ? [1,0,0,1] : [0.7, 0.7, 0.7, 1];
-
         uniforms.u_model = obj.model;
 
         if (shader) {
@@ -71,17 +61,19 @@
         }
     }
 
+    var cacheKey = 'render-solid';
     function getCachedVBOMesh (halfEdgeMesh) {
-        if (halfEdgeMesh._cache) {
-            if (halfEdgeMesh._cache.time <= halfEdgeMesh.lastBump) {
-                halfEdgeMesh._cache = buildMeshFromHalfEdges(halfEdgeMesh);
-                halfEdgeMesh._cache.time = Date.now();
+        halfEdgeMesh._cache = halfEdgeMesh._cache || {};
+        if (halfEdgeMesh._cache[cacheKey]) {
+            if (halfEdgeMesh._cache[cacheKey].time <= halfEdgeMesh.lastBump) {
+                halfEdgeMesh._cache[cacheKey] = buildMeshFromHalfEdges(halfEdgeMesh);
+                halfEdgeMesh._cache[cacheKey].time = Date.now();
             }
         } else {
-            halfEdgeMesh._cache = buildMeshFromHalfEdges(halfEdgeMesh);
-            halfEdgeMesh._cache.time = Date.now();
+            halfEdgeMesh._cache[cacheKey] = buildMeshFromHalfEdges(halfEdgeMesh);
+            halfEdgeMesh._cache[cacheKey].time = Date.now();
         }
-        return halfEdgeMesh._cache;
+        return halfEdgeMesh._cache[cacheKey];
     }
 
     function buildMeshFromHalfEdges (halfEdgeMesh) {

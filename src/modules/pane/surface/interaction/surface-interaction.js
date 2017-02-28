@@ -13,6 +13,16 @@
             return instance.surface.interactions[interactionName];
         };
 
+        instance.surface.onRender = function (canvas, surface) {
+            var keepRunning = true;
+            var callbacks = instance.surface.getInteractionCallbacks(canvas);
+            if (callbacks.onRender) keepRunning = callbacks.onRender(surface);
+            if (keepRunning) {
+                var common = instance.surface.interactions.common;
+                common.onRender(surface);
+            }
+        };
+
         instance.events.on('surface.create', function (surface) {
             surface.oncontextmenu = onContextMenu;
             surface.onmousewheel = onSurfaceEvent;
