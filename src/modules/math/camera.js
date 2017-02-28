@@ -11,12 +11,12 @@
     Camera.prototype.getViewMatrix = function (view) {
         view = view || mat4.create();
         var eye = [0, 0, 0];
-        this.getCameraPosition(eye);
+        this.getPosition(eye);
         mat4.lookAt(view, eye, this.center, this.getUpDirection());
         return view;
     };
 
-    Camera.prototype.getCameraPosition = function (eye) {
+    Camera.prototype.getPosition = function (eye) {
         eye = eye || vec3.create();
         vec3.set(eye, 0, 0, -this.distance);
         vec3.rotateX(eye, eye, this.rotation[1]);
@@ -24,17 +24,17 @@
         return eye;
     };
 
-    Camera.prototype.getCameraDirection = function (direction) {
+    Camera.prototype.getDirection = function (direction) {
         direction = direction || vec3.create();
-        var eye = this.getCameraPosition();
+        var eye = this.getPosition();
         vec3.sub(direction, this.center, eye);
         vec3.normalize(direction, direction);
         return direction;
     };
 
-    Camera.prototype.getRayFromCamera = function (ray, canvasCoords, canvasSize) {
+    Camera.prototype.getRay = function (ray, canvasCoords, canvasSize) {
         ray = ray || new Math.Ray();
-        this.getCameraPosition(ray.start);
+        this.getPosition(ray.start);
         vec3.set(ray.direction, canvasCoords[0] / (canvasSize[0] * 0.5) - 1.0,
             canvasCoords[1] / (canvasSize[1] * 0.5) - 1.0, 1);
         var auxMat = mat4.create();

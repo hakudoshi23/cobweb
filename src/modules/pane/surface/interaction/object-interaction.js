@@ -13,7 +13,7 @@
                 var canvas = event.target;
                 var data = instance.surface.map[canvas.id];
                 if (event.which === 1) {
-                    var ray = data.camera.getRayFromCamera(null, realCoords,
+                    var ray = data.camera.getRay(null, realCoords,
                         [canvas.width, canvas.height]);
 
                     var isHit = false, hitPoint = vec3.create();

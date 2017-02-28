@@ -27,7 +27,7 @@
 
         instance.surface.renders.solid = function (surface) {
             var lightDirection = vec3.create();
-            surface.camera.getCameraPosition(lightDirection);
+            surface.camera.getPosition(lightDirection);
             vec3.add(lightDirection, lightDirection, [1, 2, 0]);
             vec3.normalize(lightDirection, lightDirection);
             uniforms.u_lightvector = lightDirection;

@@ -11,9 +11,9 @@
                     var canvas = event.target;
                     var data = instance.surface.map[canvas.id];
 
-                    var ray = data.camera.getRayFromCamera(null, realCoords,
+                    var ray = data.camera.getRay(null, realCoords,
                         [canvas.width, canvas.height]);
-                    var cameraDirection = data.camera.getCameraDirection();
+                    var cameraDirection = data.camera.getDirection();
                     var face = this.selection.faces[0];
                     var faceCenter = face.computeCenter();
 
@@ -32,7 +32,7 @@
                 var canvas = event.target;
                 var data = instance.surface.map[canvas.id];
                 if (event.which === 1) {
-                    var ray = data.camera.getRayFromCamera(null, realCoords,
+                    var ray = data.camera.getRay(null, realCoords,
                         [canvas.width, canvas.height]);
 
                     var hitPoint = vec3.create();
