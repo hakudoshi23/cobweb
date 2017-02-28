@@ -63,12 +63,25 @@
         if (shader) {
             shader.uniforms(uniforms);
             if (obj.mesh instanceof Math.HalfEdgeMesh) {
-                var mesh = buildMeshFromHalfEdges(obj.mesh);
+                var mesh = getCachedVBOMesh(obj.mesh);
                 shader.draw(mesh, obj.primitive);
             } else {
                 shader.draw(obj.mesh, obj.primitive);
             }
         }
+    }
+
+    function getCachedVBOMesh (halfEdgeMesh) {
+        if (halfEdgeMesh._cache) {
+            if (halfEdgeMesh._cache.time <= halfEdgeMesh.lastBump) {
+                halfEdgeMesh._cache = buildMeshFromHalfEdges(halfEdgeMesh);
+                halfEdgeMesh._cache.time = Date.now();
+            }
+        } else {
+            halfEdgeMesh._cache = buildMeshFromHalfEdges(halfEdgeMesh);
+            halfEdgeMesh._cache.time = Date.now();
+        }
+        return halfEdgeMesh._cache;
     }
 
     function buildMeshFromHalfEdges (halfEdgeMesh) {

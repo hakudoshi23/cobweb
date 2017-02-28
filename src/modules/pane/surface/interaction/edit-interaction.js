@@ -1,15 +1,18 @@
 ((function () {
     'use strict';
 
+    var isMouseDown = false;
+
     Modules.prototype.add('edit-interaction', function (instance) {
         instance.surface.interactions.edit = {
             onMouseWheel: function (event, realCoords) {
                 return true;
             },
             onMouseMove: function (event, realCoords) {
-                if (!this.selection.isEmpty()) {
+                if (isMouseDown && !this.selection.isEmpty()) {
                     var canvas = event.target;
                     var data = instance.surface.map[canvas.id];
+                    var object = this.selection.objects[0];
 
                     var ray = data.camera.getRay(null, realCoords,
                         [canvas.width, canvas.height]);
@@ -23,6 +26,8 @@
                         vec3.sub(diff, hitPoint, faceCenter);
                         face.getVertices().forEach(function (vertex) {
                             vec3.add(vertex, vertex, diff);
+                            object.bounds.updateDimensions();
+                            object.bump();
                         });
                     }
                 }
@@ -32,6 +37,8 @@
                 var canvas = event.target;
                 var data = instance.surface.map[canvas.id];
                 if (event.which === 1) {
+                    isMouseDown = true;
+
                     var ray = data.camera.getRay(null, realCoords,
                         [canvas.width, canvas.height]);
 
@@ -41,8 +48,8 @@
                         selection.clear();
                         var face = node.data.mesh.getFace(ray);
                         if (face) {
+                            selection.object(node.data.mesh);
                             selection.face(face);
-                            node.data.mesh.bounds.updateDimensions();
                         }
                     });
                     return false;
@@ -50,6 +57,7 @@
                 return true;
             },
             onMouseUp: function (event, realCoords) {
+                isMouseDown = false;
                 return true;
             },
             onClick: function (event, realCoords) {
