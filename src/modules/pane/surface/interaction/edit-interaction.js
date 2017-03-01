@@ -2,6 +2,7 @@
     'use strict';
 
     var isMouseDown = false;
+    var initialHitPoint = [0, 0, 0];
 
     Modules.prototype.add('edit-interaction', function (instance) {
         instance.surface.interactions.edit = {
@@ -18,14 +19,13 @@
                         [canvas.width, canvas.height]);
                     var cameraDirection = data.camera.getDirection();
                     var face = this.selection.faces[0];
-                    var faceCenter = face.computeCenter();
 
                     var hitPoint = [0, 0, 0];
-                    if (Math.geo.rayPlaneCollision(ray.start, ray.direction, faceCenter, cameraDirection, hitPoint)) {
+                    if (Math.geo.rayPlaneCollision(ray.start, ray.direction, initialHitPoint, cameraDirection, hitPoint)) {
                         var diff = [0, 0, 0];
-                        vec3.sub(diff, hitPoint, faceCenter);
+                        vec3.sub(diff, hitPoint, initialHitPoint);
                         face.getVertices().forEach(function (vertex) {
-                            vec3.add(vertex, vertex, diff);
+                            vec3.add(vertex, vertex.originalPosition, diff);
                             object.bounds.updateDimensions();
                             object.bump();
                         });
@@ -42,12 +42,13 @@
                     var ray = data.camera.getRay(null, realCoords,
                         [canvas.width, canvas.height]);
 
-                    var hitPoint = vec3.create();
                     var selection = this.selection;
                     instance.scene.getObjects().forEach(function (node) {
                         selection.clear();
-                        var face = node.data.mesh.getFace(ray);
+                        var hitPoint = [0, 0, 0];
+                        var face = node.data.mesh.getFace(ray, hitPoint);
                         if (face) {
+                            vec3.copy(initialHitPoint, hitPoint);
                             selection.object(node.data.mesh);
                             selection.face(face);
                         }

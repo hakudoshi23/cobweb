@@ -94,7 +94,7 @@
         this.faces = [];
     };
 
-    HalfEdgeMesh.prototype.getFaces = function (ray) {
+    HalfEdgeMesh.prototype.getFaces = function (ray, hitPoints) {
         var uniqueFaces = [], collidingFaces = [];
         var vertices = this.bounds.getCollidingItems(ray);
         vertices.forEach(function (item) {
@@ -106,10 +106,11 @@
         uniqueFaces.forEach(function (face) {
             var triangles = face.getVerticesTriangulated();
             for (var i = 0; i < triangles.length; i++) {
-                var triangle = triangles[i];
+                var triangle = triangles[i], hitPoint = [0, 0, 0];
                 if (Math.geo.rayTriangleCollision(ray.start, ray.direction,
-                    triangle[0], triangle[1], triangle[2])) {
+                    triangle[0], triangle[1], triangle[2], hitPoint)) {
                     collidingFaces.push(face);
+                    hitPoints.push(hitPoint);
                     break;
                 }
             }
@@ -117,14 +118,19 @@
         return collidingFaces;
     };
 
-    HalfEdgeMesh.prototype.getFace = function (ray) {
-        var uniqueFaces = this.getFaces(ray);
-        uniqueFaces.sort(function (f1, f2) {
-            var d1 = vec3.dist(f1.computeCenter(), ray.start);
-            var d2 = vec3.dist(f2.computeCenter(), ray.start);
-            return d1 - d2;
+    HalfEdgeMesh.prototype.getFace = function (ray, hitPoint) {
+        var hitPoints = [];
+        var uniqueFaces = this.getFaces(ray, hitPoints);
+        var smallerIndex = 0, lastDistance = Number.MAX_VALUE;
+        uniqueFaces.forEach(function (face, index) {
+            var distance = vec3.dist(face.computeCenter(), ray.start);
+            if (distance < lastDistance) {
+                lastDistance = distance;
+                smallerIndex = index;
+            }
         });
-        return uniqueFaces[0];
+        vec3.copy(hitPoint, hitPoints[smallerIndex]);
+        return uniqueFaces[smallerIndex];
     };
 
     function buildEdge (start, end, face) {

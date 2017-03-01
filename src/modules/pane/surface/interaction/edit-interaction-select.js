@@ -9,15 +9,17 @@
             vertices: [],
             last: null,
             vertex: function (vertex) {
-                vertex.originalPosition = vertex.slice();
+                saveOriginalVertexPosition([vertex]);
                 this.vertices.push(vertex);
                 this.last = 'vertices';
             },
             edge: function (edge) {
+                saveOriginalVertexPosition([edge.vertex]);
                 this.edges.push(edge);
                 this.last = 'edges';
             },
             face: function (face) {
+                saveOriginalVertexPosition(face.getVertices());
                 this.faces.push(face);
                 this.last = 'faces';
             },
@@ -41,4 +43,10 @@
         };
 
     }, ['edit-interaction']);
+
+    function saveOriginalVertexPosition (vertices) {
+        vertices.forEach(function (vertex) {
+            vertex.originalPosition = vertex.slice();
+        });
+    }
 })());
