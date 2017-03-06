@@ -121,6 +121,7 @@
     HalfEdgeMesh.prototype.getFace = function (ray, hitPoint) {
         var hitPoints = [];
         var uniqueFaces = this.getFaces(ray, hitPoints);
+        if (uniqueFaces.length === 0) return null;
         var smallerIndex = 0, lastDistance = Number.MAX_VALUE;
         uniqueFaces.forEach(function (face, index) {
             var distance = vec3.dist(face.computeCenter(), ray.start);
