@@ -23,9 +23,9 @@
                 if (shader) {
                     shader.uniforms(uniforms);
                     if (obj.mesh instanceof Math.HalfEdgeMesh) {
-                        instance.graphics.gl.lineWidth(5);
+                        //instance.graphics.gl.lineWidth(5);
                         var mesh = getCachedVBOMesh(obj.mesh);
-                        shader.draw(mesh, GL.LINES);
+                        shader.draw(mesh, instance.graphics.gl.LINES);
                     }
                 }
             });
@@ -52,13 +52,15 @@
 
         var vertices = [], colors = [];
         halfEdgeMesh.faces.forEach(function (face) {
-            var faceNormal = face.computeNormal();
-            face.getVerticesTriangulated().forEach(function (triangles) {
-                triangles.forEach(function (triangle) {
-                    vertices.push(triangle[0], triangle[1], triangle[2]);
-                    colors.push(faceNormal[0], faceNormal[1], faceNormal[2]);
-                });
-            });
+            var verts = face.getVertices();
+            for (var i = 0; i < verts.length; i++) {
+                var vTo = verts[ i + 1 >= verts.length ? 0 : i + 1];
+                var vFrom = verts[i];
+                vertices.push(vFrom[0], vFrom[1], vFrom[2]);
+                colors.push(0, 0, 0, 1);
+                vertices.push(vTo[0], vTo[1], vTo[2]);
+                colors.push(0, 0, 0, 1);
+            }
         });
 
         buffers.vertices = new Float32Array(vertices);
