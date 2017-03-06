@@ -6,15 +6,18 @@
             objects: {},
             add: function (ray, object) {
                 var selection = this;
+
                 var vertices = object.mesh.bounds.getCollidingItems(ray);
                 vertices.forEach(function (vertex) {
                     if (Math.geo.rayPointDistance(ray, vertex) <= 0.2) {
                         addVertex(selection, object, vertex);
                     }
                 });
-                //TODO: check vertex distance to ray -> if close -> add
-                //TODO: build edge list from vertex outEdges
-                //TODO: check edge distance to ray -> if close -> add
+
+                var uniqueEdges = getEdgesFromVertices(vertices);
+                uniqueEdges.forEach(function (edge) {
+                    //TODO: check edge distance to ray -> if close -> add
+                });
                 //TODO: build face list from vertex neightboor faces
                 //TODO: check face collision to ray -> if collide -> add
             },
@@ -57,6 +60,17 @@
                 vertices: []
             };
         }
+    }
+
+    function getEdgesFromVertices (vertices) {
+        var edges = [];
+        vertices.forEach(function (vertex) {
+            vertex._halfEdges.outEdges.forEach(function (edge) {
+                if (edges.indexOf(edge) != -1)
+                    edges.push(edge);
+            });
+        });
+        return edges;
     }
 
     function saveOriginalVertexPosition (vertices) {
