@@ -44,14 +44,8 @@
 
                     var selection = this.selection;
                     instance.scene.getObjects().forEach(function (node) {
-                        selection.clear();
-                        var hitPoint = [0, 0, 0];
-                        var face = node.data.mesh.getFace(ray, hitPoint);
-                        if (face) {
-                            vec3.copy(initialHitPoint, hitPoint);
-                            selection.object(node.data.mesh);
-                            selection.face(face);
-                        }
+                        //selection.clear();
+                        selection.add(ray, node.data);
                     });
                     return false;
                 }

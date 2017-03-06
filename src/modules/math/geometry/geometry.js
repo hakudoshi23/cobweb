@@ -90,6 +90,13 @@
 		return true;
     };
 
+    Math.geo.rayPointDistance = function (ray, point) {
+        var aux = [0, 0, 0];
+        vec3.sub(aux, point, ray.start);
+        vec3.cross(aux, ray.direction, aux);
+        return vec3.len(aux);
+    };
+
     function getBarycentricCoordinates (p1, p2, p3, point) {
         var v0 = getVectorFromPoints(p1, p2);
         var v1 = getVectorFromPoints(p1, p3);
