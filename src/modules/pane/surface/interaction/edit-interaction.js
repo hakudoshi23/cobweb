@@ -45,7 +45,8 @@
                     var selection = this.selection;
                     instance.scene.getObjects().forEach(function (node) {
                         //selection.clear();
-                        selection.add(ray, node.data);
+                        selection.add(ray, node.data, data.camera.position);
+                        node.data.mesh.bump();
                     });
                     return false;
                 }

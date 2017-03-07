@@ -185,5 +185,7 @@
 				if (item[j] > aabb.max[j]) aabb.max[j] = item[j];
 			}
 		}
+		vec3.add(aabb.max, aabb.max, [0.5, 0.5, 0.5]);
+		vec3.sub(aabb.min, aabb.min, [0.5, 0.5, 0.5]);
 	}
 })();

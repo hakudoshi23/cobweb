@@ -5,6 +5,17 @@
 
     Math.geo = Math.geo || {};
 
+    Math.geo.rayFaceCollision = function (start, direction, vertices, result) {
+        var triangles = Math.geo.triangulateFace(vertices);
+        for (var i = 0; i < triangles.length; i++) {
+            var triangle = triangles[i];
+            if (Math.geo.rayTriangleCollision(start, direction,
+                triangle[0], triangle[1], triangle[2], result))
+                return true;
+        }
+        return false;
+    };
+
     Math.geo.rayTriangleCollision = function (start, direction, v1, v2, v3, result) {
         result = result || [0, 0, 0];
     	var triangleNormal = getNormal(v1, v2, v3);
@@ -90,11 +101,39 @@
 		return true;
     };
 
-    Math.geo.rayPointDistance = function (ray, point) {
+    Math.geo.rayPointDistance = function (start, direction, point) {
         var aux = [0, 0, 0];
-        vec3.sub(aux, point, ray.start);
-        vec3.cross(aux, ray.direction, aux);
+        vec3.sub(aux, point, start);
+        vec3.cross(aux, direction, aux);
         return vec3.len(aux);
+    };
+
+    Math.geo.pointPointDistance = function (p1, p2) {
+        var aux = [0, 0, 0];
+        vec3.sub(aux, p2, p1);
+        return vec3.len(aux);
+    };
+
+    Math.geo.triangulateFace = function (vertices) {
+        var triangulated = [];
+        for (var i = 0; i < vertices.length - 2; i++) {
+            triangulated.push([vertices[0], vertices[i + 1], vertices[i + 2]]);
+        }
+        return triangulated;
+    };
+
+    Math.geo.findClosestFace = function (position, faces) {
+        if (!faces.length) return null;
+        var distance = Math.geo.pointPointDistance(position, faces[0].computeCenter());
+        var closestFace = faces[0];
+        for (var i = 1; i < faces.length; i++) {
+            var newDistance = Math.geo.pointPointDistance(position, faces[i].computeCenter());
+            if (newDistance < distance) {
+                distance = newDistance;
+                closestFace = faces[i];
+            }
+        }
+        return closestFace;
     };
 
     function getBarycentricCoordinates (p1, p2, p3, point) {

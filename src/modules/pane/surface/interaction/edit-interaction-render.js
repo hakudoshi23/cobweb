@@ -23,7 +23,7 @@
                 if (shader) {
                     shader.uniforms(uniforms);
                     if (obj.mesh instanceof Math.HalfEdgeMesh) {
-                        //instance.graphics.gl.lineWidth(5);
+                        instance.graphics.gl.lineWidth(5);
                         var mesh = getCachedVBOMesh(obj.mesh);
                         shader.draw(mesh, instance.graphics.gl.LINES);
                     }
@@ -50,21 +50,29 @@
     function buildMeshFromHalfEdges (halfEdgeMesh) {
         var buffers = {};
 
-        var vertices = [], colors = [];
-        halfEdgeMesh.faces.forEach(function (face) {
-            var verts = face.getVertices();
-            for (var i = 0; i < verts.length; i++) {
-                var vTo = verts[ i + 1 >= verts.length ? 0 : i + 1];
-                var vFrom = verts[i];
-                vertices.push(vFrom[0], vFrom[1], vFrom[2]);
-                colors.push(0, 0, 0, 1);
-                vertices.push(vTo[0], vTo[1], vTo[2]);
-                colors.push(0, 0, 0, 1);
-            }
+        buffers.vertices = new Float32Array(halfEdgeMesh.vertices.length * 3);
+        halfEdgeMesh.vertices.forEach(function (vertex, i) {
+            buffers.vertices[i * 3 + 0] = vertex[0];
+            buffers.vertices[i * 3 + 1] = vertex[1];
+            buffers.vertices[i * 3 + 2] = vertex[2];
+        });
+        buffers.colors = new Float32Array(halfEdgeMesh.vertices.length * 4);
+        halfEdgeMesh.vertices.forEach(function (vertex, i) {
+            var color = vertex._selected ? [1, 0.4, 0.1, 1] : [0, 0, 0, 1];
+            for (var j = 0; j < 4; j++)
+                buffers.colors[i * 4 + j] = color[j];
         });
 
-        buffers.vertices = new Float32Array(vertices);
-        buffers.colors = new Float32Array(colors);
+        var indices = [];
+        halfEdgeMesh.faces.forEach(function (face) {
+            face.getVertices().forEach(function (vertex, i, array) {
+                var index = i >= array.length - 1 ? 0 : i + 1;
+                indices.push(vertex._halfEdge.ownIndex);
+                indices.push(array[index]._halfEdge.ownIndex);
+            });
+        });
+        buffers.lines = new Uint16Array(indices);
+
         return GL.Mesh.load(buffers);
     }
 })());
