@@ -1,6 +1,8 @@
 ((function () {
     'use strict';
 
+    var meshKey = 'render-solid';
+
     Modules.prototype.add('render-solid', function (instance) {
         var shader = null;
         instance.asset.shader.get('solid', function (s) {
@@ -36,7 +38,7 @@
     }, ['surface-render', 'shader']);
 
     var uniforms = {
-        u_color: [0.7, 0.7, 0.7, 1],
+        u_color: [0.5, 0.5, 0.5, 1],
         u_lightvector: null,
         u_model: null,
         u_mvp: mat4.create()
@@ -53,45 +55,56 @@
         if (shader) {
             shader.uniforms(uniforms);
             if (obj.mesh instanceof Math.HalfEdgeMesh) {
-                var mesh = getCachedVBOMesh(obj.mesh);
-                shader.draw(mesh, obj.primitive);
+                var mesh = obj.mesh.cache.get(meshKey, meshBuilder);
+                if (mesh) shader.draw(mesh, obj.primitive);
             } else {
                 shader.draw(obj.mesh, obj.primitive);
             }
         }
     }
 
-    var cacheKey = 'render-solid';
-    function getCachedVBOMesh (halfEdgeMesh) {
-        halfEdgeMesh._cache = halfEdgeMesh._cache || {};
-        if (halfEdgeMesh._cache[cacheKey]) {
-            if (halfEdgeMesh._cache[cacheKey].time <= halfEdgeMesh.lastBump) {
-                halfEdgeMesh._cache[cacheKey] = buildMeshFromHalfEdges(halfEdgeMesh);
-                halfEdgeMesh._cache[cacheKey].time = Date.now();
-            }
-        } else {
-            halfEdgeMesh._cache[cacheKey] = buildMeshFromHalfEdges(halfEdgeMesh);
-            halfEdgeMesh._cache[cacheKey].time = Date.now();
-        }
-        return halfEdgeMesh._cache[cacheKey];
-    }
+    var meshBuilder = {
+        onCreate: function (halfEdgeMesh) {
+            var buffers = {
+                vertices: new Float32Array(halfEdgeMesh.vertices.length * 3),
+                normals: new Float32Array(halfEdgeMesh.vertices.length * 3)
+            };
 
-    function buildMeshFromHalfEdges (halfEdgeMesh) {
-        var buffers = {};
-
-        var vertices = [], normals = [];
-        halfEdgeMesh.faces.forEach(function (face) {
-            var faceNormal = face.computeNormal();
-            face.getVerticesTriangulated().forEach(function (triangles) {
-                triangles.forEach(function (triangle) {
-                    vertices.push(triangle[0], triangle[1], triangle[2]);
-                    normals.push(faceNormal[0], faceNormal[1], faceNormal[2]);
+            var indices = [];
+            halfEdgeMesh.faces.forEach(function (face) {
+                var faceNormal = face.computeNormal();
+                face.getVerticesTriangulated().forEach(function (t) {
+                    indices.push(t[0]._halfEdge.ownIndex,
+                        t[1]._halfEdge.ownIndex, t[2]._halfEdge.ownIndex);
                 });
             });
-        });
+            buffers.triangles = new Uint16Array(indices);
+            var mesh = GL.Mesh.load(buffers);
+            for (var i = 0; i < halfEdgeMesh.vertices.length; i++)
+                this.onVertexChange(halfEdgeMesh.vertices[i], mesh);
 
-        buffers.vertices = new Float32Array(vertices);
-        buffers.normals = new Float32Array(normals);
-        return GL.Mesh.load(buffers);
-    }
+            return mesh;
+        },
+        onVertexChange: function (vertex, mesh) {
+            var buffer = mesh.vertexBuffers;
+            var index = vertex._halfEdge.ownIndex;
+            for (var j = 0; j < 3; j++)
+                buffer.vertices.data[index * 3 + j] = vertex[j];
+            buffer.vertices.dirty = true;
+            var normal = vertex._halfEdge.computeNormal();
+            for (j = 0; j < 3; j++)
+                buffer.normals.data[index * 3 + j] = normal[j];
+            buffer.normals.dirty = true;
+        },
+        onClean: function (mesh) {
+            if (mesh.vertexBuffers.vertices.dirty) {
+                mesh.vertexBuffers.vertices.upload();
+                delete mesh.vertexBuffers.vertices.dirty;
+            }
+            if (mesh.vertexBuffers.normals.dirty) {
+                mesh.vertexBuffers.normals.upload();
+                delete mesh.vertexBuffers.normals.dirty;
+            }
+        }
+    };
 })());

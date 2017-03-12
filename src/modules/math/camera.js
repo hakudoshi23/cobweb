@@ -55,5 +55,16 @@
         return up;
     };
 
+    Camera.prototype.computeLocalAxis = function () {
+        var left = [0, 0, 0];
+        var up = [0, 0, 0];
+
+        var forward = this.getDirection();
+        vec3.cross(left, forward, [0, 1, 0]);
+        vec3.cross(up, forward, left);
+
+        return {up: up, left: left};
+    };
+
     window.Math.Camera = Camera;
 })());

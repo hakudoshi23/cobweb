@@ -8,30 +8,60 @@
                 position = position || [0, 0, 0];
                 var selection = this;
 
-                var vertices = object.mesh.bounds.getCollidingItems(ray);
-                vertices.forEach(function (vertex) {
-                    if (Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= 0.2) {
-                        toggleVertex(selection, object, vertex);
-                    }
-                });
+                var result = {
+                    vertices: [],
+                    edges: [],
+                    faces: []
+                };
 
-                var uniqueEdges = getEdgesFromVertices(vertices);
-                uniqueEdges.forEach(function (edge) {
-                    //TODO: check edge distance to ray -> if close -> add
+                var vertices = object.mesh.bounds.getCollidingItems(ray);
+                var rayVertices = vertices.filter(function (vertex) {
+                    return Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= 0.2;
                 });
+                var vertex = Math.geo.findClosestPoint(position, rayVertices);
+                if (vertex) {
+                    toggleVertex(selection, object, vertex);
+                    result.vertices.push(vertex);
+                    return result;
+                }
+
+                //TODO: check edge collisions & add to selection
 
                 var uniqueFaces = getFacesFromVertices(vertices);
                 uniqueFaces = uniqueFaces.filter(function (face) {
                     return Math.geo.rayFaceCollision(ray.start, ray.direction,
                         face.getVertices());
                 });
-                toggleFace(selection, object, Math.geo.findClosestFace(position, uniqueFaces));
+                var closestFace = Math.geo.findClosestFace(position, uniqueFaces);
+                if (closestFace) {
+                    toggleFace(selection, object, closestFace);
+                    result.faces.push(closestFace);
+                }
+
+                //TODO: keep only closest element of all 3 types
+
+                return result;
+            },
+            getCenter: function () {
+                var name = Object.keys(this.objects)[0];
+                return Math.geo.computePointsCenter(this.objects[name].vertices);
             },
             clear: function () {
+                for (var name in this.objects) {
+                    var selectedObj = this.objects[name];
+                    var sceneObj = instance.scene.getObjectByName(name);
+                    for (var i = 0; i < selectedObj.vertices.length; i++) {
+                        var vertex = selectedObj.vertices[i];
+                        if (vertex._selected) {
+                            delete vertex._selected;
+                            sceneObj.mesh.onVertexChange(vertex);
+                        }
+                    }
+                }
                 this.objects = {};
             },
             isEmpty: function () {
-                return true;
+                return !Object.keys(this.objects).length;
             }
         };
 
@@ -41,6 +71,17 @@
         if (vertex) {
             if (toggle(selection, object, vertex, 'vertices')) {
                 vertex._selected = true;
+                vertex.originalPosition = vertex.slice();
+                vertex._halfEdge.getFaces().forEach(function (face) {
+                    var selectedVertices = selection.objects[object.name].vertices;
+                    var faceVertices = face.getVertices();
+                    var allSelected = true;
+                    faceVertices.forEach(function (vertex) {
+                        allSelected &= selectedVertices.includes(vertex);
+                    });
+                    if (allSelected && !face._selected)
+                        toggleFace(selection, object, face);
+                });
             } else delete vertex._selected;
         }
     }
@@ -57,6 +98,10 @@
         if (face) {
             if (toggle(selection, object, face, 'faces')) {
                 face._selected = true;
+                face.getVertices().forEach(function (vertex) {
+                    if (!vertex._selected)
+                        toggleVertex(selection, object, vertex);
+                });
             } else delete face._selected;
         }
     }

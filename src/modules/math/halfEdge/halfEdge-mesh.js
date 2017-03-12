@@ -6,16 +6,10 @@
     });
 
     var HalfEdgeMesh = function () {
+        this.bounds = new Math.Octree();
         this.halfEdges = [];
         this.vertices = [];
         this.faces = [];
-
-        this.bounds = new Math.Octree();
-        this.bump();
-    };
-
-    HalfEdgeMesh.prototype.bump = function () {
-        this.lastBump = Date.now();
     };
 
     HalfEdgeMesh.prototype.addVertices = function (vertices) {
@@ -67,71 +61,15 @@
         }
     };
 
-    HalfEdgeMesh.prototype.onVertexChange = function (vertices) {
-        if (arguments.length > 1) this.onVertexChange.apply(this, arguments);
-        if (this.mesh !== null) {
-            for (var i = 0; i < vertices.length; i++) {
-                var vertex = vertices[i];
-                var buffer = this.mesh.vertexBuffers.vertices.data;
-                buffer[vertex._halfEdge.ownIndex * 3 + 0] = vertex[0];
-                buffer[vertex._halfEdge.ownIndex * 3 + 1] = vertex[1];
-                buffer[vertex._halfEdge.ownIndex * 3 + 2] = vertex[2];
-            }
-        }
-    };
-
-    HalfEdgeMesh.prototype.onVertexChangeIndex = function (indices) {
-        if (arguments.length > 1) this.onVertexChangeIndex.apply(this, arguments);
-        var vertices = this.vertices;
-        this.onVertexChange(indices.map(function (index) {
-            return vertices[index];
-        }));
+    HalfEdgeMesh.prototype.onVertexChange = function (vertex) {
+        if (this.cache && this.cache.onVertexChange)
+            this.cache.onVertexChange(vertex);
     };
 
     HalfEdgeMesh.prototype.clear = function () {
         this.halfEdges = [];
         this.vertices = [];
         this.faces = [];
-    };
-
-    HalfEdgeMesh.prototype.getFaces = function (ray, hitPoints) {
-        var uniqueFaces = [], collidingFaces = [];
-        var vertices = this.bounds.getCollidingItems(ray);
-        vertices.forEach(function (item) {
-            item._halfEdge.getFaces().forEach(function (face) {
-                if (uniqueFaces.indexOf(face) === -1)
-                    uniqueFaces.push(face);
-            });
-        });
-        uniqueFaces.forEach(function (face) {
-            var triangles = face.getVerticesTriangulated();
-            for (var i = 0; i < triangles.length; i++) {
-                var triangle = triangles[i], hitPoint = [0, 0, 0];
-                if (Math.geo.rayTriangleCollision(ray.start, ray.direction,
-                    triangle[0], triangle[1], triangle[2], hitPoint)) {
-                    collidingFaces.push(face);
-                    hitPoints.push(hitPoint);
-                    break;
-                }
-            }
-        });
-        return collidingFaces;
-    };
-
-    HalfEdgeMesh.prototype.getFace = function (ray, hitPoint) {
-        var hitPoints = [];
-        var uniqueFaces = this.getFaces(ray, hitPoints);
-        if (uniqueFaces.length === 0) return null;
-        var smallerIndex = 0, lastDistance = Number.MAX_VALUE;
-        uniqueFaces.forEach(function (face, index) {
-            var distance = vec3.dist(face.computeCenter(), ray.start);
-            if (distance < lastDistance) {
-                lastDistance = distance;
-                smallerIndex = index;
-            }
-        });
-        vec3.copy(hitPoint, hitPoints[smallerIndex]);
-        return uniqueFaces[smallerIndex];
     };
 
     function buildEdge (start, end, face) {
@@ -212,13 +150,7 @@
     };
 
     HalfEdgeFace.prototype.computeCenter = function () {
-        var vertices = this.getVertices();
-        var center = vertices.reduce(function(center, p, i) {
-            vec3.add(center, center, p);
-            return center;
-        }, [0, 0, 0]);
-        vec3.scale(center, center, 1 / vertices.length);
-        return center;
+        return Math.geo.computePointsCenter(this.getVertices());
     };
 
     function computeNormal (v1, v2, v3) {

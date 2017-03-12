@@ -17,11 +17,14 @@
 
         instance.scene.addLight = function (info) {
             if (!info.model) info.position = [0, 0, 0];
-            if (!info.color) info.color = [1, 1, 1];
-            if (!info.intensity) info.intensity = 1;
+            if (!info.color) info.color = [0.5, 0.5, 0.5];
             if (!info.type) info.type = 'light';
             if (!info.name) info.name = 'light_' + (lightCount++);
             this.add(info);
+        };
+
+        instance.scene.getObjectByName = function (name) {
+            return getObjectByName(this, name);
         };
 
         instance.scene.getObjects = function () {
@@ -39,4 +42,17 @@
         instance.scene.addObject({mesh: Math.HalfEdgeCube()});
         instance.scene.addLight({position: [0, 10, 5]});
     }, ['graphics', 'math-halfEdge-cube']);
+
+    function getObjectByName (rootNode, name) {
+        for (var i = 0; i < rootNode.children.length; i++) {
+            var child = rootNode.children[i];
+            if (child.data.name === name) {
+                return child.data;
+            } else {
+                var node = getObjectByName(child, name);
+                if (node) return node.data;
+            }
+        }
+        return null;
+    }
 })());

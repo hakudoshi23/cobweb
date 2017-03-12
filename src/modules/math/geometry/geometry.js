@@ -122,18 +122,43 @@
         return triangulated;
     };
 
-    Math.geo.findClosestFace = function (position, faces) {
-        if (!faces.length) return null;
-        var distance = Math.geo.pointPointDistance(position, faces[0].computeCenter());
-        var closestFace = faces[0];
-        for (var i = 1; i < faces.length; i++) {
-            var newDistance = Math.geo.pointPointDistance(position, faces[i].computeCenter());
+    Math.geo.computePointsCenter = function (points) {
+        if (!points || points.length === 0) return null;
+        var center = [0, 0, 0];
+        points.forEach(function(point) {
+            vec3.add(center, center, point);
+        });
+        vec3.scale(center, center, 1 / points.length);
+        return center;
+    };
+
+    Math.geo.findClosestPointIndex = function (position, points) {
+        if (!points || !points.length) return null;
+        var distance = Math.geo.pointPointDistance(position, points[0]);
+        var closestIndex = 0;
+        for (var i = 1; i < points.length; i++) {
+            var newDistance = Math.geo.pointPointDistance(position, points[i]);
             if (newDistance < distance) {
                 distance = newDistance;
-                closestFace = faces[i];
+                closestIndex = i;
             }
         }
-        return closestFace;
+        return closestIndex;
+    };
+
+    Math.geo.findClosestPoint = function (position, points) {
+        if (!points || !points.length) return null;
+        var index = Math.geo.findClosestPointIndex(position, points);
+        return points[index];
+    };
+
+    Math.geo.findClosestFace = function (position, faces) {
+        if (!faces || !faces.length) return null;
+        var centers = faces.map(function (face) {
+            return face.computeCenter();
+        });
+        var index = Math.geo.findClosestPointIndex(position, centers);
+        return faces[index];
     };
 
     function getBarycentricCoordinates (p1, p2, p3, point) {
