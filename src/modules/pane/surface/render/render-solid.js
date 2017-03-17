@@ -7,19 +7,15 @@
             shader = s;
         });
 
-        var grid = {
-            type: 'object',
-            primitive: instance.graphics.gl.LINES,
-            mesh: GL.Mesh.grid({lines:11,size:10}),
-            model: mat4.create(),
-        };
-
         var bounds = {
             type: 'object',
             primitive: instance.graphics.gl.LINES,
             mesh: GL.Mesh.box({wireframe:true}),
             model: mat4.create(),
         };
+        var grid = GL.Mesh.grid({lines:11,size:10});
+        var axisX = GL.Mesh.load({vertices: new Float32Array([-10, 0, 0, 10, 0, 0])});
+        var axisZ = GL.Mesh.load({vertices: new Float32Array([0, 0, -10, 0, 0, 10])});
 
         instance.surface.renders.solid = function (surface) {
             var lightDirection = vec3.create();
@@ -28,11 +24,14 @@
             vec3.normalize(lightDirection, lightDirection);
             uniforms.u_lightvector = lightDirection;
 
-            renderObject(surface, grid, shader);
+            renderObject(surface, grid, shader, instance.graphics.gl.LINES);
+            renderObject(surface, axisX, shader, instance.graphics.gl.LINES);
+            renderObject(surface, axisZ, shader, instance.graphics.gl.LINES);
             instance.scene.getObjects().forEach(function (node) {
                 updateBoundsModel(bounds.model, node.data.mesh.bounds);
-                renderObject(surface, bounds, shader, 'wireframe');
-                renderObject(surface, node.data, shader);
+                var mesh = node.data.mesh.cache.get('render-solid');
+                renderObject(surface, bounds.mesh, shader, bounds.primitive, bounds.model, 'wireframe');
+                renderObject(surface, mesh, shader, node.data.primitive, node.data.model);
             });
         };
 
@@ -49,20 +48,21 @@
     };
 
     var temp = mat4.create();
-    function renderObject (surface, obj, shader, indexBufferName) {
+    function renderObject (surface, mesh, shader, primitive, model, indexBufferName) {
+        model = model || mat4.create();
+
         surface.camera.getViewMatrix(temp);
         mat4.multiply(temp, surface.camera.projection, temp);
-        mat4.multiply(uniforms.u_mvp, temp, obj.model);
+        mat4.multiply(uniforms.u_mvp, temp, model);
 
-        uniforms.u_model = obj.model;
+        uniforms.u_model = model;
 
         if (shader) {
             shader.uniforms(uniforms);
-            if (obj.mesh instanceof Math.HalfEdgeMesh) {
-                var mesh = obj.mesh.cache.get('render-solid');
-                if (mesh) shader.draw(mesh, obj.primitive, indexBufferName);
+            if (mesh instanceof Math.HalfEdgeMesh) {
+                if (mesh) shader.draw(mesh, primitive, indexBufferName);
             } else {
-                shader.draw(obj.mesh, obj.primitive, indexBufferName);
+                shader.draw(mesh, primitive, indexBufferName);
             }
         }
     }

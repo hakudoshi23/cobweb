@@ -65,6 +65,7 @@
             case 'mouseup': if (callbacks.onMouseUp) return callbacks.onMouseUp(event, realCoords); break;
             case 'click': if (callbacks.onClick) return callbacks.onClick(event, realCoords); break;
         }
+        return true;
     }
 
     function getLocalCoordinates (event) {
