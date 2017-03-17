@@ -121,7 +121,6 @@
 			(parentAabb.max[1] - parentAabb.min[1]) * 0.5,
 			(parentAabb.max[2] - parentAabb.min[2]) * 0.5
 		];
-		console.debug(parentAabb, half);
 		var ref = [!(index & 1), !(index & 2), !(index & 4)];
 		this.aabb.min = [
 			parentAabb.min[0] + half[0] * ref[0],

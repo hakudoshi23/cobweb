@@ -3,7 +3,7 @@
 
     var Camera = function (center, rotation, distance) {
         this.center = center || [0, 0, 0];
-        this.rotation = rotation || [-0.5, -0.5];
+        this.rotation = rotation || [-0.5, 0.5];
         this.distance = distance || 12;
         this.projection = mat4.create();
     };
@@ -50,8 +50,8 @@
         var vRotation = this.rotation[1];
         if (vRotation >= Math.PI / 2 &&
             vRotation <= ((Math.PI * 3) / 2))
-            vec3.set(up, 0, -1, 0);
-        else vec3.set(up, 0, 1, 0);
+            vec3.set(up, 0, 1, 0);
+        else vec3.set(up, 0, -1, 0);
         return up;
     };
 

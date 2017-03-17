@@ -70,7 +70,7 @@
         if (!initial) return [0, 0];
         return [
             initial[0] - current[0],
-            initial[1] - current[1]
+            current[1] - initial[1]
         ];
     }
 
