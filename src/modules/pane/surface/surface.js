@@ -1,6 +1,6 @@
 ((function () {
     'use strict';
-    
+
     Modules.prototype.add('surface', function (instance) {
         instance.pane.types.surface = {
             onPaneType: onSurfacePaneType,
@@ -27,6 +27,9 @@
     function onSurfacePaneType (pane, instance) {
         var canvas = document.createElement('canvas');
         canvas.id = 'surface' + (surfaceIndex++);
+        canvas.addEventListener('mouseover', function (event) {
+            event.target.focus();
+        });
         canvas.className = 'surface';
         pane.appendChild(canvas);
 

@@ -6,9 +6,6 @@
 
     Modules.prototype.add('edit-interaction', function (instance) {
         instance.surface.interactions.edit = {
-            onMouseWheel: function (event, realCoords) {
-                return true;
-            },
             onMouseMove: function (event, realCoords) {
                 if (isMouseDown && !this.selection.isEmpty()) {
                     var canvas = event.target;
@@ -87,8 +84,11 @@
                 }
                 return true;
             },
-            onClick: function (event, realCoords) {
-                return true;
+            onKeyDown: function (event, realCoords) {
+                console.debug(event);
+            },
+            onKeyUp: function (event, realCoords) {
+                console.debug(event);
             }
         };
 

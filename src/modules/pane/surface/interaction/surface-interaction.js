@@ -24,7 +24,13 @@
         };
 
         instance.events.on('surface.create', function (surface) {
+            surface.tabIndex = 1000;
+
             surface.oncontextmenu = onContextMenu;
+
+            surface.onkeydown = onSurfaceEvent;
+            surface.onkeyup = onSurfaceEvent;
+
             surface.onmousewheel = onSurfaceEvent;
             surface.onmousemove = onSurfaceEvent;
             surface.onmousedown = onSurfaceEvent;
@@ -41,11 +47,6 @@
             }
         }
 
-        function onContextMenu (event) {
-            event.preventDefault();
-            return false;
-        }
-
         instance.events.on('pane.split', function (oldPane, newPane) {
             var initialValue = oldPane.dataset.interaction;
             newPane.dataset.interaction = initialValue;
@@ -55,15 +56,23 @@
     function runCallback (callbacks, event) {
         var realCoords = getLocalCoordinates(event);
         switch (event.type) {
-            case 'mousewheel': return callbacks.onMouseWheel(event, realCoords);
-            case 'mousemove': return callbacks.onMouseMove(event, realCoords);
-            case 'mousedown': return callbacks.onMouseDown(event, realCoords);
-            case 'mouseup': return callbacks.onMouseUp(event, realCoords);
-            case 'click': return callbacks.onClick(event, realCoords);
+            case 'keydown': if (callbacks.onKeyDown) return callbacks.onKeyDown(event, realCoords); break;
+            case 'keyup': if (callbacks.onKeyUp) return callbacks.onKeyUp(event, realCoords); break;
+
+            case 'mousewheel': if (callbacks.onMouseWheel) return callbacks.onMouseWheel(event, realCoords); break;
+            case 'mousemove': if (callbacks.onMouseMove) return callbacks.onMouseMove(event, realCoords); break;
+            case 'mousedown': if (callbacks.onMouseDown) return callbacks.onMouseDown(event, realCoords); break;
+            case 'mouseup': if (callbacks.onMouseUp) return callbacks.onMouseUp(event, realCoords); break;
+            case 'click': if (callbacks.onClick) return callbacks.onClick(event, realCoords); break;
         }
     }
 
     function getLocalCoordinates (event) {
         return [event.layerX, event.layerY];
+    }
+
+    function onContextMenu (event) {
+        event.preventDefault();
+        return false;
     }
 })());

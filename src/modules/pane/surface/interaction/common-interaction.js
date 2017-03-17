@@ -47,11 +47,7 @@
                     mouseDownCoords = null;
                 }
                 return true;
-            },
-            onClick: function (event, realCoords) {
-                return true;
-            },
-            onRender: function (surface) {}
+            }
         };
     }, ['surface-interaction']);
 
