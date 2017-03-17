@@ -2,6 +2,8 @@
     'use strict';
 
     var isMouseDown = false;
+    var isShiftDown = false;
+    var isControlDown = false;
     var initialCoords = [0, 0];
 
     Modules.prototype.add('edit-interaction', function (instance) {
@@ -17,16 +19,19 @@
                         [canvas.width, canvas.height]);
                     var cameraDirection = data.camera.getDirection();
 
-                    var hitPointInitial = [0, 0, 0];
-                    var hitPointCurrent = [0, 0, 0];
+                    var hitPointInitial = [0, 0, 0], hitPointCurrent = [0, 0, 0];
 
-                    var diff = [0, 0], delta = [0, 0, 0], aux = [0, 0, 0];
+                    var delta = [0, 0, 0], aux = [0, 0, 0];
                     var selectionCenter = this.selection.getCenter();
                     Math.geo.rayPlaneCollision(currentRay.start, currentRay.direction,
                         selectionCenter, cameraDirection, hitPointCurrent);
                     Math.geo.rayPlaneCollision(initialRay.start, initialRay.direction,
                         selectionCenter, cameraDirection, hitPointInitial);
                     vec3.sub(delta, hitPointCurrent, hitPointInitial);
+
+                    if (isControlDown)
+                        for (var j = 0; j < 3; j++)
+                            delta[j] = Math.round(delta[j]);
 
                     for (var name in this.selection.objects) {
                         var hitPoint = [0, 0, 0];
@@ -35,9 +40,11 @@
 
                         for (var i = 0; i < selectedObj.vertices.length; i++) {
                             var vertex = selectedObj.vertices[i];
-                            vec3.add(vertex, vertex.originalPosition, delta);
-                            sceneObj.mesh.bounds.updateDimensions();
-                            sceneObj.mesh.onVertexChange(vertex);
+                            if (vertex.originalPosition) {
+                                vec3.add(vertex, vertex.originalPosition, delta);
+                                sceneObj.mesh.bounds.updateDimensions();
+                                sceneObj.mesh.onVertexChange(vertex);
+                            }
                         }
                     }
                 }
@@ -67,7 +74,7 @@
 
                     var selection = this.selection;
                     instance.scene.getObjects().forEach(function (node) {
-                        selection.clear();
+                        if (!isShiftDown) selection.clear();
                         var result = selection.add(ray, node.data, data.camera.getPosition());
                         result.vertices.forEach(function (vertex) {
                             node.data.mesh.cache.onVertexChange(vertex);
@@ -85,10 +92,12 @@
                 return true;
             },
             onKeyDown: function (event, realCoords) {
-                console.debug(event);
+                isControlDown = event.ctrlKey;
+                isShiftDown = event.shiftKey;
             },
             onKeyUp: function (event, realCoords) {
-                console.debug(event);
+                isControlDown = event.ctrlKey;
+                isShiftDown = event.shiftKey;
             }
         };
 
