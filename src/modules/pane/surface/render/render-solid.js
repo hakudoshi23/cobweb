@@ -14,8 +14,14 @@
             model: mat4.create(),
         };
         var grid = GL.Mesh.grid({lines:11,size:10});
-        var axisX = GL.Mesh.load({vertices: new Float32Array([-10, 0, 0, 10, 0, 0])});
-        var axisZ = GL.Mesh.load({vertices: new Float32Array([0, 0, -10, 0, 0, 10])});
+        var axisX = GL.Mesh.load({
+            vertices: new Float32Array([-10, 0.001, 0, 10, 0.001, 0]),
+            colors: new Float32Array([1, 0, 0, 1, 1, 0, 0, 1])
+        });
+        var axisZ = GL.Mesh.load({
+            vertices: new Float32Array([0, 0.001, -10, 0, 0.001, 10]),
+            colors: new Float32Array([0, 1, 0, 1, 0, 1, 0, 1])
+        });
 
         instance.surface.renders.solid = function (surface) {
             var lightDirection = vec3.create();
