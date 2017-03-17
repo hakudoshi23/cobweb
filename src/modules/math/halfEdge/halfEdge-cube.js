@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Modules.prototype.add('math-halfEdge-cube', function (instance) {
+    Modules.prototype.add('halfedge-cube', function (instance) {
         function cube () {
             var mesh = new Math.HalfEdgeMesh();
 
@@ -62,5 +62,5 @@
         }
 
         Math.HalfEdgeCube = cube;
-    }, ['math-halfEdge']);
+    }, ['halfedge']);
 })());

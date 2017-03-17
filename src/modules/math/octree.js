@@ -4,6 +4,7 @@
 	var defaultOptions = {
 		maxItems: 5,
 		maxDepth: 5,
+		padding: 0.1
 	};
 
 	var OctreeNode = function (parent, depth) {
@@ -120,6 +121,7 @@
 			(parentAabb.max[1] - parentAabb.min[1]) * 0.5,
 			(parentAabb.max[2] - parentAabb.min[2]) * 0.5
 		];
+		console.debug(parentAabb, half);
 		var ref = [!(index & 1), !(index & 2), !(index & 4)];
 		this.aabb.min = [
 			parentAabb.min[0] + half[0] * ref[0],
@@ -164,7 +166,7 @@
 	};
 
 	Octree.prototype.growIfNeeded = function (allItems) {
-		updateRootBounds(allItems, this.aabb);
+		updateRootBounds(allItems, this.aabb, this.options.padding);
 	};
 
 	Math.Octree = Octree;
@@ -177,15 +179,15 @@
 		return true;
 	}
 
-	function updateRootBounds (items, aabb) {
+	function updateRootBounds (items, aabb, padding) {
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i];
 			for (var j = 0; j < 3; j++) {
-				if (item[j] < aabb.min[j]) aabb.min[j] = item[j];
-				if (item[j] > aabb.max[j]) aabb.max[j] = item[j];
+				var valMax = item[j] + padding;
+				var valMin = item[j] - padding;
+				if (valMin < aabb.min[j]) aabb.min[j] = valMin;
+				if (valMax > aabb.max[j]) aabb.max[j] = valMax;
 			}
 		}
-		vec3.add(aabb.max, aabb.max, [0.5, 0.5, 0.5]);
-		vec3.sub(aabb.min, aabb.min, [0.5, 0.5, 0.5]);
 	}
 })();

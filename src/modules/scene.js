@@ -41,7 +41,7 @@
 
         instance.scene.addObject({mesh: Math.HalfEdgeCube()});
         instance.scene.addLight({position: [0, 10, 5]});
-    }, ['graphics', 'math-halfEdge-cube']);
+    }, ['graphics', 'halfedge-cube']);
 
     function getObjectByName (rootNode, name) {
         for (var i = 0; i < rootNode.children.length; i++) {

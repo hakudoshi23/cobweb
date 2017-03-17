@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Modules.prototype.add('math-halfEdge', function (instance) {
+    Modules.prototype.add('halfedge', function (instance) {
         Math.HalfEdgeMesh = HalfEdgeMesh;
     });
 
