@@ -9,17 +9,16 @@
 
         var bounds = {
             type: 'object',
-            primitive: instance.graphics.gl.LINES,
             mesh: GL.Mesh.box({wireframe:true}),
             model: mat4.create(),
         };
-        var grid = GL.Mesh.grid({lines:11,size:10});
+        var grid = GL.Mesh.grid({lines:17,size:16});
         var axisX = GL.Mesh.load({
-            vertices: new Float32Array([-10, 0.001, 0, 10, 0.001, 0]),
+            vertices: new Float32Array([-8, 0.001, 0, 8, 0.001, 0]),
             colors: new Float32Array([1, 0, 0, 1, 1, 0, 0, 1])
         });
         var axisZ = GL.Mesh.load({
-            vertices: new Float32Array([0, 0.001, -10, 0, 0.001, 10]),
+            vertices: new Float32Array([0, 0.001, -8, 0, 0.001, 8]),
             colors: new Float32Array([0, 1, 0, 1, 0, 1, 0, 1])
         });
 
@@ -34,9 +33,8 @@
             renderObject(surface, axisX, shader, instance.graphics.gl.LINES);
             renderObject(surface, axisZ, shader, instance.graphics.gl.LINES);
             instance.scene.getObjects().forEach(function (node) {
-                updateBoundsModel(bounds.model, node.data.mesh.bounds);
                 var mesh = node.data.mesh.cache.get('render-solid');
-                renderObject(surface, bounds.mesh, shader, bounds.primitive, bounds.model, 'wireframe');
+                renderBounds(surface, shader, bounds, node.data.mesh.bounds, instance.graphics.gl.LINES);
                 renderObject(surface, mesh, shader, node.data.primitive, node.data.model);
             });
         };
@@ -71,6 +69,14 @@
                 shader.draw(mesh, primitive, indexBufferName);
             }
         }
+    }
+
+    function renderBounds (surface, shader, bounds, octree, primitive) {
+        updateBoundsModel(bounds.model, octree);
+        renderObject(surface, bounds.mesh, shader, primitive, bounds.model, 'wireframe');
+        if (octree.children)
+            for (var i = 0; i < octree.children.length; i++)
+                renderBounds(surface, shader, bounds, octree.children[i], primitive);
     }
 
     function updateBoundsModel (model, octree) {

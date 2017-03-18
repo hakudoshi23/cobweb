@@ -64,6 +64,7 @@
     HalfEdgeMesh.prototype.onVertexChange = function (vertex) {
         if (this.cache && this.cache.onVertexChange)
             this.cache.onVertexChange(vertex);
+        this.bounds.onVertexMove(vertex);
     };
 
     HalfEdgeMesh.prototype.clear = function () {

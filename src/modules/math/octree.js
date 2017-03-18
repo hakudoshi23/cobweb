@@ -53,6 +53,25 @@
 		return false;
 	};
 
+	OctreeNode.prototype.removeItem = function (item) {
+		var removed = false;
+		var index = this.items.indexOf(item);
+		if (index > -1) {
+			this.items.splice(index, 1);
+			this.mergeIfNeeded();
+			removed = true;
+		} else {
+			if (this.children) {
+				for (var i = 0; i < this.children.length; i++) {
+					removed |= this.children[i].removeItem(item);
+					if (removed) break;
+				}
+			}
+		}
+		if (removed) this.mergeIfNeeded();
+		return removed;
+	};
+
 	OctreeNode.prototype.splitIfNeeded = function () {
 		if (this.root.options.maxItems < this.items.length &&
 			this.root.options.maxDepth >= this.depth) {
@@ -71,18 +90,8 @@
 		}
 	};
 
-	OctreeNode.prototype.removeItem = function (item) {
-		var index = this.items.indexOf(item);
-		if (index > -1) {
-			this.items.splice(index, 1);
-			this.mergeIfNeeded();
-			return true;
-		}
-		return false;
-	};
-
 	OctreeNode.prototype.mergeIfNeeded = function () {
-		//TODO: implement
+		console.debug('mergeIfNeeded');
 	};
 
 	OctreeNode.prototype.contains = function (item) {
@@ -116,22 +125,16 @@
 	};
 
 	OctreeNode.prototype.updateDimensions = function (parentAabb, index) {
-		var half = [
-			(parentAabb.max[0] - parentAabb.min[0]) * 0.5,
-			(parentAabb.max[1] - parentAabb.min[1]) * 0.5,
-			(parentAabb.max[2] - parentAabb.min[2]) * 0.5
-		];
+		var half = [0, 0, 0];
+		vec3.sub(half, parentAabb.max, parentAabb.min);
+		vec3.scale(half, half, 0.5);
 		var ref = [!(index & 1), !(index & 2), !(index & 4)];
-		this.aabb.min = [
-			parentAabb.min[0] + half[0] * ref[0],
-			parentAabb.min[1] + half[1] * ref[1],
-			parentAabb.min[2] + half[2] * ref[2]
-		];
-		this.aabb.max = [
-			this.aabb.min[0] + half[0],
-			this.aabb.min[1] + half[1],
-			this.aabb.min[2] + half[2]
-		];
+		vec3.mul(this.aabb.min, half, ref);
+		vec3.add(this.aabb.min, this.aabb.min, parentAabb.min);
+		vec3.add(this.aabb.max, this.aabb.min, half);
+		if (this.children)
+			for (var i = 0; i < this.children.length; i++)
+				this.children[i].updateDimensions(this.aabb, i);
 	};
 
 	var Octree = function (options) {
@@ -144,15 +147,19 @@
 
 	var _addItems = Octree.prototype.addItems;
 	Octree.prototype.addItems = function (items) {
-		this.growIfNeeded(items);
+		this.updateBounds(items);
 		_addItems.call(this, items);
+	};
+
+	Octree.prototype.onVertexMove = function (item) {
+		this.updateDimensions();
+		if (this.removeItem(item)) this.addItem(item);
 	};
 
 	Octree.prototype.updateDimensions = function (newItems) {
 		var allItems = this.getAllItems();
 		if (newItems) allItems.push(newItems);
-		this.shrinkIfNeeded(allItems);
-		this.growIfNeeded(allItems);
+		this.updateBounds(allItems);
 		if (this.children) {
 			for (var i = 0; i < this.children.length; i++) {
 				this.children[i].updateDimensions(this.aabb, i);
@@ -160,12 +167,18 @@
 		}
 	};
 
-	Octree.prototype.shrinkIfNeeded = function (allItems) {
-		console.debug('shrinkIfNeeded');
-	};
-
-	Octree.prototype.growIfNeeded = function (allItems) {
-		updateRootBounds(allItems, this.aabb, this.options.padding);
+	Octree.prototype.updateBounds = function (items) {
+		var max = [0, 0, 0].fill(-Number.MAX_VALUE);
+		var min = [0, 0, 0].fill(Number.MAX_VALUE);
+		var padding = this.options.padding;
+		items.forEach(function (item) {
+			for (var j = 0; j < 3; j++) {
+				min[j] = Math.min(min[j], item[j] - padding);
+				max[j] = Math.max(max[j], item[j] + padding);
+			}
+		});
+		vec3.copy(this.aabb.min, min);
+		vec3.copy(this.aabb.max, max);
 	};
 
 	Math.Octree = Octree;
@@ -176,17 +189,5 @@
 			if (item[j] > aabb.max[j]) return false;
 		}
 		return true;
-	}
-
-	function updateRootBounds (items, aabb, padding) {
-		for (var i = 0; i < items.length; i++) {
-			var item = items[i];
-			for (var j = 0; j < 3; j++) {
-				var valMax = item[j] + padding;
-				var valMin = item[j] - padding;
-				if (valMin < aabb.min[j]) aabb.min[j] = valMin;
-				if (valMax > aabb.max[j]) aabb.max[j] = valMax;
-			}
-		}
 	}
 })();

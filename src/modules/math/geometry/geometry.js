@@ -42,6 +42,7 @@
 		return true;
     };
 
+    //TODO: refactor to reduce number of operations
     Math.geo.rayAABBCollision = function (start, direction, minB, maxB, result) {
         result = result || vec3.create();
 
@@ -100,6 +101,38 @@
 			}
 		return true;
     };
+
+    //TODO: refactor to reduce number of operations
+    Math.geo.closestPointBetweenLines = function (a0,a1, b0,b1, p_a, p_b) {
+		var u = vec3.subtract( vec3.create(), a1, a0 );
+		var v = vec3.subtract( vec3.create(), b1, b0 );
+		var w = vec3.subtract( vec3.create(), a0, b0 );
+
+		var a = vec3.dot(u,u);         // always >= 0
+		var b = vec3.dot(u,v);
+		var c = vec3.dot(v,v);         // always >= 0
+		var d = vec3.dot(u,w);
+		var e = vec3.dot(v,w);
+		var D = a*c - b*b;        // always >= 0
+		var sc, tc;
+
+		// compute the line parameters of the two closest points
+		if (D < EPSILON) {          // the lines are almost parallel
+			sc = 0.0;
+			tc = (b>c ? d/b : e/c);    // use the largest denominator
+		}
+		else {
+			sc = (b*e - c*d) / D;
+			tc = (a*e - b*d) / D;
+		}
+
+		// get the difference of the two closest points
+		if(p_a)	vec3.add(p_a, a0, vec3.scale(vec3.create(),u,sc));
+		if(p_b)	vec3.add(p_b, b0, vec3.scale(vec3.create(),v,tc));
+
+		var dP = vec3.add( vec3.create(), w, vec3.subtract( vec3.create(), vec3.scale(vec3.create(),u,sc) , vec3.scale(vec3.create(),v,tc)) );  // =  L1(sc) - L2(tc)
+		return vec3.length(dP);   // return the closest distance
+	};
 
     Math.geo.rayPointDistance = function (start, direction, point) {
         var aux = [0, 0, 0];

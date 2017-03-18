@@ -4,7 +4,7 @@
     var Camera = function (center, rotation, distance) {
         this.center = center || [0, 0, 0];
         this.rotation = rotation || [-0.5, 0.5];
-        this.distance = distance || 12;
+        this.distance = distance || 15;
         this.projection = mat4.create();
     };
 

@@ -42,7 +42,6 @@
                             var vertex = selectedObj.vertices[i];
                             if (vertex.originalPosition) {
                                 vec3.add(vertex, vertex.originalPosition, delta);
-                                sceneObj.mesh.bounds.updateDimensions();
                                 sceneObj.mesh.onVertexChange(vertex);
                             }
                         }
