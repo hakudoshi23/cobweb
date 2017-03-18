@@ -103,7 +103,7 @@
     };
 
     //TODO: refactor to reduce number of operations
-    Math.geo.closestPointBetweenLines = function (a0,a1, b0,b1, p_a, p_b) {
+    Math.geo.closestPointsBetweenSegments = function (a0,a1, b0,b1, p_a, p_b) {
 		var u = vec3.subtract( vec3.create(), a1, a0 );
 		var v = vec3.subtract( vec3.create(), b1, b0 );
 		var w = vec3.subtract( vec3.create(), a0, b0 );
