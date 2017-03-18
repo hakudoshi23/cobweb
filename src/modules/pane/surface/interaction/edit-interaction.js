@@ -4,6 +4,7 @@
     var isMouseDown = false;
     var isShiftDown = false;
     var isControlDown = false;
+
     var initialCoords = [0, 0];
 
     Modules.prototype.add('edit-interaction', function (instance) {
@@ -93,6 +94,19 @@
             onKeyDown: function (event, realCoords) {
                 isControlDown = event.ctrlKey;
                 isShiftDown = event.shiftKey;
+
+                if (event.key === 'a') {
+                    if (!this.selection.isEmpty()) this.selection.clear();
+                    else {
+                        var selection = this.selection;
+                        instance.scene.getObjects().forEach(function (object) {
+                            var result = selection.addAll(object.data);
+                            result.forEach(function (vertex) {
+                                object.data.mesh.cache.onVertexChange(vertex);
+                            });
+                        });
+                    }
+                }
             },
             onKeyUp: function (event, realCoords) {
                 isControlDown = event.ctrlKey;

@@ -91,7 +91,7 @@
 	};
 
 	OctreeNode.prototype.mergeIfNeeded = function () {
-		console.debug('mergeIfNeeded');
+		//console.debug('mergeIfNeeded');
 	};
 
 	OctreeNode.prototype.contains = function (item) {

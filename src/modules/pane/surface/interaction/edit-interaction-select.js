@@ -4,6 +4,15 @@
     Modules.prototype.add('edit-interaction-selection', function (instance) {
         instance.surface.interactions.edit.selection = {
             objects: {},
+            addAll: function (object) {
+                var result = [];
+                var selection = this;
+                object.mesh.vertices.forEach(function (vertex) {
+                    toggleVertex(selection, object, vertex);
+                    result.push(vertex);
+                });
+                return result;
+            },
             add: function (ray, object, position) {
                 position = position || [0, 0, 0];
                 var selection = this;
