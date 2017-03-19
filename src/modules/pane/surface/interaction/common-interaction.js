@@ -9,11 +9,9 @@
             onMouseWheel: function (event, realCoords) {
                 var canvas = event.target;
                 var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
-                delta /= 2;
 
                 var data = instance.surface.map[canvas.id];
-                data.camera.distance -= delta;
-                data.camera.distance = Math.max(data.camera.distance, 0);
+                data.camera.distance -= (delta * data.camera.distance) / 25;
 
                 return true;
             },
