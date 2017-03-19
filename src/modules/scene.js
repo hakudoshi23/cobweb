@@ -39,7 +39,9 @@
             });
         };
 
-        instance.scene.addObject({mesh: Math.HalfEdgeCube()});
+        instance.asset.mesh.get('cube', function (mesh) {
+            instance.scene.addObject({mesh: mesh});
+        });
         instance.scene.addLight({position: [0, 10, 5]});
     }, ['graphics', 'halfedge-cube']);
 

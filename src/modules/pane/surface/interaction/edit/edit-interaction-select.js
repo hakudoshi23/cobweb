@@ -25,7 +25,7 @@
 
                 var vertices = object.mesh.bounds.getCollidingItems(ray);
                 var rayVertices = vertices.filter(function (vertex) {
-                    return Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= 0.2;
+                    return Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= 0.05;
                 });
                 var vertex = Math.geo.findClosestPoint(position, rayVertices);
                 if (vertex) {

@@ -6,13 +6,13 @@
         instance.asset.shader = {
             get: function (name, callback) {
                 var shader = null, firstSource = null;
-                var vertSource = Ajax.get('shader/' + name + '.vert', function (response) {
+                Ajax.get('asset/shader/' + name + '.vert', function (response) {
                     if (firstSource) {
                         shader = new Shader(response, firstSource);
                         callback(shader);
                     } firstSource = response;
                 });
-                var fragSource = Ajax.get('shader/' + name + '.frag', function (response) {
+                Ajax.get('asset/shader/' + name + '.frag', function (response) {
                     if (firstSource) {
                         shader = new Shader(firstSource, response);
                         callback(shader);
@@ -20,5 +20,5 @@
                 });
             }
         };
-    }, ['surface-interaction']);
+    });
 })());

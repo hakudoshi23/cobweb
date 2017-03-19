@@ -41,7 +41,7 @@
             var he2 = buildEdge(vertices[1], vertices[2], he1.face);
             he1.next = he2;
             this.halfEdges.push(he1, he2);
-            if (vertices.length > 3) {
+            if (vertices.length >= 3) {
                 var last, prev = he2;
                 for (var i = 2; i < vertices.length - 1; i++) {
                     last = buildEdge(vertices[i], vertices[i + 1], he1.face);
@@ -115,6 +115,10 @@
         while (he.next !== this.halfEdge) {
             output.push(he);
             he = he.next;
+            if (he === null) {
+                var a = 0;
+                console.debug(this, a);
+            }
         }
         output.push(he);
         return output;

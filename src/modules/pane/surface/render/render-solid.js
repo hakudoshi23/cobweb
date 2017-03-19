@@ -34,7 +34,7 @@
         });
         grid.createVertexBuffer('colors', 'a_color', 4, new Float32Array(colorsArray));
         var axisX = GL.Mesh.load({
-            vertices: new Float32Array([-8, 0.01, 0, 8, 0.01, 0]),
+            vertices: new Float32Array([-8, 0.001, 0, 8, 0.001, 0]),
             colors: new Float32Array([1, 0, 0, 1, 1, 0, 0, 1])
         });
         var axisZ = GL.Mesh.load({
