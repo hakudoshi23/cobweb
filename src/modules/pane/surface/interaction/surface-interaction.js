@@ -41,6 +41,7 @@
         function onSurfaceEvent (event) {
             var callbacks = instance.surface.getInteractionCallbacks(event.target);
             var keepRunning = runCallback(callbacks, event);
+            if (keepRunning === undefined) keepRunning = true;
             if (keepRunning) {
                 var common = instance.surface.interactions.common;
                 runCallback(common, event);
@@ -56,8 +57,8 @@
     function runCallback (callbacks, event) {
         var realCoords = getLocalCoordinates(event);
         switch (event.type) {
-            case 'keydown': if (callbacks.onKeyDown) return callbacks.onKeyDown(event, realCoords); break;
-            case 'keyup': if (callbacks.onKeyUp) return callbacks.onKeyUp(event, realCoords); break;
+            case 'keydown': if (callbacks.onKeyDown) return callbacks.onKeyDown(event); break;
+            case 'keyup': if (callbacks.onKeyUp) return callbacks.onKeyUp(event); break;
 
             case 'mousewheel': if (callbacks.onMouseWheel) return callbacks.onMouseWheel(event, realCoords); break;
             case 'mousemove': if (callbacks.onMouseMove) return callbacks.onMouseMove(event, realCoords); break;

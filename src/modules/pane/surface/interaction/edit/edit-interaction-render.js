@@ -1,8 +1,9 @@
 ((function () {
     'use strict';
 
+    var shader = null;
+
     Modules.prototype.add('edit-interaction-render', function (instance) {
-        var shader = null;
         instance.asset.shader.get('wireframe', function (s) {
             shader = s;
         });
@@ -23,8 +24,10 @@
                 if (shader) {
                     shader.uniforms(uniforms);
                     if (obj.mesh instanceof Math.HalfEdgeMesh) {
-                        var mesh = obj.mesh.cache.get('edit-interaction-render');
-                        shader.draw(mesh, instance.graphics.gl.LINES);
+                        var wireframe = obj.mesh.cache.get('edit-interaction-render-wireframe');
+                        var vertices = obj.mesh.cache.get('edit-interaction-render-vertices');
+                        shader.draw(wireframe, instance.graphics.gl.LINES);
+                        shader.draw(vertices, instance.graphics.gl.POINTS);
                     }
                 }
             });

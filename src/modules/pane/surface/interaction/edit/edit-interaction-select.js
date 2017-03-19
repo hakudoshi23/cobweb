@@ -80,7 +80,6 @@
         if (vertex) {
             if (toggle(selection, object, vertex, 'vertices')) {
                 vertex._selected = true;
-                vertex.originalPosition = vertex.slice();
                 vertex._halfEdge.getFaces().forEach(function (face) {
                     var selectedVertices = selection.objects[object.name].vertices;
                     var faceVertices = face.getVertices();
@@ -171,11 +170,5 @@
             });
         });
         return faces;
-    }
-
-    function saveOriginalVertexPosition (vertices) {
-        vertices.forEach(function (vertex) {
-            vertex.originalPosition = vertex.slice();
-        });
     }
 })());

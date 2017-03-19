@@ -1,20 +1,40 @@
 ((function () {
     'use strict';
 
+    var solidShader = null;
+    var wireframeShader = null;
+
     Modules.prototype.add('render-solid', function (instance) {
-        var shader = null;
         instance.asset.shader.get('solid', function (s) {
-            shader = s;
+            solidShader = s;
+        });
+        instance.asset.shader.get('wireframe', function (s) {
+            wireframeShader = s;
         });
 
-        var bounds = {
-            type: 'object',
-            mesh: GL.Mesh.box({wireframe:true}),
-            model: mat4.create(),
-        };
+        var bounds = GL.Mesh.load({
+            vertices: new Float32Array([
+                0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5,
+                0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
+            ]),
+            colors: new Float32Array([
+                0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1,
+                0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1
+            ]),
+            wireframe: new Uint16Array([
+                0, 1, 1, 3, 3, 2, 2, 0,
+                4, 5, 5, 7, 7, 6, 6, 4,
+                0, 4, 1, 5, 2, 6, 3, 7
+            ])
+        });
         var grid = GL.Mesh.grid({lines:17,size:16});
+        var colorsArray = [];
+        grid.vertexBuffers.vertices.forEach(function (vertex, bufferIndex) {
+            colorsArray.push(0.4, 0.4, 0.4, 1);
+        });
+        grid.createVertexBuffer('colors', 'a_color', 4, new Float32Array(colorsArray));
         var axisX = GL.Mesh.load({
-            vertices: new Float32Array([-8, 0.001, 0, 8, 0.001, 0]),
+            vertices: new Float32Array([-8, 0.01, 0, 8, 0.01, 0]),
             colors: new Float32Array([1, 0, 0, 1, 1, 0, 0, 1])
         });
         var axisZ = GL.Mesh.load({
@@ -29,13 +49,13 @@
             vec3.normalize(lightDirection, lightDirection);
             uniforms.u_lightvector = lightDirection;
 
-            renderObject(surface, grid, shader, instance.graphics.gl.LINES);
-            renderObject(surface, axisX, shader, instance.graphics.gl.LINES);
-            renderObject(surface, axisZ, shader, instance.graphics.gl.LINES);
+            renderObject(surface, grid, wireframeShader, instance.graphics.gl.LINES);
+            renderObject(surface, axisX, wireframeShader, instance.graphics.gl.LINES);
+            renderObject(surface, axisZ, wireframeShader, instance.graphics.gl.LINES);
             instance.scene.getObjects().forEach(function (node) {
                 var mesh = node.data.mesh.cache.get('render-solid');
-                renderBounds(surface, shader, bounds, node.data.mesh.bounds, instance.graphics.gl.LINES);
-                renderObject(surface, mesh, shader, node.data.primitive, node.data.model);
+                renderBounds(surface, wireframeShader, bounds, node.data.mesh.bounds, instance.graphics.gl.LINES);
+                renderObject(surface, mesh, solidShader, node.data.primitive, node.data.model);
             });
         };
 
@@ -71,9 +91,10 @@
         }
     }
 
+    var boundsModel = mat4.create();
     function renderBounds (surface, shader, bounds, octree, primitive) {
-        updateBoundsModel(bounds.model, octree);
-        renderObject(surface, bounds.mesh, shader, primitive, bounds.model, 'wireframe');
+        updateBoundsModel(boundsModel, octree);
+        renderObject(surface, bounds, shader, primitive, boundsModel, 'wireframe');
         if (octree.children)
             for (var i = 0; i < octree.children.length; i++)
                 renderBounds(surface, shader, bounds, octree.children[i], primitive);
