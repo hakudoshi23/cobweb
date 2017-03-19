@@ -13,8 +13,8 @@
                 });
                 return result;
             },
-            add: function (ray, object, position) {
-                position = position || [0, 0, 0];
+            add: function (ray, object, camera) {
+                var position = camera.getPosition();
                 var selection = this;
 
                 var result = {
@@ -23,9 +23,10 @@
                     faces: []
                 };
 
+                var vertexSelectionMargin = camera.distance / 200;
                 var vertices = object.mesh.bounds.getCollidingItems(ray);
                 var rayVertices = vertices.filter(function (vertex) {
-                    return Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= 0.05;
+                    return Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= vertexSelectionMargin;
                 });
                 var vertex = Math.geo.findClosestPoint(position, rayVertices);
                 if (vertex) {

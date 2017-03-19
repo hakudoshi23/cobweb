@@ -38,7 +38,7 @@
                         var shiftDown = this.isShiftDown;
                         instance.scene.getObjects().forEach(function (node) {
                             if (!shiftDown) selection.clear();
-                            var result = selection.add(ray, node.data, data.camera.getPosition());
+                            var result = selection.add(ray, node.data, data.camera);
                             result.vertices.forEach(function (vertex) {
                                 node.data.mesh.cache.onVertexChange(vertex);
                                 vec2.copy(mouseDownCoords, realCoords);

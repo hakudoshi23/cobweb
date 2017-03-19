@@ -39,11 +39,11 @@
             });
         };
 
-        instance.asset.mesh.get('cube', function (mesh) {
+        instance.asset.mesh.get('ico', function (mesh) {
             instance.scene.addObject({mesh: mesh});
         });
         instance.scene.addLight({position: [0, 10, 5]});
-    }, ['graphics', 'halfedge-cube']);
+    }, ['graphics']);
 
     function getObjectByName (rootNode, name) {
         for (var i = 0; i < rootNode.children.length; i++) {
