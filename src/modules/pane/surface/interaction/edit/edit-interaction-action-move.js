@@ -73,7 +73,8 @@
                 }
                 context.action = null;
             },
-            onMouseUp: function (context, event) {
+            onKeyDown: function (context, event) {
+                console.debug(event);
             }
         };
     }, ['edit-interaction']);

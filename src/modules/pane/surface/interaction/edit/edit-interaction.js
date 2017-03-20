@@ -53,12 +53,15 @@
             onKeyDown: function (event, realCoords) {
                 this.isShiftDown = event.shiftKey;
                 this.isShiftDown = event.ctrlKey;
-                if (event.key === 'a') this.setAction('all', event);
-                else if (event.key === 'g') this.setAction('move', event);
+                if (!this.action) {
+                    if (event.key === 'a') this.setAction('all', event);
+                    else if (event.key === 'g') this.setAction('move', event);
+                } else this.runAction('onKeyDown', event, realCoords);
             },
             onKeyUp: function (event, realCoords) {
                 this.isShiftDown = event.shiftKey;
                 this.isShiftDown = event.ctrlKey;
+                this.runAction('onKeyUp', event, realCoords);
             },
             setAction: function (name, event) {
                 if (name && this.actions[name]) {
