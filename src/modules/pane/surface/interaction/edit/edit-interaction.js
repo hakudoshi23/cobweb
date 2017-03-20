@@ -53,17 +53,8 @@
             onKeyDown: function (event, realCoords) {
                 this.isShiftDown = event.shiftKey;
                 this.isShiftDown = event.ctrlKey;
-
-                if (event.key === 'a') {
-                    if (!this.selection.isEmpty()) this.selection.clear();
-                    else {
-                        var selection = this.selection;
-                        instance.scene.getObjects().forEach(function (object) {
-                            var result = selection.addAll(object.data);
-                            object.data.mesh.cache.onVerticesChange(result);
-                        });
-                    }
-                } else if (event.key === 'g') this.setAction('move', event);
+                if (event.key === 'a') this.setAction('all', event);
+                else if (event.key === 'g') this.setAction('move', event);
             },
             onKeyUp: function (event, realCoords) {
                 this.isShiftDown = event.shiftKey;
