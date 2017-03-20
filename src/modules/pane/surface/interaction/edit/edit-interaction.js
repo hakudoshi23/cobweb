@@ -39,10 +39,10 @@
                         instance.scene.getObjects().forEach(function (node) {
                             if (!shiftDown) selection.clear();
                             var result = selection.add(ray, node.data, data.camera);
-                            node.data.mesh.cache.onVerticesChange(result.vertices);
-                            result.faces.forEach(function (face) {
-                                node.data.mesh.cache.onVerticesChange(face.getVertices());
-                            });
+                            if (result.vertex)
+                                node.data.mesh.cache.onVerticesChange([result.vertex]);
+                            if (result.face)
+                                node.data.mesh.cache.onVerticesChange(result.face.getVertices());
                         });
                         return false;
                     }

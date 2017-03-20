@@ -18,9 +18,8 @@
                 var selection = this;
 
                 var result = {
-                    vertices: [],
-                    edges: [],
-                    faces: []
+                    vertex: null,
+                    face: null
                 };
 
                 var vertexSelectionMargin = camera.distance / 200;
@@ -29,13 +28,7 @@
                     return Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= vertexSelectionMargin;
                 });
                 var vertex = Math.geo.findClosestPoint(position, rayVertices);
-                if (vertex) {
-                    toggleVertex(selection, object, vertex);
-                    result.vertices.push(vertex);
-                    return result;
-                }
-
-                //TODO: check edge collisions & add to selection
+                if (vertex) result.vertex = vertex;
 
                 var uniqueFaces = getFacesFromVertices(vertices);
                 uniqueFaces = uniqueFaces.filter(function (face) {
@@ -43,12 +36,18 @@
                         face.getVertices());
                 });
                 var closestFace = Math.geo.findClosestFace(position, uniqueFaces);
-                if (closestFace) {
-                    toggleFace(selection, object, closestFace);
-                    result.faces.push(closestFace);
-                }
+                if (closestFace) result.face = closestFace;
 
-                //TODO: keep only closest element of all 3 types
+                var vertexDistance = result.vertex ? Math.geo.pointPointDistance(position, result.vertex) : Number.MAX_VALUE;
+                var faceDistance = result.face ? Math.geo.pointPointDistance(position, result.face.computeCenter()) : Number.MAX_VALUE;
+
+                if (faceDistance > vertexDistance) {
+                    result.face = null;
+                    toggleVertex(selection, object, result.vertex);
+                } else {
+                    result.vertex = null;
+                    toggleFace(selection, object, result.face);
+                }
 
                 return result;
             },
