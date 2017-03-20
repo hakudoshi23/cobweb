@@ -39,15 +39,9 @@
                         instance.scene.getObjects().forEach(function (node) {
                             if (!shiftDown) selection.clear();
                             var result = selection.add(ray, node.data, data.camera);
-                            result.vertices.forEach(function (vertex) {
-                                node.data.mesh.cache.onVertexChange(vertex);
-                                vec2.copy(mouseDownCoords, realCoords);
-                            });
+                            node.data.mesh.cache.onVerticesChange(result.vertices);
                             result.faces.forEach(function (face) {
-                                face.getVertices().forEach(function (vertex) {
-                                    node.data.mesh.cache.onVertexChange(vertex);
-                                });
-                                vec2.copy(mouseDownCoords, realCoords);
+                                node.data.mesh.cache.onVerticesChange(face.getVertices());
                             });
                         });
                         return false;
@@ -66,9 +60,7 @@
                         var selection = this.selection;
                         instance.scene.getObjects().forEach(function (object) {
                             var result = selection.addAll(object.data);
-                            result.forEach(function (vertex) {
-                                object.data.mesh.cache.onVertexChange(vertex);
-                            });
+                            object.data.mesh.cache.onVerticesChange(result);
                         });
                     }
                 } else if (event.key === 'g') this.setAction('move', event);

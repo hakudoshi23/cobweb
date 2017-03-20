@@ -23,20 +23,22 @@
             });
             buffers.lines = new Uint16Array(indices);
             var mesh = GL.Mesh.load(buffers);
-            for (var i = 0; i < halfEdgeMesh.vertices.length; i++)
-                this.onVertexChange(halfEdgeMesh.vertices[i], mesh);
+            this.onVerticesChange(halfEdgeMesh.vertices, mesh);
 
             return mesh;
         },
-        onVertexChange: function (vertex, mesh) {
+        onVerticesChange: function (vertices, mesh) {
             var buffer = mesh.vertexBuffers;
-            var index = vertex._halfEdge.ownIndex;
-            for (var j = 0; j < 3; j++)
-                buffer.vertices.data[index * 3 + j] = vertex[j];
+            for (var i = 0; i < vertices.length; i++) {
+                var vertex = vertices[i];
+                var index = vertex._halfEdge.ownIndex;
+                for (var j = 0; j < 3; j++)
+                    buffer.vertices.data[index * 3 + j] = vertex[j];
+                var color = vertex._selected ? [1, 0.4, 0.1, 1] : [0, 0, 0, 1];
+                for (j = 0; j < 4; j++)
+                    buffer.colors.data[index * 4 + j] = color[j];
+            }
             buffer.vertices.dirty = true;
-            var color = vertex._selected ? [1, 0.4, 0.1, 1] : [0, 0, 0, 1];
-            for (j = 0; j < 4; j++)
-                buffer.colors.data[index * 4 + j] = color[j];
             buffer.colors.dirty = true;
         },
         onClean: function (mesh) {
@@ -57,22 +59,24 @@
                 vertices: new Float32Array(halfEdgeMesh.vertices.length * 3),
                 colors: new Float32Array(halfEdgeMesh.vertices.length * 4)
             };
-            
+
             var mesh = GL.Mesh.load(buffers);
-            for (var i = 0; i < halfEdgeMesh.vertices.length; i++)
-                this.onVertexChange(halfEdgeMesh.vertices[i], mesh);
+            this.onVerticesChange(halfEdgeMesh.vertices, mesh);
 
             return mesh;
         },
-        onVertexChange: function (vertex, mesh) {
+        onVerticesChange: function (vertices, mesh) {
             var buffer = mesh.vertexBuffers;
-            var index = vertex._halfEdge.ownIndex;
-            for (var j = 0; j < 3; j++)
-                buffer.vertices.data[index * 3 + j] = vertex[j];
+            for (var i = 0; i < vertices.length; i++) {
+                var vertex = vertices[i];
+                var index = vertex._halfEdge.ownIndex;
+                for (var j = 0; j < 3; j++)
+                    buffer.vertices.data[index * 3 + j] = vertex[j];
+                var color = vertex._selected ? [1, 0.4, 0.1, 1] : [0, 0, 0, 1];
+                for (j = 0; j < 4; j++)
+                    buffer.colors.data[index * 4 + j] = color[j];
+            }
             buffer.vertices.dirty = true;
-            var color = vertex._selected ? [1, 0.4, 0.1, 1] : [0, 0, 0, 1];
-            for (j = 0; j < 4; j++)
-                buffer.colors.data[index * 4 + j] = color[j];
             buffer.colors.dirty = true;
         },
         onClean: function (mesh) {

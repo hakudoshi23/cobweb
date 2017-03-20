@@ -2,7 +2,7 @@
 	'use strict';
 
 	var defaultOptions = {
-		maxItems: 50,
+		maxItems: 20,
 		maxDepth: 5,
 		padding: 0.1
 	};
@@ -19,14 +19,16 @@
 			this.root = this.root.parent;
 	};
 
-	OctreeNode.prototype.getAllItems = function () {
-        if (!this.children) return this.items;
-        else {
-            var allItems = [];
-            for (var i = 0; i < this.children.length; i++)
-                allItems = allItems.concat(this.children[i].getAllItems());
-            return allItems;
+	OctreeNode.prototype.getAllItems = function (container) {
+		container = container || [];
+		var i;
+        if (!this.children) {
+			container = container.concat(this.items);
+		} else {
+            for (i = 0; i < this.children.length; i++)
+                container = this.children[i].getAllItems(container);
         }
+		return container;
 	};
 
 	OctreeNode.prototype.addItems = function (items) {
@@ -39,7 +41,7 @@
 	};
 
 	OctreeNode.prototype.addItem = function (item) {
-		if (this.contains(item)) {
+		if (this.canContain(item)) {
 			if (this.children) {
 				for (var i = 0; i < 8; i++)
 					if (this.children[i].addItem(item))
@@ -74,28 +76,36 @@
 
 	OctreeNode.prototype.splitIfNeeded = function () {
 		if (this.root.options.maxItems < this.items.length &&
-			this.root.options.maxDepth >= this.depth) {
+			this.root.options.maxDepth > this.depth) {
 			this.children = [];
 			for (var i = 0; i < 8; i++) {
 				this.children[i] = new OctreeNode(this, this.depth + 1);
 				this.children[i].updateDimensions(this.aabb, i);
 			}
-			while (this.items.length > 0) {
-				var item = this.items.pop();
-				for (i = 0; i < 8; i++) {
-					var child = this.children[i];
-					if (child.addItem(item)) break;
-				}
-			}
+			this.redistributeItems(this.items);
+			this.items = [];
 		}
 	};
 
 	OctreeNode.prototype.mergeIfNeeded = function () {
-		//console.debug('mergeIfNeeded');
+		if (this.children) {
+			var canMerge = false;
+			for (var i = 0; i < 8; i++) {
+				this.children[i].mergeIfNeeded();
+				canMerge = !this.children[i].children;
+				if (!canMerge) return false;
+			}
+			var subItems = this.getAllItems();
+			if (this.root.options.maxItems > subItems.length) {
+				this.children = null;
+				this.redistributeItems(subItems);
+				return true;
+			} else return false;
+		} else return false;
 	};
 
-	OctreeNode.prototype.contains = function (item) {
-		return isContained(item, this.aabb);
+	OctreeNode.prototype.canContain = function (item) {
+		return canContain(item, this.aabb);
 	};
 
 	OctreeNode.prototype.getCollidingNodes = function (ray) {
@@ -137,6 +147,20 @@
 				this.children[i].updateDimensions(this.aabb, i);
 	};
 
+	OctreeNode.prototype.redistributeItems = function (items) {
+		items = items || this.items;
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i];
+			var containingParent = findContainingParent(this, item);
+			if (containingParent === null) {
+				console.warn('Recomputing bounds...');
+				this.root.updateDimensions([item]);
+				containingParent = findContainingParent(this, item);
+			}
+			containingParent.addItem(item);
+		}
+	};
+
 	var Octree = function (options) {
 		this.options = Object.assign({}, defaultOptions, options);
 		OctreeNode.call(this);
@@ -145,20 +169,21 @@
 	Octree.prototype = Object.create(OctreeNode.prototype);
 	Octree.prototype.constructor = OctreeNode;
 
-	var _addItems = Octree.prototype.addItems;
-	Octree.prototype.addItems = function (items) {
-		this.updateBounds(items);
-		_addItems.call(this, items);
+	var _addItem = Octree.prototype.addItem;
+	Octree.prototype.addItem = function (item) {
+		if (!this.canContain(item))
+			this.updateDimensions([item]);
+		return _addItem.call(this, item);
 	};
 
-	Octree.prototype.onVertexMove = function (item) {
-		this.updateDimensions();
-		if (this.removeItem(item)) this.addItem(item);
+	Octree.prototype.onVerticesMove = function (items) {
+		for (var i = 0; i < items.length; i++)
+			if (this.removeItem(items[i]))
+				this.addItem(items[i]);
 	};
 
 	Octree.prototype.updateDimensions = function (newItems) {
-		var allItems = this.getAllItems();
-		if (newItems) allItems.push(newItems);
+		var allItems = this.getAllItems(newItems);
 		this.updateBounds(allItems);
 		if (this.children) {
 			for (var i = 0; i < this.children.length; i++) {
@@ -183,11 +208,18 @@
 
 	Math.Octree = Octree;
 
-	function isContained (item, aabb) {
+	function canContain (item, aabb) {
 		for (var j = 0; j < 3; j++) {
 			if (item[j] < aabb.min[j]) return false;
 			if (item[j] > aabb.max[j]) return false;
 		}
 		return true;
+	}
+
+	function findContainingParent (current, item) {
+		var result = current;
+		while (result && !result.canContain(item))
+			result = result.parent;
+		return result;
 	}
 })();

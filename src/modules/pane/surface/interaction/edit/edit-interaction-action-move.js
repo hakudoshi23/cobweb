@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    Modules.prototype.add('edit-interaction-action', function (instance) {
+    Modules.prototype.add('edit-interaction-action-move', function (instance) {
         var initialCoords = vec2.create();
 
         instance.surface.interactions.edit.actions.move = {
@@ -46,11 +46,10 @@
 
                         for (var i = 0; i < selectedObj.vertices.length; i++) {
                             var vertex = selectedObj.vertices[i];
-                            if (vertex.originalPosition) {
+                            if (vertex.originalPosition)
                                 vec3.add(vertex, vertex.originalPosition, delta);
-                                sceneObj.mesh.onVertexChange(vertex);
-                            }
                         }
+                        sceneObj.mesh.onVerticesChange(selectedObj.vertices);
                     }
                 }
             },
@@ -59,17 +58,17 @@
                     var restore = event.which === 3;
                     for (var name in context.selection.objects) {
                         var selectedObj = context.selection.objects[name];
+                        var sceneObj = instance.scene.getObjectByName(name);
                         for (var i = 0; i < selectedObj.vertices.length; i++) {
                             var vertex = selectedObj.vertices[i];
                             if (vertex.originalPosition) {
-                                if (restore) {
+                                if (restore)
                                     vec3.copy(vertex, vertex.originalPosition);
-                                    var sceneObj = instance.scene.getObjectByName(name);
-                                    sceneObj.mesh.onVertexChange(vertex);
-                                }
                                 delete vertex.originalPosition;
                             }
                         }
+                        sceneObj.mesh.bounds.updateDimensions();
+                        sceneObj.mesh.onVerticesChange(sceneObj.mesh.vertices);
                     }
                 }
                 context.action = null;

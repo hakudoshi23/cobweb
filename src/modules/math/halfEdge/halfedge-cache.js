@@ -18,12 +18,12 @@
                     builder.onClean(e);
                     return e;
                 },
-                onVertexChange: function (vertex) {
+                onVerticesChange: function (vertices) {
                     for (var key in this.meshes) {
                         var e = this.meshes[key];
                         var builder = Math.HalfEdgeMesh.prototype.builders[key];
-                        if (builder.onVertexChange)
-                            builder.onVertexChange(vertex, e);
+                        if (builder.onVerticesChange)
+                            builder.onVerticesChange(vertices, e);
                     }
                 }
             };

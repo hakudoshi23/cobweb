@@ -62,11 +62,10 @@
                     var sceneObj = instance.scene.getObjectByName(name);
                     for (var i = 0; i < selectedObj.vertices.length; i++) {
                         var vertex = selectedObj.vertices[i];
-                        if (vertex._selected) {
+                        if (vertex._selected)
                             delete vertex._selected;
-                            sceneObj.mesh.onVertexChange(vertex);
-                        }
                     }
+                    sceneObj.mesh.onVerticesChange(selectedObj.vertices);
                 }
                 this.objects = {};
             },

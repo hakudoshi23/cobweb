@@ -2,7 +2,6 @@
     'use strict';
 
     var objectCount = 0;
-    var lightCount = 0;
 
     Modules.prototype.add('scene', function (instance) {
         instance.scene = TreeNode.extend();
@@ -12,14 +11,6 @@
             if (!info.model) info.model = mat4.create();
             if (!info.type) info.type = 'object';
             if (!info.name) info.name = 'object_' + (objectCount++);
-            this.add(info);
-        };
-
-        instance.scene.addLight = function (info) {
-            if (!info.model) info.position = [0, 0, 0];
-            if (!info.color) info.color = [0.5, 0.5, 0.5];
-            if (!info.type) info.type = 'light';
-            if (!info.name) info.name = 'light_' + (lightCount++);
             this.add(info);
         };
 
@@ -33,16 +24,9 @@
             });
         };
 
-        instance.scene.getLights = function () {
-            return this.dfs(function (node) {
-                return node.data.type === 'light';
-            });
-        };
-
-        instance.asset.mesh.get('ico', function (mesh) {
+        instance.asset.mesh.get('monkey', function (mesh) {
             instance.scene.addObject({mesh: mesh});
         });
-        instance.scene.addLight({position: [0, 10, 5]});
     }, ['graphics']);
 
     function getObjectByName (rootNode, name) {

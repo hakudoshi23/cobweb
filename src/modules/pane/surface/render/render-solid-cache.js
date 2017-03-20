@@ -22,20 +22,22 @@
             });
             buffers.triangles = new Uint16Array(indices);
             var mesh = GL.Mesh.load(buffers);
-            for (var i = 0; i < halfEdgeMesh.vertices.length; i++)
-                this.onVertexChange(halfEdgeMesh.vertices[i], mesh);
+            this.onVerticesChange(halfEdgeMesh.vertices, mesh);
 
             return mesh;
         },
-        onVertexChange: function (vertex, mesh) {
+        onVerticesChange: function (vertices, mesh) {
             var buffer = mesh.vertexBuffers;
-            var index = vertex._halfEdge.ownIndex;
-            for (var j = 0; j < 3; j++)
-                buffer.vertices.data[index * 3 + j] = vertex[j];
+            for (var i = 0; i < vertices.length; i++) {
+                var vertex = vertices[i];
+                var index = vertex._halfEdge.ownIndex;
+                for (var j = 0; j < 3; j++)
+                    buffer.vertices.data[index * 3 + j] = vertex[j];
+                var normal = vertex._halfEdge.computeNormal();
+                for (j = 0; j < 3; j++)
+                    buffer.normals.data[index * 3 + j] = normal[j];
+            }
             buffer.vertices.dirty = true;
-            var normal = vertex._halfEdge.computeNormal();
-            for (j = 0; j < 3; j++)
-                buffer.normals.data[index * 3 + j] = normal[j];
             buffer.normals.dirty = true;
         },
         onClean: function (mesh) {
