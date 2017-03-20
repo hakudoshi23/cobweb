@@ -3,6 +3,8 @@
 
     Modules.prototype.add('edit-interaction-action-move', function (instance) {
         var initialCoords = vec2.create();
+        var axis = vec3.set(vec3.create(), 0, 1, 0);
+        var axisOrigin = null;
 
         instance.surface.interactions.edit.actions.move = {
             init: function (context, event) {
@@ -29,11 +31,25 @@
                     var hitPointInitial = [0, 0, 0], hitPointCurrent = [0, 0, 0];
 
                     var selectionCenter = context.selection.getCenter();
-                    Math.geo.rayPlaneCollision(currentRay.start, currentRay.direction,
-                        selectionCenter, cameraDirection, hitPointCurrent);
                     Math.geo.rayPlaneCollision(initialRay.start, initialRay.direction,
                         selectionCenter, cameraDirection, hitPointInitial);
-                    var delta = vec3.sub(vec3.create(), hitPointCurrent, hitPointInitial);
+
+                    var delta = vec3.create();
+
+                    if (axis) {
+                        var currentRayEnd = vec3.scaleAndAdd(vec3.create(), currentRay.start, currentRay.direction, 100);
+                        var axisStart = vec3.scale(vec3.create(), axis, -50);
+                        var axisEnd = vec3.scale(vec3.create(), axis, 50);
+                        Math.geo.closestPointsBetweenSegments(axisStart, axisEnd, currentRay.start, currentRayEnd, hitPointCurrent);
+
+                        if (!axisOrigin) {
+                            axisOrigin = vec3.copy(vec3.create(), hitPointCurrent);
+                        } else vec3.sub(delta, hitPointCurrent, axisOrigin);
+                    } else {
+                        Math.geo.rayPlaneCollision(currentRay.start, currentRay.direction,
+                            selectionCenter, cameraDirection, hitPointCurrent);
+                        vec3.sub(delta, hitPointCurrent, hitPointInitial);
+                    }
 
                     if (context.isControlDown)
                         for (var j = 0; j < 3; j++)
@@ -71,6 +87,7 @@
                         sceneObj.mesh.onVerticesChange(sceneObj.mesh.vertices);
                     }
                 }
+                axisOrigin = null;
                 context.action = null;
             },
             onKeyDown: function (context, event) {
