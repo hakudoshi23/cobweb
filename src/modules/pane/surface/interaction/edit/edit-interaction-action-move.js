@@ -3,10 +3,10 @@
 
     Modules.prototype.add('edit-interaction-action-move', function (instance) {
         var initialCoords = vec2.create();
-        var axis = vec3.set(vec3.create(), 0, 1, 0);
         var axisOrigin = null;
 
         instance.surface.interactions.edit.actions.move = {
+            axis: null,
             init: function (context, event) {
                 vec2.copy(initialCoords, context.lastCoords);
                 for (var name in context.selection.objects) {
@@ -36,10 +36,10 @@
 
                     var delta = vec3.create();
 
-                    if (axis) {
+                    if (this.axis) {
                         var currentRayEnd = vec3.scaleAndAdd(vec3.create(), currentRay.start, currentRay.direction, 100);
-                        var axisStart = vec3.scale(vec3.create(), axis, -50);
-                        var axisEnd = vec3.scale(vec3.create(), axis, 50);
+                        var axisStart = vec3.scale(vec3.create(), this.axis, -50);
+                        var axisEnd = vec3.scale(vec3.create(), this.axis, 50);
                         Math.geo.closestPointsBetweenSegments(axisStart, axisEnd, currentRay.start, currentRayEnd, hitPointCurrent);
 
                         if (!axisOrigin) {
@@ -87,11 +87,13 @@
                         sceneObj.mesh.onVerticesChange(sceneObj.mesh.vertices);
                     }
                 }
-                axisOrigin = null;
+                this.axis = null;
                 context.action = null;
             },
             onKeyDown: function (context, event) {
-                console.debug(event);
+                if (event.key === 'x') this.axis = vec3.set(vec3.create(), 1, 0, 0);
+                else if (event.key === 'y') this.axis = vec3.set(vec3.create(), 0, 1, 0);
+                else if (event.key === 'z') this.axis = vec3.set(vec3.create(), 0, 0, 1);
             }
         };
     }, ['edit-interaction']);

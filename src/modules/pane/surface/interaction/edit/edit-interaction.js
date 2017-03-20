@@ -71,8 +71,9 @@
             },
             runAction : function (callbackName, event) {
                 if (this.action && this.actions[this.action]) {
-                    var callback = this.actions[this.action][callbackName];
-                    if (callback) callback(this, event);
+                    var action = this.actions[this.action];
+                    var callback = action[callbackName];
+                    if (callback) callback.call(action, this, event);
                 }
             }
         };
