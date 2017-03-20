@@ -3,12 +3,15 @@
 
     Modules.prototype.add('edit-interaction-action-move', function (instance) {
         var initialCoords = vec2.create();
+        var selectionNormal = null;
         var axisOrigin = null;
+        var isY = false;
 
         instance.surface.interactions.edit.actions.move = {
             axis: null,
             init: function (context, event) {
                 vec2.copy(initialCoords, context.lastCoords);
+                selectionNormal = context.selection.getNormal();
                 for (var name in context.selection.objects) {
                     var selectedObj = context.selection.objects[name];
                     for (var i = 0; i < selectedObj.vertices.length; i++) {
@@ -87,13 +90,22 @@
                         sceneObj.mesh.onVerticesChange(sceneObj.mesh.vertices);
                     }
                 }
+                isY = false;
                 this.axis = null;
                 context.action = null;
             },
             onKeyDown: function (context, event) {
                 if (event.key === 'x') this.axis = vec3.set(vec3.create(), 1, 0, 0);
-                else if (event.key === 'y') this.axis = vec3.set(vec3.create(), 0, 1, 0);
-                else if (event.key === 'z') this.axis = vec3.set(vec3.create(), 0, 0, 1);
+                else if (event.key === 'y') {
+                    if (isY) {
+                        this.axis = selectionNormal;
+                        isY = false;
+                    } else {
+                        this.axis = vec3.set(vec3.create(), 0, 1, 0);
+                        isY = true;
+                    }
+                } else if (event.key === 'z') this.axis = vec3.set(vec3.create(), 0, 0, 1);
+                axisOrigin = null;
             }
         };
     }, ['edit-interaction']);

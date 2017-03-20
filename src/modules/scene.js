@@ -24,7 +24,7 @@
             });
         };
 
-        instance.asset.mesh.get('monkey', function (mesh) {
+        instance.asset.mesh.get('cube', function (mesh) {
             instance.scene.addObject({mesh: mesh});
         });
     }, ['graphics']);

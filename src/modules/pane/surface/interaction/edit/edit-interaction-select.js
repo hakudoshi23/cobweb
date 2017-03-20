@@ -52,8 +52,21 @@
                 return result;
             },
             getCenter: function () {
+                //TODO: take into account multiple objects
                 var name = Object.keys(this.objects)[0];
                 return Math.geo.computePointsCenter(this.objects[name].vertices);
+            },
+            getNormal: function () {
+                var normal = vec3.create();
+                for (var name in this.objects) {
+                    var obj = this.objects[name];
+                    for (var i = 0; i < obj.vertices.length; i++) {
+                        var vertex = obj.vertices[i];
+                        vec3.add(normal, normal, vertex._halfEdge.computeNormal());
+                    }
+                }
+                vec3.normalize(normal, normal);
+                return normal;
             },
             clear: function () {
                 for (var name in this.objects) {
