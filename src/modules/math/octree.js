@@ -2,8 +2,8 @@
 	'use strict';
 
 	var defaultOptions = {
-		maxItems: 20,
-		maxDepth: 5,
+		maxItems: 10,
+		maxDepth: 10,
 		padding: 0.1
 	};
 
