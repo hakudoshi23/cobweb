@@ -15,7 +15,7 @@
                         e = builder.onCreate(heMesh);
                         this.meshes[key] = e;
                     }
-                    builder.onClean(e);
+                    if (builder.onClean) builder.onClean(e);
                     return e;
                 },
                 onVerticesChange: function (vertices) {
