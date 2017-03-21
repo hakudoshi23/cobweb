@@ -9,7 +9,10 @@ var config = {
     dist: 'dist/',
     sass: {
         paths: {
-            master: 'scss/**/*.scss'
+            master: [
+                'scss/cobweb.scss',
+                'scss/**/*.scss'
+            ]
         }
     },
     js: {

@@ -33,6 +33,14 @@
         canvas.className = 'surface';
         pane.appendChild(canvas);
 
+        var surfaceGUI = document.createElement('div');
+        surfaceGUI.className = 'surface-toolbar';
+        surfaceGUI.style.float = 'left';
+        Ajax.get('partial/surface-toolbar.html', function (result) {
+            surfaceGUI.innerHTML = result;
+        });
+        pane.appendChild(surfaceGUI);
+
         instance.surface.map = instance.surface.map || {};
         instance.surface.map[canvas.id] = {
             camera: new Math.Camera()
@@ -57,7 +65,11 @@
         var header = pane.querySelector('.pane-header');
         var headerHeight = header ? header.height() : 0;
 
-        var width = pane.width(), height = pane.height() - headerHeight;
+        var gui = pane.querySelector('.surface-toolbar');
+        var guiWidth = gui ? gui.width() : 0;
+
+        var width = pane.width() - guiWidth - 1;
+        var height = pane.height() - headerHeight;
         data.imgData = context.createImageData(width, height);
         data.buffer = new Uint8Array(width * height * 4);
 

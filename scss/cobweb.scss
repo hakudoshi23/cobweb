@@ -1,15 +1,16 @@
+@import "variables";
+
 html, body {
     height:100%;
     margin:0;
     padding:0;
 }
 
-canvas {
-    vertical-align: bottom;
-    outline: none;
-}
-
 .cb-container {
     position: relative;
     user-select: none;
+}
+
+.main-panes {
+    height: calc(100% - #{$MAIN_MENU_HEIGHT});
 }

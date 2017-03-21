@@ -2,9 +2,15 @@
     'use strict';
 
     Modules.prototype.add('pane', function (instance) {
+        var mainPanes = document.createElement('div');
+        mainPanes.className = 'main-panes';
+
+        var container = document.querySelector(instance.options.container.selector);
+        container.appendChild(mainPanes);
+
         instance.events.on('app.loaded', function () {
             instance.pane.internal = new Pane({
-                container: instance.options.container.selector,
+                container: 'div.main-panes',
                 separator: {
                     size: 3
                 },

@@ -1,0 +1,13 @@
+canvas.surface {
+    display: inline-block;
+    vertical-align: bottom;
+    outline: none;
+}
+
+div.surface-toolbar {
+    display: inline-block;
+    background-color: #E6E6E6;
+    height: calc(100% - 25px);
+    min-width: 120px;
+    width: 15%;
+}
