@@ -15,7 +15,7 @@
                 vec2.copy(this.lastCoords, realCoords);
                 if (this.isMouseDown && !this.action) {
                     var delta2d = vec2.sub(vec2.create(), mouseDownCoords, realCoords);
-                    if (vec2.length(delta2d) > 5) this.setAction('move', event);
+                    if (vec2.length(delta2d) > 10) this.setAction('move', event);
                 }
                 this.runAction('onMouseMove', event, realCoords);
             },
