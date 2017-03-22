@@ -25,25 +25,23 @@
     });
 
     function drawRenderTarget (instance, canvas) {
+        var width  = canvas.clientWidth, height = canvas.clientHeight;
         var data = instance.surface.map[canvas.id];
         var gl = instance.graphics.gl;
 
-        var width  = canvas.clientWidth, height = canvas.clientHeight;
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.viewport(0, 0, width, height);
+        var c = instance.graphics.gl.canvas;
+        gl.viewport(0, c.height - height, width, height);
 
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         var mainRender = instance.surface.getRender(canvas);
+        var surfaceRender = instance.surface.onRender;
         if (mainRender) mainRender(data);
-        instance.surface.onRender(canvas, data);
+        if (surfaceRender) surfaceRender(canvas, data);
 
         var error = gl.getError();
         if (error) console.error('WebGL error! CODE: ', error);
 
         var context = canvas.getContext('2d');
-        if (context) {
-            gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data.buffer);
-            data.imgData.data.set(data.buffer);
-            context.putImageData(data.imgData, 0, 0);
-        }
+        if (context) context.drawImage(c, 0, 0, width, height, 0, 0, width, height);
     }
 })());

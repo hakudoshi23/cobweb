@@ -70,11 +70,12 @@
 
         var width = pane.width() - guiWidth - 1;
         var height = pane.height() - headerHeight;
-        data.imgData = context.createImageData(width, height);
-        data.buffer = new Uint8Array(width * height * 4);
-
         canvas.height = height;
         canvas.width = width;
+
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.translate(0, height);
+        context.scale(1, -1);
 
         mat4.perspective(data.camera.projection, 45 * DEG2RAD, width / height, 0.1, 1000);
     }
