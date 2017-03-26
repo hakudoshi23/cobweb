@@ -68,7 +68,7 @@
         var gui = pane.querySelector('.surface-toolbar');
         var guiWidth = gui ? gui.width() : 0;
 
-        var width = pane.width() - guiWidth - 1;
+        var width = pane.width() - guiWidth;
         var height = pane.height() - headerHeight;
         canvas.height = height;
         canvas.width = width;

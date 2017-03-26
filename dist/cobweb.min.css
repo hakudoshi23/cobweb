@@ -3,5 +3,5 @@ body,html{height:100%;margin:0;padding:0}.cb-container{position:relative;user-se
 div.main-menu{background-color:#fff;height:25px;width:100%}
 .cb-menu{height:30px;width:100%;position:absolute;top:0;background-color:#e6e6e6;font-size:14px;cursor:default}.cb-menu ul{float:left;margin:2px 5px;padding:0;list-style-type:none;user-select:none}.cb-menu ul li{height:24px;line-height:26px;border:solid 1px transparent;border-radius:2px;padding:0 5px;float:left;vertical-align:middle}.cb-menu ul li:hover{border:solid 1px gray;cursor:pointer}
 .pane-header{height:25px;width:100%;font-size:13px;line-height:25px;background-color:#fff}
-canvas.surface{display:inline-block;vertical-align:bottom;outline:0}div.surface-toolbar{display:inline-block;background-color:#e6e6e6;height:calc(100% - 25px);min-width:120px;width:15%}
+canvas.surface{display:inline-block;vertical-align:bottom;outline:0}div.surface-toolbar{display:inline-block;background-color:#e6e6e6;height:calc(100% - 25px);min-width:120px;width:180px}
 /*# sourceMappingURL=cobweb.min.css.map */
