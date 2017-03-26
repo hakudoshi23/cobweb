@@ -12,21 +12,6 @@
             wireframeShader = s;
         });
 
-        var bounds = GL.Mesh.load({
-            vertices: new Float32Array([
-                0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5,
-                0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
-            ]),
-            colors: new Float32Array([
-                0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1,
-                0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1, 0.6, 0.6, 0.6, 1
-            ]),
-            wireframe: new Uint16Array([
-                0, 1, 1, 3, 3, 2, 2, 0,
-                4, 5, 5, 7, 7, 6, 6, 4,
-                0, 4, 1, 5, 2, 6, 3, 7
-            ])
-        });
         var grid = GL.Mesh.grid({lines:17,size:16});
         var colorsArray = [];
         grid.vertexBuffers.vertices.forEach(function (vertex, bufferIndex) {
@@ -54,7 +39,6 @@
             renderObject(surface, axisZ, wireframeShader, instance.graphics.gl.LINES);
             instance.scene.getObjects().forEach(function (node) {
                 var mesh = node.data.mesh.cache.get('render-solid');
-                renderBounds(surface, wireframeShader, bounds, node.data.mesh.bounds, instance.graphics.gl.LINES);
                 renderObject(surface, mesh, solidShader, node.data.primitive, node.data.model);
             });
         };
@@ -89,23 +73,5 @@
                 shader.draw(mesh, primitive, indexBufferName);
             }
         }
-    }
-
-    var boundsModel = mat4.create();
-    function renderBounds (surface, shader, bounds, octree, primitive) {
-        updateBoundsModel(boundsModel, octree);
-        renderObject(surface, bounds, shader, primitive, boundsModel, 'wireframe');
-        if (octree.children)
-            for (var i = 0; i < octree.children.length; i++)
-                renderBounds(surface, shader, bounds, octree.children[i], primitive);
-    }
-
-    function updateBoundsModel (model, octree) {
-        mat4.identity(model);
-        var scale = [0, 0, 0], position = [0, 0, 0];
-        vec3.lerp(position, octree.aabb.min, octree.aabb.max, 0.5);
-        mat4.translate(model, model, position);
-        vec3.sub(scale, octree.aabb.max, octree.aabb.min);
-        mat4.scale(model, model, scale);
     }
 })());

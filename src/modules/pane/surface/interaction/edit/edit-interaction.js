@@ -57,6 +57,11 @@
                     if (event.key === 'a') this.setAction('all', event);
                     else if (event.key === 'g') this.setAction('move', event);
                     else if (event.key === 's') this.setAction('scale', event);
+                    else if (event.key === 'b') {
+                        if (this.drawBounds === null) this.drawBounds = false;
+                        else if (this.drawBounds === false) this.drawBounds = true;
+                        else if (this.drawBounds === true) this.drawBounds = null;
+                    }
                 } else {
                     if (event.keyCode === 13) this.action = null;
                     else this.runAction('onKeyDown', event, realCoords);
