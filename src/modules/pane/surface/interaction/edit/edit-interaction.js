@@ -57,7 +57,10 @@
                     if (event.key === 'a') this.setAction('all', event);
                     else if (event.key === 'g') this.setAction('move', event);
                     else if (event.key === 's') this.setAction('scale', event);
-                } else this.runAction('onKeyDown', event, realCoords);
+                } else {
+                    if (event.keyCode === 13) this.action = null;
+                    else this.runAction('onKeyDown', event, realCoords);
+                }
             },
             onKeyUp: function (event, realCoords) {
                 this.isShiftDown = event.shiftKey;
