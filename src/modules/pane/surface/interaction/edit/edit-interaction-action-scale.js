@@ -38,26 +38,22 @@
             },
             onMouseMove: function (context, event) {
                 if (!context.selection.isEmpty()) {
-                    var canvas = event.target;
-                    var data = instance.surface.map[canvas.id];
-
                     vec2.sub(aux, context.lastCoords, selectionCenter2d);
                     var delta = (vec2.length(aux) / initialDistance);
+                    var vectorDelta = vec3.scale(vec3.create(), this.axis || [1, 1, 1], delta);
+                    var negatedCenter = vec3.negate(vec3.create(), selectionCenter);
 
-                    var scaleVector = vec3.create();
+                    var tranform = mat4.create();
+                    mat4.translate(tranform, tranform, selectionCenter);
+                    mat4.scale(tranform, tranform, vectorDelta);
+                    mat4.translate(tranform, tranform, negatedCenter);
+
                     for (var name in context.selection.objects) {
                         var selectedObj = context.selection.objects[name];
                         var sceneObj = instance.scene.getObjectByName(name);
-
                         for (var i = 0; i < selectedObj.vertices.length; i++) {
                             var vertex = selectedObj.vertices[i];
-                            vec3.sub(scaleVector, vertex, selectionCenter);
-                            vec3.normalize(scaleVector, scaleVector);
-                            vec3.scale(scaleVector, scaleVector, delta - 1);
-                            if (this.axis)
-                                vec3.mul(scaleVector, scaleVector, this.axis);
-                            if (vertex.originalPosition)
-                                vec3.add(vertex, vertex.originalPosition, scaleVector);
+                            vec3.transformMat4(vertex, vertex.originalPosition, tranform);
                         }
                         sceneObj.mesh.onVerticesChange(selectedObj.vertices);
                     }
