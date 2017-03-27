@@ -8,6 +8,21 @@
             shader = s;
         });
 
+        var vertices = [], colors = [], count = 0;
+        for (var rads = 0; rads < (Math.PI * 2); rads += 0.1) {
+            vertices[count * 3 + 0] = Math.sin(rads) * 5;
+            vertices[count * 3 + 1] = Math.cos(rads) * 5;
+            vertices[count * 3 + 2] = 0;
+            colors[count * 4 + 0] = 1;
+            colors[count * 4 + 1] = 1;
+            colors[count * 4 + 2] = 1;
+            colors[count * 4 + 3] = 1;
+            count++;
+        }
+        var circle = GL.Mesh.load({
+            vertices: new Float32Array(vertices),
+            colors: new Float32Array(colors)
+        });
         var bounds = GL.Mesh.load({
             vertices: new Float32Array([
                 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5,
@@ -30,6 +45,7 @@
 
         instance.surface.interactions.edit.drawBounds = null;
         instance.surface.interactions.edit.onRender = function (surface) {
+            var selection = this.selection;
             instance.scene.getObjects().forEach(function (node) {
                 var obj = node.data;
 
@@ -41,6 +57,21 @@
                 renderObject(surface, vertices, shader, instance.graphics.gl.POINTS);
                 if (drawBounds !== null)
                     renderBounds(surface, shader, bounds, obj.mesh.bounds, drawBounds);
+
+                if (!selection.isEmpty()) {
+                    var c = selection.getCenter();
+                    vec3.transformMat4(c, c, surface.camera.getViewMatrix());
+                    vec3.transformMat4(c, c, surface.camera.projection);
+                    c[0] = ((c[0] + 1) / 2) * surface.camera.width;
+                    c[1] = ((c[1] + 1) / 2) * surface.camera.height;
+
+                    mat4.identity(uniforms.u_mvp);
+                    mat4.translate(uniforms.u_mvp, uniforms.u_mvp, [c[0], c[1], 0]);
+                    mat4.multiply(uniforms.u_mvp, surface.camera.ortho, uniforms.u_mvp);
+
+                    shader.uniforms(uniforms);
+                    shader.draw(circle, instance.graphics.gl.LINE_LOOP);
+                }
             });
         };
 

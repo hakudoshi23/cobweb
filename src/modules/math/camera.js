@@ -6,6 +6,9 @@
         this.rotation = rotation || [2.8, 0.5];
         this.distance = distance || 15;
         this.projection = mat4.create();
+        this.ortho = mat4.create();
+        this.height = 0;
+        this.width = 0;
     };
 
     Camera.prototype.getViewMatrix = function (view) {

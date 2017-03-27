@@ -77,6 +77,9 @@
         context.translate(0, height);
         context.scale(1, -1);
 
+        data.camera.width = width;
+        data.camera.height = height;
         mat4.perspective(data.camera.projection, 45 * DEG2RAD, width / height, 0.1, 1000);
+        mat4.ortho(data.camera.ortho, 0, width, 0, height, -1, 1);
     }
 })());
