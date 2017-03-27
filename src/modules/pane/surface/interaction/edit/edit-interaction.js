@@ -57,6 +57,7 @@
                     if (event.key === 'a') this.setAction('all', event);
                     else if (event.key === 'g') this.setAction('move', event);
                     else if (event.key === 's') this.setAction('scale', event);
+                    else if (event.key === 'r') this.setAction('rotate', event);
                     else if (event.key === 'b') {
                         if (this.drawBounds === null) this.drawBounds = false;
                         else if (this.drawBounds === false) this.drawBounds = true;

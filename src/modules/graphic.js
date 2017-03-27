@@ -17,7 +17,6 @@
 
         console.info(this.gl.getParameter(this.gl.VERSION));
         console.info(this.gl.getParameter(this.gl.SHADING_LANGUAGE_VERSION));
-        console.info(this.gl.getParameter(this.gl.VENDOR));
     };
 
     Modules.prototype.add('graphics', function (instance) {
