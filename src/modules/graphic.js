@@ -38,9 +38,6 @@
         if (mainRender) mainRender(data);
         if (surfaceRender) surfaceRender(canvas, data);
 
-        var error = gl.getError();
-        if (error) console.error('WebGL error! CODE: ', error);
-
         var context = canvas.getContext('2d');
         if (context) context.drawImage(c, 0, 0, width, height, 0, 0, width, height);
     }
