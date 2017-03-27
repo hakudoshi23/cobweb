@@ -9,7 +9,7 @@
         var aux = vec2.create();
 
         instance.surface.interactions.edit.actions.rotate = {
-            axis: null,
+            axis: vec3.create(),
             init: function (context, event) {
                 if (context.selection.isEmpty()) {
                     context.action = null;
@@ -26,7 +26,7 @@
                 center[1] = ((center[1] + 1) / 2) * canvas.height;
                 vec2.copy(selectionCenter2d, center);
 
-                this.axis = data.camera.getDirection();
+                data.camera.getDirection(this.axis);
 
                 vec2.sub(initialVector, selectionCenter2d, context.lastCoords);
                 vec2.normalize(initialVector, initialVector);
@@ -81,7 +81,6 @@
                         sceneObj.mesh.onVerticesChange(sceneObj.mesh.vertices);
                     }
                 }
-                this.axis = null;
                 context.action = null;
             },
             onKeyDown: function (context, event) {
