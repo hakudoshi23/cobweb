@@ -2,6 +2,7 @@ canvas.surface {
     display: inline-block;
     vertical-align: bottom;
     outline: none;
+    user-select: none;
 }
 
 div.surface-toolbar {
@@ -10,4 +11,19 @@ div.surface-toolbar {
     height: calc(100% - 25px);
     min-width: 120px;
     width: 180px;
+
+    .section {
+        margin-bottom: 10px;
+        margin: 5px;
+
+        .section-name {
+            font-size: 20px;
+            width: 100%;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        label {
+            display: block;
+        }
+    }
 }
