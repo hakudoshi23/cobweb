@@ -51,6 +51,9 @@
 
                 return result;
             },
+            addFace: function (object, face) {
+                toggleFace(this, object, face);
+            },
             getCenter: function () {
                 //TODO: take into account multiple objects
                 var name = Object.keys(this.objects)[0];
@@ -72,10 +75,13 @@
                 for (var name in this.objects) {
                     var selectedObj = this.objects[name];
                     var sceneObj = instance.scene.getObjectByName(name);
-                    for (var i = 0; i < selectedObj.vertices.length; i++) {
+                    for (var i = 0; i < selectedObj.faces.length; i++) {
+                        var face = selectedObj.faces[i];
+                        if (face._selected) delete face._selected;
+                    }
+                    for (i = 0; i < selectedObj.vertices.length; i++) {
                         var vertex = selectedObj.vertices[i];
-                        if (vertex._selected)
-                            delete vertex._selected;
+                        if (vertex._selected) delete vertex._selected;
                     }
                     sceneObj.mesh.onVerticesChange(selectedObj.vertices);
                 }

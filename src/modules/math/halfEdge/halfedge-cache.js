@@ -11,8 +11,9 @@
                 get: function (key) {
                     var e = this.meshes[key];
                     var builder = Math.HalfEdgeMesh.prototype.builders[key];
-                    if (!e) {
+                    if (!e || e.rebuild) {
                         e = builder.onCreate(heMesh);
+                        heMesh.rebuild = false;
                         this.meshes[key] = e;
                     }
                     if (builder.onClean) builder.onClean(e);
@@ -32,6 +33,24 @@
         cachedHalfEdgeMesh.prototype.constructor = cachedHalfEdgeMesh;
 
         Math.HalfEdgeMesh = cachedHalfEdgeMesh;
+
+        var _addVertices = Math.HalfEdgeMesh.prototype.addVertices;
+        Math.HalfEdgeMesh.prototype.addVertices = function (vertices) {
+            _addVertices.call(this, vertices);
+            this.invalidateCache();
+        };
+
+        var _addFace = Math.HalfEdgeMesh.prototype.addFace;
+        Math.HalfEdgeMesh.prototype.addFace = function (vertices) {
+            _addFace.call(this, vertices);
+            this.invalidateCache();
+        };
+
+        Math.HalfEdgeMesh.prototype.invalidateCache = function () {
+        for (var key in this.cache.meshes) {
+            this.cache.meshes[key].rebuild = true;
+        }
+        };
 
         Math.HalfEdgeMesh.prototype.builders = {};
         Math.HalfEdgeMesh.prototype.addBuilder = function (key, builder) {

@@ -87,9 +87,13 @@
         var opposites = end._halfEdge.outEdges.filter(function (he) {
             return he.vertex === start;
         });
+        console.debug('opposites', opposites);
         if (opposites.length > 0) {
             var opposite = opposites[0];
-            if (opposite.opposite === null) opposite.opposite = he;
+            if (opposite.opposite === null) {
+                console.debug('another!', he);
+                opposite.opposite = he;
+            }
             return opposite;
         } else {
             return null;
