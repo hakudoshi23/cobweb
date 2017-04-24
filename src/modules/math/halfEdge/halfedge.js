@@ -77,17 +77,23 @@
         var edge = {};
         edge.vertex = end;
         edge.face = face ? face : new HalfEdgeFace(edge);
-        edge.opposite = findOppositeEdge(start, end) || edge;
+        edge.opposite = findOppositeEdge(start, end, edge);
         edge.next = null;
         start._halfEdge.outEdges.push(edge);
         return edge;
     }
 
-    function findOppositeEdge(start, end) {
+    function findOppositeEdge(start, end, he) {
         var opposites = end._halfEdge.outEdges.filter(function (he) {
             return he.vertex === start;
         });
-        return (opposites && opposites[0]) ? opposites[0] : null;
+        if (opposites.length > 0) {
+            var opposite = opposites[0];
+            if (opposite.opposite === null) opposite.opposite = he;
+            return opposite;
+        } else {
+            return null;
+        }
     }
 
     function VertexGetFaces () {
