@@ -58,6 +58,7 @@
                     else if (event.key === 'g') this.setAction('move', event);
                     else if (event.key === 's') this.setAction('scale', event);
                     else if (event.key === 'r') this.setAction('rotate', event);
+                    else if (event.keyCode === 46) this.setAction('delete', event);
                     else if (event.key === 'e') {
                         this.setAction('extrude', event);
                         this.setAction('move', event);

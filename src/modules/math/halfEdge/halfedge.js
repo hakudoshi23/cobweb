@@ -124,7 +124,6 @@
             he = he.next;
             if (he === null) {
                 var a = 0;
-                console.debug(this, a);
             }
         }
         output.push(he);
