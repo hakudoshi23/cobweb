@@ -65,7 +65,8 @@
                     var obj = this.objects[name];
                     for (var i = 0; i < obj.vertices.length; i++) {
                         var vertex = obj.vertices[i];
-                        vec3.add(normal, normal, vertex._halfEdge.computeNormal());
+                        var n = vertex._halfEdge.computeNormal();
+                        vec3.add(normal, normal, n);
                     }
                 }
                 vec3.normalize(normal, normal);
