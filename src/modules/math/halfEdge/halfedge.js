@@ -20,12 +20,15 @@
             var vertex = vertices[i];
             var index = this.vertices.indexOf(vertex);
             if (index < 0) {
-                var _halfEdge = {};
-                _halfEdge.computeNormal = VertexComputeNormal;
+                var _halfEdge = null;
+                if (!vertex._halfEdge) {
+                    _halfEdge = {};
+                    _halfEdge.computeNormal = VertexComputeNormal;
+                    _halfEdge.getFaces = VertexGetFaces;
+                    _halfEdge.outEdges = [];
+                    vertex._halfEdge = _halfEdge;
+                } else _halfEdge = vertex._halfEdge;
                 _halfEdge.ownIndex = this.vertices.length;
-                _halfEdge.getFaces = VertexGetFaces;
-                _halfEdge.outEdges = [];
-                vertex._halfEdge = _halfEdge;
                 this.vertices.push(vertex);
             } else {
                 console.error('addVertices: Adding vertex twice!', vertex);
@@ -78,8 +81,8 @@
         edge.vertex = end;
         edge.face = face ? face : new HalfEdgeFace(edge);
         edge.opposite = findOppositeEdge(start, end, edge);
-        edge.next = null;
         start._halfEdge.outEdges.push(edge);
+        edge.next = null;
         return edge;
     }
 
@@ -87,17 +90,11 @@
         var opposites = end._halfEdge.outEdges.filter(function (he) {
             return he.vertex === start;
         });
-        console.debug('opposites', opposites);
         if (opposites.length > 0) {
             var opposite = opposites[0];
-            if (opposite.opposite === null) {
-                console.debug('another!', he);
-                opposite.opposite = he;
-            }
+            opposite.opposite = he;
             return opposite;
-        } else {
-            return null;
-        }
+        } else return null;
     }
 
     function VertexGetFaces () {

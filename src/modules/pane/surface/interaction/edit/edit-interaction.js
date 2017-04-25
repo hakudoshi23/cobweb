@@ -60,7 +60,7 @@
                     else if (event.key === 'r') this.setAction('rotate', event);
                     else if (event.key === 'e') {
                         this.setAction('extrude', event);
-                        //this.setAction('move', event);
+                        this.setAction('move', event);
                     } else if (event.key === 'b') {
                         if (this.drawBounds === null) this.drawBounds = false;
                         else if (this.drawBounds === false) this.drawBounds = true;
