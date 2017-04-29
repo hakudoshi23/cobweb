@@ -51,9 +51,12 @@
             var heIndex = mesh.halfEdges.indexOf(halfEdge);
             mesh.halfEdges.splice(heIndex, 1);
             if (halfEdge.opposite) {
-                var outEdges = halfEdge.opposite.vertex._halfEdge.outEdges;
+                var oppositeVertex = halfEdge.opposite.vertex;
+                var outEdges = oppositeVertex._halfEdge.outEdges;
                 heIndex = outEdges.indexOf(halfEdge);
                 outEdges.splice(heIndex, 1);
+                if (outEdges.length === 0)
+                    removeVertex(mesh, oppositeVertex);
             }
         }
     }, ['edit-interaction']);
