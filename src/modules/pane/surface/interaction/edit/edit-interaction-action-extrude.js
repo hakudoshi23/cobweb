@@ -11,8 +11,9 @@
 
                         var mesh = instance.scene.getObjects()[0].data.mesh;
 
-                        var outerEdges = getOuterEdges(selectedFaces);
-                        var newOuterEdges = duplicateOuterRing(outerEdges, mesh);
+                        var outerEdges = getOuterEdgeLoop(selectedFaces);
+                        var newOuterEdges = duplicateOuterRing(outerEdges,
+                                selectedFaces, mesh);
 
                         context.selection.clear();
                         for (var i = 0; i < selectedFaces.length; i++) {
@@ -26,25 +27,36 @@
             }
         };
 
-        function getOuterEdges (faces) {
-            var outerEdges = [];
+        function getOuterEdgeLoop (faces) {
+            var outerEdges = [], startEdge = null;
             for (var i = 0; i < faces.length; i++) {
                 var faceEdges = faces[i].getEdges();
                 for (var j = 0; j < faceEdges.length; j++) {
                     var he = faceEdges[j];
-                    if (!he.opposite) console.debug(he);
-                    else {
-                        var oppositeFace = he.opposite.face;
-                        if (!oppositeFace._selected) {
-                            outerEdges.push(he);
-                        }
+                    var oppositeFace = he.opposite.face;
+                    if (!oppositeFace._selected) {
+                        startEdge = he;
                     }
                 }
             }
+
+            function filterNextOutEdge (he) {
+                if (!he.opposite) return null;
+                return he.face._selected && !he.opposite.face._selected;
+            }
+            outerEdges.push(startEdge);
+            var nextEdge = startEdge.vertex
+                ._halfEdge.outEdges.find(filterNextOutEdge);
+            while (nextEdge && nextEdge != startEdge) {
+                outerEdges.push(nextEdge);
+                nextEdge = nextEdge.vertex._halfEdge
+                    .outEdges.find(filterNextOutEdge);
+            }
+
             return outerEdges;
         }
 
-        function duplicateOuterRing (outerEdges, mesh) {
+        function duplicateOuterRing (outerEdges, faces, mesh) {
             var newVertices = [], oldVertices = [];
             for (var i = 0; i < outerEdges.length; i++) {
                 var newVertex = Object.assign([], outerEdges[i].vertex);
@@ -65,9 +77,17 @@
                 newVertices.push(newVertex);
             }
             mesh.addVertices(newVertices);
-            for (i = 0; i < outerEdges.length; i++) {
-                var vertexIndex = oldVertices.indexOf(outerEdges[i].vertex);
-                outerEdges[i].vertex = newVertices[vertexIndex];
+            for (i = 0; i < faces.length; i++) {
+                var faceEdges = faces[i].getEdges();
+                for (var w = 0; w < faceEdges.length; w++) {
+                    var he = faceEdges[w];
+                    if (!he.opposite) console.debug(he);
+                    else {
+                        var vertexIndex = oldVertices.indexOf(he.vertex);
+                        if (vertexIndex >= 0)
+                            he.vertex = newVertices[vertexIndex];
+                    }
+                }
             }
             for (i = 0; i < newVertices.length; i++) {
                 var nextIndex = i + 1 >= newVertices.length ? 0 : i + 1;
