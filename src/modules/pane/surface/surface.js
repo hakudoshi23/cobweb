@@ -3,8 +3,7 @@
 
     Modules.prototype.add('surface', function (instance) {
         instance.pane.types.surface = {
-            onPaneType: onSurfacePaneType,
-            onCreateHeader: onCreateSurfaceHeader
+            onPaneType: onSurfacePaneType
         };
 
         instance.events.on('pane.resize', function (pane) {
@@ -33,14 +32,6 @@
         canvas.className = 'surface';
         pane.appendChild(canvas);
 
-        var surfaceGUI = document.createElement('div');
-        surfaceGUI.className = 'surface-toolbar';
-        surfaceGUI.style.float = 'left';
-        Ajax.get('partial/surface-toolbar.html', function (result) {
-            surfaceGUI.innerHTML = result;
-        });
-        pane.appendChild(surfaceGUI);
-
         instance.surface.map = instance.surface.map || {};
         instance.surface.map[canvas.id] = {
             camera: new Math.Camera()
@@ -49,12 +40,6 @@
         updateCanvasSize(instance, pane);
 
         instance.events.trigger('surface.create', canvas);
-    }
-
-    function onCreateSurfaceHeader (header, instance) {
-        var label = document.createElement('label');
-        label.innerHTML = 'Surface Pane';
-        header.appendChild(label);
     }
 
     function updateCanvasSize (instance, pane) {

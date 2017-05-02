@@ -14,8 +14,6 @@
             if (this.types[name]) {
                 var typeCallbacks = this.types[name];
                 typeCallbacks.onPaneType(pane, instance);
-                var paneHeader = pane.querySelector('.pane-header');
-                typeCallbacks.onCreateHeader(paneHeader, instance);
                 pane.dataset.paneType = name;
             }
         };

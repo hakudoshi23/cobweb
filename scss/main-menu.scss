@@ -3,5 +3,7 @@
 div.main-menu {
     background-color: white;
     height: $MAIN_MENU_HEIGHT;
+    padding-top: $MAIN_MENU_PADDING_TOP;
+    padding-bottom: $MAIN_MENU_PADDING_BOTTOM;
     width: 100%;
 }
