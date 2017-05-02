@@ -18,7 +18,10 @@
         }));
 
         mainMenu.appendChild(buildButton('Download Object', function () {
-            //TODO: build output file in OBJ format
+            if (instance.scene.children.length > 0) {
+                var objString = meshToOBJString(instance.scene.children[0].data.mesh);
+                download('export.obj', objString);
+            }
         }));
 
         mainMenu.appendChild(buildButton('Upload Object', function () {
@@ -48,6 +51,44 @@
             }
         }
     });
+
+    function download(filename, text) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' +
+            encodeURIComponent(text));
+        element.setAttribute('download', filename);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
+    function meshToOBJString (mesh) {
+        var result = '';
+        console.debug(mesh);
+        for (var i = 0; i < mesh.vertices.length; i++) {
+            var v = mesh.vertices[i];
+            result += 'v ';
+            result += v[0] + ' ';
+            result += v[1] + ' ';
+            result += v[2] + '\r\n';
+        }
+        result += 's off\r\n';
+        for (i = 0; i < mesh.faces.length; i++) {
+            var f = mesh.faces[i];
+            var nextHE = f.halfEdge;
+            result += 'f ' + (nextHE.vertex._halfEdge.ownIndex + 1);
+            while (nextHE.next != f.halfEdge) {
+                nextHE = nextHE.next;
+                result += ' ' + (nextHE.vertex._halfEdge.ownIndex + 1);
+            }
+            result += '\r\n';
+        }
+        return result;
+    }
 
     function buildButton (name, clickCallback) {
         var button = document.createElement('button');
