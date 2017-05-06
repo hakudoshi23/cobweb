@@ -68,8 +68,9 @@
                 for (var j = 0; j < oldOutEdges.length; j++) {
                     var outEdge = oldOutEdges[j];
                     if (outEdge.face._selected) {
-                        oldOutEdges.splice(oldOutEdges.indexOf(outEdge), 1);
+                        oldOutEdges.splice(j, 1);
                         newOutEdges.push(outEdge);
+                        j -= 1;
                     }
                 }
                 newVertex._halfEdge.outEdges = newOutEdges;
