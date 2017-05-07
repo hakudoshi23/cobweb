@@ -53,6 +53,7 @@
                     else if (event.key === 's') this.setAction('scale', event);
                     else if (event.key === 'r') this.setAction('rotate', event);
                     else if (event.key === 'f') this.setAction('face', event);
+                    else if (event.key === 'n') this.setAction('subdivide', event);
                     else if (event.keyCode === 46) this.setAction('delete', event);
                     else if (event.key === 'e') {
                         this.setAction('extrude', event);

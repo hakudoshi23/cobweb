@@ -44,20 +44,19 @@
             var he2 = buildEdge(vertices[1], vertices[2], he1.face);
             he1.next = he2;
             this.halfEdges.push(he1, he2);
-            if (vertices.length >= 3) {
-                var last, prev = he2;
-                for (var i = 2; i < vertices.length - 1; i++) {
-                    last = buildEdge(vertices[i], vertices[i + 1], he1.face);
-                    if (!he2.next) he2.next = last;
-                    last.next = prev;
-                    this.halfEdges.push(last);
-                    prev = last;
-                }
-                last = buildEdge(vertices[i], vertices[0], he1.face);
-                last.next = he1;
-                this.halfEdges.push(last);
+
+            var last, prev = he2;
+            for (var i = 2; i < vertices.length - 1; i++) {
+                last = buildEdge(vertices[i], vertices[i + 1], he1.face);
                 prev.next = last;
+                this.halfEdges.push(last);
+                prev = last;
             }
+            last = buildEdge(vertices[i], vertices[0], he1.face);
+            last.next = he1;
+            this.halfEdges.push(last);
+            prev.next = last;
+
             this.faces.push(he1.face);
         } else {
             console.error('addFace: 3 or more vertices needed to form a face!');
