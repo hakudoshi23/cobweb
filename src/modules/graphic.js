@@ -12,7 +12,7 @@
             for (var i = 0; i < renderTargets.length; i++)
                 drawRenderTarget(instance, renderTargets[i]);
         };
-        this.gl.clearColor(0.349, 0.349, 0.349, 1);
+        this.gl.clearColor(0.223529, 0.223529, 0.223529, 1);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.depthFunc(this.gl.GL_EQUAL);
         this.gl.getExtension('OES_standard_derivatives');
