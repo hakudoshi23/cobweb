@@ -9,12 +9,25 @@
                         var obj = context.selection.objects[objKey];
                         var mesh = instance.scene.getObjects()[0].data.mesh;
 
+                        var i, j, w;
                         if (obj.faces && obj.faces.length > 0) {
-                            for (var i = 0; i < obj.faces.length; i++)
+                            for (i = 0; i < obj.faces.length; i++) {
+                                var faceVertices = obj.faces[i].getVertices();
                                 removeFace(mesh, obj.faces[i]);
+                                for (j = 0; j < faceVertices.length; j++) {
+                                    if (faceVertices[j]._halfEdge.outEdges.length === 0) {
+                                        removeVertex(mesh, faceVertices[j]);
+                                    }
+                                }
+                            }
                         } else if (obj.vertices && obj.vertices.length > 0) {
-                            for (var j = 0; j < obj.vertices.length; j++)
-                                removeVertex(mesh, obj.vertices[j]);
+                            for (i = 0; i < obj.vertices.length; i++) {
+                                var vertexFaces = obj.vertices[i]._halfEdge.getFaces();
+                                for (j = 0; j < vertexFaces.length; j++) {
+                                    removeFace(mesh, vertexFaces[j]);
+                                }
+                                removeVertex(mesh, obj.vertices[i]);
+                            }
                         }
 
                         context.selection.clear();
@@ -26,9 +39,6 @@
         };
 
         function removeVertex (mesh, vertex) {
-            vertex._halfEdge.getFaces().forEach(function (face) {
-                removeFace(mesh, face);
-            });
             var vIndex = vertex._halfEdge.ownIndex;
             mesh.vertices.splice(vIndex, 1);
             for (var i = vIndex; i < mesh.vertices.length; i++) {
@@ -55,8 +65,6 @@
                 var outEdges = oppositeVertex._halfEdge.outEdges;
                 heIndex = outEdges.indexOf(halfEdge);
                 outEdges.splice(heIndex, 1);
-                if (outEdges.length === 0)
-                    removeVertex(mesh, oppositeVertex);
             }
         }
     }, ['edit-interaction']);
