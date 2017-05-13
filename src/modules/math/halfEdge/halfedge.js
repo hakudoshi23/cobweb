@@ -37,8 +37,8 @@
     };
 
     HalfEdgeMesh.prototype.addFace = function (vertices) {
-        if (arguments.length > 1) this.addFace.apply(this, arguments);
-        if (!Array.isArray(vertices)) return;
+        if (arguments.length > 1) return this.addFace.apply(this, arguments);
+        if (!Array.isArray(vertices)) return null;
         if (vertices.length >= 3) {
             var he1 = buildEdge(vertices[0], vertices[1]);
             var he2 = buildEdge(vertices[1], vertices[2], he1.face);
@@ -58,9 +58,11 @@
             prev.next = last;
 
             this.faces.push(he1.face);
+            return he1.face;
         } else {
             console.error('addFace: 3 or more vertices needed to form a face!');
         }
+        return null;
     };
 
     HalfEdgeMesh.prototype.onVerticesChange = function (vertex) {

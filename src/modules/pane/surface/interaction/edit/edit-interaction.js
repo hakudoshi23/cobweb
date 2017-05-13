@@ -55,7 +55,10 @@
                     else if (event.key === 'f') this.setAction('face', event);
                     else if (event.key === 'n') this.setAction('subdivide', event);
                     else if (event.keyCode === 46) this.setAction('delete', event);
-                    else if (event.key === 'e') {
+                    else if (event.key === 'c') {
+                        this.setAction('copy', event);
+                        this.setAction('move', event);
+                    } else if (event.key === 'e') {
                         this.setAction('extrude', event);
                         this.setAction('move', event);
                     } else if (event.key === 'b') {

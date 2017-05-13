@@ -42,8 +42,9 @@
 
         var _addFace = Math.HalfEdgeMesh.prototype.addFace;
         Math.HalfEdgeMesh.prototype.addFace = function (vertices) {
-            _addFace.call(this, vertices);
+            var newFace = _addFace.call(this, vertices);
             this.invalidateCache();
+            return newFace;
         };
 
         Math.HalfEdgeMesh.prototype.invalidateCache = function () {
