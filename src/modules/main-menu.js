@@ -37,6 +37,8 @@
             }
         }));
 
+        mainMenu.innerHTML += ' Cobweb v1.0.0';
+
         container.insertBefore(mainMenu, container.firstChild);
 
         function handleMeshFileSelected (event) {

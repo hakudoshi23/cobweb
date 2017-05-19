@@ -1,3 +1,5 @@
+@import "variables";
+
 canvas.surface {
     display: inline-block;
     vertical-align: bottom;
@@ -6,27 +8,24 @@ canvas.surface {
 }
 
 #surface-help {
-    position: absolute;
-    top: 50px;
-    left: 15px;
-    border: solid 1px gray;
-    border-radius: 3px;
+    position: fixed;
+    top: #{$MAIN_MENU_HEIGHT + $MAIN_MENU_PADDING_TOP + $MAIN_MENU_PADDING_BOTTOM};
+    left: 0;
     padding: 10px;
     background-color: white;
-    box-shadow: 0px 0px 10px black;
-    opacity: 0.6;
+    border-bottom-right-radius: 3px;
 
     div.section {
         margin-bottom: 10px;
 
         div.section-name {
             font-weight: bold;
-            font-size: 15px;
+            font-size: 18px;
             opacity: 1;
         }
 
         label {
-            font-size: 13px;
+            font-size: 14px;
             display: block;
             width: 100%;
         }
