@@ -22,7 +22,7 @@
                     face: null
                 };
 
-                var vertexSelectionMargin = camera.distance / 200;
+                var vertexSelectionMargin = 0.3;
                 var vertices = object.mesh.bounds.getCollidingItems(ray);
                 var rayVertices = vertices.filter(function (vertex) {
                     return Math.geo.rayPointDistance(ray.start, ray.direction, vertex) <= vertexSelectionMargin;
