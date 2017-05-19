@@ -11,6 +11,7 @@
                     toggleVertex(selection, object, vertex);
                     result.push(vertex);
                 });
+                onSelectionChange(this);
                 return result;
             },
             add: function (ray, object, camera) {
@@ -48,11 +49,13 @@
                     result.vertex = null;
                     toggleFace(selection, object, result.face);
                 }
+                onSelectionChange(this);
 
                 return result;
             },
             addFace: function (object, face) {
                 toggleFace(this, object, face);
+                onSelectionChange(this);
             },
             getCenter: function () {
                 //TODO: take into account multiple objects
@@ -87,6 +90,7 @@
                     sceneObj.mesh.onVerticesChange(selectedObj.vertices);
                 }
                 this.objects = {};
+                onSelectionChange(this);
             },
             isEmpty: function () {
                 return !Object.keys(this.objects).length;
@@ -94,6 +98,20 @@
         };
 
     }, ['edit-interaction']);
+
+    function onSelectionChange (selection) {
+        var vertContainer = document.querySelector('#selection .vertices');
+        var faceContainer = document.querySelector('#selection .faces');
+
+        var vertCount = 0, faceCount = 0;
+        for (var keys in selection.objects) {
+            var obj = selection.objects[keys];
+            vertCount = obj.vertices.length;
+            faceCount = obj.faces.length;
+        }
+        vertContainer.innerHTML = vertCount;
+        faceContainer.innerHTML = faceCount;
+    }
 
     function toggleVertex (selection, object, vertex) {
         if (vertex) {

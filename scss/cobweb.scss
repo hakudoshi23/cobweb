@@ -18,6 +18,23 @@ html, body {
          - #{$FOOTER_HEIGHT});
 }
 
+#selection {
+    position: fixed;
+    top: #{$MAIN_MENU_PADDING_TOP + $MAIN_MENU_PADDING_BOTTOM
+        + $FOOTER_HEIGHT};
+    right: 0;
+    background-color: white;
+    text-align: right;
+
+    padding: 5px 15px;
+
+    border-bottom-left-radius: 2px;
+
+    .s-name {
+        font-weight: bold;
+    }
+}
+
 a, button {
     background-color: #2196F3;
     border: none;
