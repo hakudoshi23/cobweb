@@ -19,11 +19,11 @@
         });
         grid.createVertexBuffer('colors', 'a_color', 4, new Float32Array(colorsArray));
         var axisX = GL.Mesh.load({
-            vertices: new Float32Array([-8, 0.001, 0, 8, 0.001, 0]),
+            vertices: new Float32Array([-8, 0, 0, 8, 0, 0]),
             colors: new Float32Array([1, 0, 0, 1, 1, 0, 0, 1])
         });
         var axisZ = GL.Mesh.load({
-            vertices: new Float32Array([0, 0.001, -8, 0, 0.001, 8]),
+            vertices: new Float32Array([0, 0, -8, 0, 0, 8]),
             colors: new Float32Array([0, 1, 0, 1, 0, 1, 0, 1])
         });
 
@@ -34,9 +34,12 @@
             vec3.normalize(lightDirection, lightDirection);
             uniforms.u_lightvector = lightDirection;
 
-            renderObject(surface, grid, wireframeShader, instance.graphics.gl.LINES);
-            renderObject(surface, axisX, wireframeShader, instance.graphics.gl.LINES);
-            renderObject(surface, axisZ, wireframeShader, instance.graphics.gl.LINES);
+            var gl = instance.graphics.gl;
+            renderObject(surface, grid, wireframeShader, gl.LINES);
+            gl.disable(gl.DEPTH_TEST);
+            renderObject(surface, axisX, wireframeShader, gl.LINES);
+            renderObject(surface, axisZ, wireframeShader, gl.LINES);
+            gl.enable(gl.DEPTH_TEST);
             instance.scene.getObjects().forEach(function (node) {
                 var mesh = node.data.mesh.cache.get('render-solid');
                 renderObject(surface, mesh, solidShader, node.data.primitive, node.data.model);
