@@ -1,7 +1,7 @@
 ((function () {
     'use strict';
 
-    var infoText = '[R-Click] Save position; [L-Click] Reset position; [X or Y or Z] Lock to axis;';
+    var infoText = '[L-Click] Save position; [R-Click] Reset position; [X or Y or Z] Lock to axis;';
 
     Modules.prototype.add('edit-interaction-action-scale', function (instance) {
         var selectionCenter2d = vec2.create();
