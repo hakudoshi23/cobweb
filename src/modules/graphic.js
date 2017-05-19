@@ -14,7 +14,7 @@
         };
         this.gl.clearColor(0.223529, 0.223529, 0.223529, 1);
         this.gl.enable(this.gl.DEPTH_TEST);
-        this.gl.depthFunc(this.gl.GL_EQUAL);
+        this.gl.depthFunc(this.gl.LEQUAL);
         this.gl.getExtension('OES_standard_derivatives');
 
         console.info(this.gl.getParameter(this.gl.VERSION));

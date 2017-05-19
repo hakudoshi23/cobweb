@@ -37,7 +37,10 @@
             }
         }));
 
-        mainMenu.innerHTML += ' Cobweb v1.0.0';
+        var appInfo = document.createElement('span');
+        appInfo.style.marginLeft = '10px';
+        appInfo.innerHTML = 'Cobweb v1.0.0';
+        mainMenu.appendChild(appInfo);
 
         container.insertBefore(mainMenu, container.firstChild);
 
@@ -96,7 +99,7 @@
         var button = document.createElement('button');
         button.style.marginLeft = '5px';
         button.innerHTML = name;
-        button.onclick = clickCallback;
+        button.addEventListener('click', clickCallback, false);
         return button;
     }
 })());
