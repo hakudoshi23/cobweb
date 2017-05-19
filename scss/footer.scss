@@ -1,21 +1,17 @@
-$HEIGHT: 20px;
+@import "variables";
 
-.cb-logger {
-    height: $HEIGHT;
-    width: 100%;
+.footer {
+    height: $FOOTER_HEIGHT;
+    width: calc(100% - 20px);
 
+    padding: 0px 10px;
     background-color: #E6E6E6;
 
     position: absolute;
     bottom: 0;
 
-    font-size: 12px;
-    line-height: $HEIGHT;
+    font-size: 14px;
+    line-height: $FOOTER_HEIGHT;
 
-    .info {
-        float: left;
-        color: gray;
-
-        padding: 0 5px;
-    }
+    color: black;
 }

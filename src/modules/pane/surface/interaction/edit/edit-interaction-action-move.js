@@ -1,6 +1,8 @@
 ((function () {
     'use strict';
 
+    var infoText = '[R-Click] Save position; [L-Click] Reset position; [X or Y or Z] Lock to axis;';
+
     Modules.prototype.add('edit-interaction-action-move', function (instance) {
         var initialCoords = vec2.create();
         var selectionNormal = null;
@@ -10,6 +12,7 @@
         instance.surface.interactions.edit.actions.move = {
             axis: null,
             init: function (context, event) {
+                instance.footer.add(infoText);
                 vec2.copy(initialCoords, context.lastCoords);
                 selectionNormal = context.selection.getNormal();
                 for (var name in context.selection.objects) {
@@ -93,6 +96,7 @@
                 isY = false;
                 this.axis = null;
                 context.action = null;
+                instance.footer.reset();
             },
             onKeyDown: function (context, event) {
                 if (event.key === 'x') this.axis = vec3.set(vec3.create(), 1, 0, 0);

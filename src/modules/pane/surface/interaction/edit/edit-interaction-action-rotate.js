@@ -1,6 +1,8 @@
 ((function () {
     'use strict';
 
+    var infoText = '[R-Click] Save position; [L-Click] Reset position; [X or Y or Z] Lock to axis;';
+
     Modules.prototype.add('edit-interaction-action-rotate', function (instance) {
         var selectionCenter2d = vec2.create();
         var selectionCenter = vec3.create();
@@ -15,6 +17,7 @@
                     context.action = null;
                     return;
                 }
+                instance.footer.add(infoText);
                 var canvas = event.target;
                 var data = instance.surface.map[canvas.id];
 
@@ -82,6 +85,7 @@
                     }
                 }
                 context.action = null;
+                instance.footer.reset();
             },
             onKeyDown: function (context, event) {
                 if (event.key === 'x') this.axis = vec3.set(vec3.create(), 1, 0, 0);

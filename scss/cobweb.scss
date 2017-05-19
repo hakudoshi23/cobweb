@@ -13,7 +13,8 @@ html, body {
 .main-panes {
     height: calc(100% - #{$MAIN_MENU_HEIGHT}
          - #{$MAIN_MENU_PADDING_TOP}
-         - #{$MAIN_MENU_PADDING_BOTTOM});
+         - #{$MAIN_MENU_PADDING_BOTTOM}
+         - #{$FOOTER_HEIGHT});
 }
 
 a, button {
