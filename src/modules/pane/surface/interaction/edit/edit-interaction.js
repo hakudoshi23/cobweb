@@ -77,6 +77,11 @@
                 this.runAction('onKeyUp', event, realCoords);
             },
             setAction: function (name, event) {
+				if (!event) {
+					event = {
+						
+					};
+				}
                 if (name && this.actions[name]) {
                     this.action = name;
                     this.runAction('init', event);

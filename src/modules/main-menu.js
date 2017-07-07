@@ -10,12 +10,7 @@
         var mainMenu = document.createElement('div');
         mainMenu.className = 'main-menu';
 
-        mainMenu.appendChild(buildButton('Toggle Help', function () {
-            var helpContainer = document.querySelector('#surface-help');
-            if (helpContainer.style.display) {
-                helpContainer.style.display = '';
-            } else helpContainer.style.display = 'none';
-        }));
+        mainMenu.appendChild(buildButton('Toggle Help', toggleHelpButton));
 
         mainMenu.appendChild(buildButton('Download Object', function () {
             if (instance.scene.children.length > 0) {
@@ -56,6 +51,14 @@
             }
         }
     });
+
+	function toggleHelpButton () {
+		var helpContainer = document.querySelector('#surface-help');
+		if (helpContainer.style.display) {
+			helpContainer.style.display = '';
+		} else helpContainer.style.display = 'none';
+	}
+	window.toggleHelpButton = toggleHelpButton;
 
     function download(filename, text) {
         var element = document.createElement('a');

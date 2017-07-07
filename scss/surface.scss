@@ -16,6 +16,23 @@ canvas.surface {
     border-bottom-right-radius: 3px;
 	border-top: solid 1px #CCC;
 
+	div.close {
+		position: absolute;
+		top: 0;
+		right: 0;
+
+		color: red;
+		background-color: #FFF;
+		font-size: 12px;
+		font-weight: bold;
+		padding: 2px 5px;
+		border: solid 1px gray;
+		border-top: none;
+		border-right: none;
+		border-bottom-left-radius: 3px;
+		cursor: pointer;
+	}
+
     div.section {
         margin-bottom: 10px;
 
@@ -36,6 +53,20 @@ canvas.surface {
 				border-radius: 3px;
 				cursor: default;
 				color: gray;
+			}
+
+			label {
+				display: inline-block;
+				font-size: 14px;
+			}
+
+			button {
+				color: black;
+				background-color: #c9e6fd;
+
+				&:hover {
+					background-color: #74c1fb;
+				}
 			}
 		}
     }
