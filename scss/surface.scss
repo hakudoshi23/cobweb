@@ -14,6 +14,7 @@ canvas.surface {
     padding: 10px;
     background-color: white;
     border-bottom-right-radius: 3px;
+	border-top: solid 1px #CCC;
 
     div.section {
         margin-bottom: 10px;
@@ -24,10 +25,18 @@ canvas.surface {
             opacity: 1;
         }
 
-        label {
-            font-size: 14px;
-            display: block;
-            width: 100%;
-        }
+		div.action {
+			margin: 3px;
+
+			div.shortcut {
+				display: inline-block;
+				font-size: 10px;
+				border: solid 1px gray;
+				padding: 4px;
+				border-radius: 3px;
+				cursor: default;
+				color: gray;
+			}
+		}
     }
 }

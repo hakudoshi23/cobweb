@@ -29,10 +29,16 @@ html, body {
     padding: 5px 15px;
 
     border-bottom-left-radius: 2px;
+	border-top: solid 1px #CCC;
 
     .s-name {
         font-weight: bold;
     }
+}
+
+h4 {
+	margin: 5px 0;
+	font-size: 16px;
 }
 
 a, button {
@@ -43,8 +49,10 @@ a, button {
     font-weight: bold;
     color: white;
     cursor: pointer;
+	transition: background-color linear 0.5s;
 
-    &:hover {
-        box-shadow: 0 0 2px gray;
-    }
+	&:hover {
+		box-shadow: none;
+		background-color: #0367B4;
+	}
 }
