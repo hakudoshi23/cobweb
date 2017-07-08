@@ -44,62 +44,62 @@
                 <div class="section-name">Controls</div>
 				<div class="action">
 	                <label>Move camera</label>
-					<div class="shortcut">Mouse Right</div>
+					<div class="shortcut">Mouse R</div>
 				</div>
 				<div class="action">
 	                <label>Select geometry</label>
-					<div class="shortcut">Mouse Left</div>
+					<div class="shortcut">Mouse L</div>
 				</div>
 				<div class="action">
-	                <button>Toggle selection</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('all');">Toggle selection</button>
 					<div class="shortcut">A</div>
 				</div>
             </div>
             <div class="section">
                 <div class="section-name">Render</div>
 				<div class="action">
-					<button>Toggle bounds</button>
+					<button onclick="cb.surface.interactions.edit.toggleDrawBounds();">Toggle bounds</button>
 					<div class="shortcut">B</div>
 				</div>
             </div>
             <div class="section">
                 <div class="section-name">Transform</div>
 				<div class="action">
-	                <button>Translate</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('move');">Translate</button>
 					<div class="shortcut">G</div>
 				</div>
 				<div class="action">
-	                <button>Rotate</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('rotate');">Rotate</button>
 					<div class="shortcut">R</div>
 				</div>
 				<div class="action">
-	                <button>Scale</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('scale');">Scale</button>
 					<div class="shortcut">S</div>
 				</div>
             </div>
             <div class="section">
                 <div class="section-name">Add geometry</div>
 				<div class="action">
-	                <button>Copy</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('copy');">Copy</button>
 					<div class="shortcut">C</div>
 				</div>
 				<div class="action">
-	                <button>Extrude</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('extrude');">Extrude</button>
 					<div class="shortcut">E</div>
 				</div>
 				<div class="action">
-	                <button>Add face</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('face');">Add face</button>
 					<div class="shortcut">F</div>
 				</div>
 				<div class="action">
-	                <button>Subdivide</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('subdivide');">Subdivide</button>
 					<div class="shortcut">N</div>
 				</div>
             </div>
             <div class="section">
                 <div class="section-name">Remove geometry</div>
 				<div class="action">
-	                <button>Delete geometry</button>
+	                <button onclick="cb.surface.interactions.edit.setAction('delete');">Delete geometry</button>
 					<div class="shortcut">Supr</div>
 				</div>
             </div>

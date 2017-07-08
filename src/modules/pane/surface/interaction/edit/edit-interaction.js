@@ -62,9 +62,7 @@
                         this.setAction('extrude', event);
                         this.setAction('move', event);
                     } else if (event.key === 'b') {
-                        if (this.drawBounds === null) this.drawBounds = false;
-                        else if (this.drawBounds === false) this.drawBounds = true;
-                        else if (this.drawBounds === true) this.drawBounds = null;
+                        this.toggleDrawBounds();
                     }
                 } else {
                     if (event.keyCode === 13) this.action = null;
@@ -78,9 +76,7 @@
             },
             setAction: function (name, event) {
 				if (!event) {
-					event = {
-						
-					};
+					event = { target: document.querySelector('canvas') };
 				}
                 if (name && this.actions[name]) {
                     this.action = name;
@@ -93,6 +89,11 @@
                     var callback = action[callbackName];
                     if (callback) callback.call(action, this, event);
                 }
+            },
+            toggleDrawBounds: function () {
+                if (this.drawBounds === null) this.drawBounds = false;
+                else if (this.drawBounds === false) this.drawBounds = true;
+                else if (this.drawBounds === true) this.drawBounds = null;
             }
         };
 

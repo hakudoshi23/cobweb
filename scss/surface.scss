@@ -56,13 +56,16 @@ canvas.surface {
 			}
 
 			label {
+                text-align: center;
 				display: inline-block;
 				font-size: 14px;
+                width: 120px;
 			}
 
 			button {
 				color: black;
 				background-color: #c9e6fd;
+                width: 120px;
 
 				&:hover {
 					background-color: #74c1fb;
